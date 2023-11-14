@@ -20,6 +20,11 @@ sealed class Resource<out T> {
 }
 
 class APIService {
+
+    companion object {
+        const val BASE_URL = "http://192.168.29.57:8080"
+    }
+
     private val client = HttpClient {
         install(ContentNegotiation) {
             json(Json {
@@ -30,7 +35,7 @@ class APIService {
     }
 
     suspend fun getAnimals(): Resource<List<Animal>> {
-        val result = client.get("http://192.168.29.79:8080/animal")
+        val result = client.get("$BASE_URL/animal")
 
         return if (result.status == HttpStatusCode.OK) {
             Resource.Success(result.body())
@@ -42,7 +47,7 @@ class APIService {
 
     suspend fun addAnimal(newAnimal: Animal): Resource<String> {
 
-        val result = client.post("http://192.168.29.79:8080/animal") {
+        val result = client.post("$BASE_URL/animal") {
             contentType(ContentType.Application.Json)
             setBody(newAnimal)
         }
