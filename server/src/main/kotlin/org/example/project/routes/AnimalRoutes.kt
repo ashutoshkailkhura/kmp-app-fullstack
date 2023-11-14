@@ -6,19 +6,16 @@ import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.*
-import org.example.project.entity.Animals
+import entity.Animals
+import kotlinx.coroutines.delay
 
 fun Route.animalRouting() {
     val animalStorage = mutableListOf<Animals>()
 
     route("/animal") {
         get {
-            if (animalStorage.isNotEmpty()) {
-                call.respond(animalStorage)
-            } else {
-                call.respondText("No animal found", status = HttpStatusCode.OK)
-            }
-
+            delay(2_000)
+            call.respond(animalStorage)
         }
         get("{id?}") {
             val id = call.parameters["id"] ?: return@get call.respondText(
@@ -35,7 +32,7 @@ fun Route.animalRouting() {
         post {
             val animal = call.receive<Animals>()
             animalStorage.add(animal)
-            call.respondText("animal stored correctly", status = HttpStatusCode.Created)
+            call.respondText("Animal added successfully", status = HttpStatusCode.Created)
 
         }
         delete("{id?}") {
