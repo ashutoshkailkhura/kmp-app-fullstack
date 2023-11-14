@@ -9,9 +9,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -19,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
-import entity.Animals
+import entity.Animal
 import kotlinx.coroutines.launch
 import network.APIService
 
@@ -75,8 +73,8 @@ class AddAnimalScreen() : Screen {
             Button(onClick = {
                 scope.launch {
                     val data = APIService().addAnimal(
-                        Animals(
-                            id = "3",
+                        Animal(
+                            id = 3,
                             type = 3,
                             name = name,
                             story = story

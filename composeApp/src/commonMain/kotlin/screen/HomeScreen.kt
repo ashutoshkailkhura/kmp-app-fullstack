@@ -10,26 +10,23 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import entity.Animals
+import entity.Animal
 import network.Resource
 import screen.component.AnimalItem
 
 
 class HomeScreen(
-    private var dataState: MutableState<Resource<List<Animals>>>,
+    private var dataState: MutableState<Resource<List<Animal>>>,
     private var refreshData: () -> Unit
 ) : Screen {
 
@@ -84,7 +81,7 @@ class HomeScreen(
 }
 
 @Composable
-fun AnimalList(animals: List<Animals>) {
+fun AnimalList(animals: List<Animal>) {
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {

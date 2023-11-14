@@ -1,6 +1,6 @@
 package network
 
-import entity.Animals
+import entity.Animal
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -29,7 +29,7 @@ class APIService {
         }
     }
 
-    suspend fun getAnimals(): Resource<List<Animals>> {
+    suspend fun getAnimals(): Resource<List<Animal>> {
         val result = client.get("http://192.168.29.79:8080/animal")
 
         return if (result.status == HttpStatusCode.OK) {
@@ -40,7 +40,7 @@ class APIService {
 
     }
 
-    suspend fun addAnimal(newAnimal: Animals): Resource<String> {
+    suspend fun addAnimal(newAnimal: Animal): Resource<String> {
 
         val result = client.post("http://192.168.29.79:8080/animal") {
             contentType(ContentType.Application.Json)
