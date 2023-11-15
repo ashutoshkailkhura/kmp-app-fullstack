@@ -20,7 +20,7 @@ kotlin {
             }
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -31,7 +31,7 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         val ktorVersion = "2.3.5"
         val voyagerVersion = "1.0.0-rc05"
@@ -42,14 +42,14 @@ kotlin {
                 implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.androidx.activity.compose)
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
-                }
+            }
         }
         val commonMain by getting {
             dependencies {
                 implementation(projects.shared)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
-                implementation(compose.material)
+                implementation(compose.material3)
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
                 implementation("io.ktor:ktor-client-core:$ktorVersion")

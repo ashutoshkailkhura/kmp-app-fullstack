@@ -1,4 +1,3 @@
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -9,22 +8,30 @@ import entity.Animal
 import kotlinx.coroutines.launch
 import network.APIService
 import network.Resource
-import screen.HomeScreen
+import ui.screen.HomeScreen
+import ui.theme.ReplyTheme
 
 @Composable
 fun App() {
-    MaterialTheme {
+    ReplyTheme(
+
+    ) {
         val scope = rememberCoroutineScope()
         val dataState = remember { mutableStateOf<Resource<List<Animal>>>(Resource.Loading) }
         val refreshFlag = remember { mutableStateOf(true) }
+
         LaunchedEffect(refreshFlag.value) {
             scope.launch {
-                dataState.value = APIService().getAnimals()
+                dataState.value = Resource.Loading
+                try {
+                    dataState.value = APIService().getAnimals()
+                } catch (ex: Exception) {
+                    dataState.value = Resource.Error(ex)
+                }
             }
         }
 
         Navigator(HomeScreen(dataState, refreshData = {
-            println("refreshing ...")
             refreshFlag.value = !refreshFlag.value
         }))
     }

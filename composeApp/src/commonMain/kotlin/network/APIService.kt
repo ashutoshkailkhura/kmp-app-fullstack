@@ -11,6 +11,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 
 sealed class Resource<out T> {
@@ -30,13 +31,66 @@ class APIService {
     }
 
     suspend fun getAnimals(): Resource<List<Animal>> {
-        val result = client.get("http://192.168.29.79:8080/animal")
-
-        return if (result.status == HttpStatusCode.OK) {
-            Resource.Success(result.body())
-        } else {
-            Resource.Error(Exception("API Calling Failed"))
-        }
+//        val result = client.get("http://192.168.29.79:8080/animal")
+//
+//        return if (result.status == HttpStatusCode.OK) {
+//            Resource.Success(result.body())
+//        } else {
+//            Resource.Error(Exception("API Calling Failed"))
+//        }
+        delay(2_000)
+        return Resource.Success(
+            listOf(
+                Animal(
+                    1,
+                    1,
+                    "ashu",
+                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
+                ),
+                Animal(
+                    2,
+                    2,
+                    "basu",
+                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
+                ),
+                Animal(
+                    3,
+                    3,
+                    "manu",
+                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
+                ),
+                Animal(
+                    4,
+                    4,
+                    "samu",
+                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
+                ),
+                Animal(
+                    1,
+                    1,
+                    "ashu",
+                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
+                ),
+                Animal(
+                    2,
+                    2,
+                    "basu",
+                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
+                ),
+                Animal(
+                    3,
+                    3,
+                    "manu",
+                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
+                ),
+                Animal(
+                    4,
+                    4,
+                    "samu",
+                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
+                ),
+            )
+        )
 
     }
 
