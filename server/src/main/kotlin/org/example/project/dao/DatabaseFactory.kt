@@ -10,7 +10,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.*
 object DatabaseFactory {
     fun init() {
         val driverClassName = "com.mysql.jdbc.Driver"
-        val jdbcURL = "jdbc:mysql://localhost:3306/animal"
+        val jdbcURL = "jdbc:mysql://localhost:3306/animal?characterEncoding=latin1&useConfigs=maxPerformance"
         val database = Database.connect(
             url = jdbcURL,
             driver = driverClassName,

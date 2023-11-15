@@ -11,7 +11,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.coroutines.delay
 import kotlinx.serialization.json.Json
 
 sealed class Resource<out T> {
@@ -21,6 +20,11 @@ sealed class Resource<out T> {
 }
 
 class APIService {
+
+    companion object {
+        const val BASE_URL = "http://192.168.29.57:8080"
+    }
+
     private val client = HttpClient {
         install(ContentNegotiation) {
             json(Json {
@@ -31,72 +35,19 @@ class APIService {
     }
 
     suspend fun getAnimals(): Resource<List<Animal>> {
-//        val result = client.get("http://192.168.29.79:8080/animal")
-//
-//        return if (result.status == HttpStatusCode.OK) {
-//            Resource.Success(result.body())
-//        } else {
-//            Resource.Error(Exception("API Calling Failed"))
-//        }
-        delay(2_000)
-        return Resource.Success(
-            listOf(
-                Animal(
-                    1,
-                    1,
-                    "ashu",
-                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
-                ),
-                Animal(
-                    2,
-                    2,
-                    "basu",
-                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
-                ),
-                Animal(
-                    3,
-                    3,
-                    "manu",
-                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
-                ),
-                Animal(
-                    4,
-                    4,
-                    "samu",
-                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
-                ),
-                Animal(
-                    1,
-                    1,
-                    "ashu",
-                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
-                ),
-                Animal(
-                    2,
-                    2,
-                    "basu",
-                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
-                ),
-                Animal(
-                    3,
-                    3,
-                    "manu",
-                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
-                ),
-                Animal(
-                    4,
-                    4,
-                    "samu",
-                    "as as asasa asas as as as as as sd df df df df fddfdfdf df df df df df df df df"
-                ),
-            )
-        )
+        val result = client.get("$BASE_URL/animal")
+
+        return if (result.status == HttpStatusCode.OK) {
+            Resource.Success(result.body())
+        } else {
+            Resource.Error(Exception("API Calling Failed"))
+        }
 
     }
 
     suspend fun addAnimal(newAnimal: Animal): Resource<String> {
 
-        val result = client.post("http://192.168.29.79:8080/animal") {
+        val result = client.post("$BASE_URL/animal") {
             contentType(ContentType.Application.Json)
             setBody(newAnimal)
         }
