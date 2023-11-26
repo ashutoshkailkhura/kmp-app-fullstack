@@ -9,6 +9,8 @@ ALTER USER 'ashu'@localhost IDENTIFIED WITH mysql_native_password BY 'Ashu@123';
 
 [Navigation] - (https://voyager.adriel.cafe/)
 
+for Jwt authentication [video](https://www.youtube.com/watch?v=uezSuUQt6DY)
+
 This is a Kotlin Multiplatform project targeting Android, iOS, Server.
 
 * `/server` is for the Ktor server application.

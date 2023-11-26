@@ -13,6 +13,7 @@ application {
 }
 
 val exposed_version: String by project
+val sshAntTask = configurations.create("sshAntTask")
 
 dependencies {
     implementation(projects.shared)
@@ -27,6 +28,11 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation ("org.jetbrains.exposed:exposed-kotlin-datetime:0.44.1")
     implementation("mysql:mysql-connector-java:5.1.6")
-
+    implementation("io.ktor:ktor-server-auth:2.3.5")
+    implementation("io.ktor:ktor-server-auth-jwt:2.3.5")
+    implementation("commons-codec:commons-codec:1.15")
+    implementation("io.ktor:ktor-server-call-logging:2.3.5")
+    sshAntTask("org.apache.ant:ant-jsch:1.10.12")
 }
