@@ -47,7 +47,7 @@ class HomeScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        navigator.push(AddAnimalScreen())
+//                        navigator.push(AddAnimalScreen())
                     },
                 ) {
                     Icon(Icons.Filled.Add, "Floating action button.")

@@ -34,14 +34,14 @@ kotlin {
 
     sourceSets {
         val ktorVersion = "2.3.5"
-        val voyagerVersion = "1.0.0-rc05"
+        val voyagerVersion = "1.0.0"
 
         val androidMain by getting {
             dependencies {
                 implementation(libs.compose.ui)
                 implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.androidx.activity.compose)
-                implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+                implementation(libs.ktorClientOkhttp)
             }
         }
         val commonMain by getting {
@@ -52,12 +52,14 @@ kotlin {
                 implementation(compose.material3)
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation(libs.ktor.serialization)
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-                implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
-
+                implementation(libs.ktorClientCore)
+                implementation(libs.ktorClientContentNegotiation)
+                implementation(libs.kotlinxCoroutinesCore)
+                implementation(libs.voyagerNavigator)
+                implementation(libs.voyagerTabNavigator)
+                implementation(libs.voyagerScreenModel)
+                implementation(libs.voyagerTransitions)
             }
         }
     }
@@ -100,8 +102,7 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-
+        implementation(libs.kotlinxCoroutinesAndroid)
     }
 }
 
