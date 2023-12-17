@@ -1,6 +1,6 @@
 package org.example.project.dao
 
-import org.example.project.data.user.User
+import data.user.User
 
 class DAOUserInfoImpl : DAOUserInfo {
     override suspend fun addUser(user: User): Boolean {

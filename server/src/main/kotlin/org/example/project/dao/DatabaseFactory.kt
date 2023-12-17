@@ -22,8 +22,18 @@ object DatabaseFactory {
 
         transaction(database) {
             addLogger(StdOutSqlLogger)
-            SchemaUtils.drop(UserTable,UserInfoTable, PetTable, PostTable)
-            SchemaUtils.create(UserTable,UserInfoTable, PetTable, PostTable)
+            SchemaUtils.drop(
+                UserTable,
+                UserInfoTable,
+                PetTable,
+                PostTable
+            )
+            SchemaUtils.create(
+                UserTable,
+                UserInfoTable,
+                PetTable,
+                PostTable
+            )
         }
     }
 

@@ -1,25 +1,17 @@
 package org.example.project
 
-import SERVER_PORT
-import io.ktor.server.application.Application
-import io.ktor.server.engine.embeddedServer
-import io.ktor.server.netty.Netty
+import io.ktor.server.application.*
 import org.example.project.dao.DAOUser
 import org.example.project.dao.DAOUserImpl
 import org.example.project.dao.DatabaseFactory
-import org.example.project.plugin.*
+import org.example.project.plugin.configureMonitoring
+import org.example.project.plugin.configureRouting
+import org.example.project.plugin.configureSecurity
+import org.example.project.plugin.configureSerialization
 import org.example.project.security.JwtTokenService
 import org.example.project.security.TokenConfig
 import org.example.project.security.hasing.SHA256HashingService
 
-//fun main() {
-//    embeddedServer(
-//        Netty, port = SERVER_PORT,
-//        host = "0.0.0.0",
-//        module = Application::module
-//    )
-//        .start(wait = true)
-//}
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 fun Application.module() {
     val tokenService = JwtTokenService()
@@ -30,13 +22,13 @@ fun Application.module() {
         secret = System.getenv("JWT_SECRET")
     )
     val hashingService = SHA256HashingService()
-    val userDao: DAOUser = DAOUserImpl()
+
+
+
     DatabaseFactory.init()
+
     configureSecurity(tokenConfig)
-
-    configureRouting(userDao, hashingService, tokenService, tokenConfig)
-//    configureRouting(userDataSource, hashingService, tokenService, tokenConfig)
-
+    configureRouting(hashingService, tokenService, tokenConfig)
     configureSerialization()
     configureMonitoring()
 }

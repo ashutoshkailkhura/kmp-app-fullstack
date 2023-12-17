@@ -1,7 +1,7 @@
 package org.example.project.dao
 
 import org.example.project.dao.DatabaseFactory.dbQuery
-import org.example.project.data.user.User
+import data.user.User
 import org.example.project.entity.UserTable
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere

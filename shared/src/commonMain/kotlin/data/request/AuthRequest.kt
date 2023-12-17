@@ -1,4 +1,4 @@
-package org.example.project.data.request
+package data.request
 
 import kotlinx.serialization.Serializable
 

@@ -1,6 +1,6 @@
 package org.example.project.dao
 
-import org.example.project.data.user.User
+import data.user.User
 
 
 //interface DAOFacade {
@@ -14,7 +14,6 @@ interface DAOUser {
     suspend fun addUser(newUser: User): Int?
     suspend fun getUserByUserEmail(userEmail: String): User?
     suspend fun deleteUser(userId: Int): Boolean
-
 }
 
 interface DAOUserInfo {

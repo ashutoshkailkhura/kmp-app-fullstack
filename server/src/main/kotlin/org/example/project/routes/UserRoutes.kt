@@ -9,19 +9,23 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.codec.digest.DigestUtils
 import org.example.project.dao.DAOUser
-import org.example.project.data.request.AuthRequest
-import org.example.project.data.response.AuthResponse
-import org.example.project.data.user.User
+import data.request.AuthRequest
+import data.response.AuthResponse
+import data.user.User
+import org.example.project.security.JwtTokenService
 import org.example.project.security.TokenClaim
 import org.example.project.security.TokenConfig
 import org.example.project.security.TokenService
 import org.example.project.security.hasing.HashingService
+import org.example.project.security.hasing.SHA256HashingService
 import org.example.project.security.hasing.SaltedHash
 
-fun Route.signUp(
+fun Route.authentication(
+    userDao: DAOUser,
     hashingService: HashingService,
-    userDao: DAOUser
-) {
+    tokenService: TokenService,
+    tokenConfig: TokenConfig
+){
     post("signup") {
         val request = call.receiveOrNull<AuthRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
@@ -30,7 +34,7 @@ fun Route.signUp(
         val areFieldsBlank = request.userEmail.isBlank() || request.password.isBlank()
         val isPwTooShort = request.password.length < 8
         if (areFieldsBlank || isPwTooShort) {
-            call.respond(HttpStatusCode.Conflict)
+            call.respond(HttpStatusCode.Conflict, "Check Field and password length")
             return@post
         }
 
@@ -49,14 +53,6 @@ fun Route.signUp(
 
         call.respond(HttpStatusCode.OK)
     }
-}
-
-fun Route.signIn(
-    userDao: DAOUser,
-    hashingService: HashingService,
-    tokenService: TokenService,
-    tokenConfig: TokenConfig
-) {
     post("signin") {
         val request = call.receiveOrNull<AuthRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
@@ -97,17 +93,11 @@ fun Route.signIn(
             )
         )
     }
-}
-
-fun Route.authenticate() {
     authenticate {
         get("authenticate") {
             call.respond(HttpStatusCode.OK)
         }
     }
-}
-
-fun Route.getSecretInfo() {
     authenticate {
         get("secret") {
             val principal = call.principal<JWTPrincipal>()
