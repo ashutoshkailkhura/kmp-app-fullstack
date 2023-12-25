@@ -17,22 +17,35 @@ val sshAntTask = configurations.create("sshAntTask")
 
 dependencies {
     implementation(projects.shared)
+
     implementation(libs.logback)
+    implementation(libs.logback)
+
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
-    testImplementation(libs.ktor.server.tests)
-    testImplementation(libs.kotlin.test.junit)
     implementation(libs.ktor.content.negotiation)
     implementation(libs.ktor.serialization)
-    implementation(libs.logback)
+    implementation("io.ktor:ktor-server-auth:2.3.5")
+    implementation("io.ktor:ktor-server-auth-jwt:2.3.5")
+    implementation("io.ktor:ktor-server-call-logging:2.3.5")
+    implementation("io.ktor:ktor-server-websockets-jvm")
+
+    testImplementation("io.ktor:ktor-server-tests-jvm")
+
+    testImplementation(libs.ktor.server.tests)
+    testImplementation(libs.kotlin.test.junit)
+
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation ("org.jetbrains.exposed:exposed-kotlin-datetime:0.44.1")
+
     implementation("mysql:mysql-connector-java:5.1.6")
-    implementation("io.ktor:ktor-server-auth:2.3.5")
-    implementation("io.ktor:ktor-server-auth-jwt:2.3.5")
+
+    implementation("com.google.code.gson:gson:2.8.8")
+
     implementation("commons-codec:commons-codec:1.15")
-    implementation("io.ktor:ktor-server-call-logging:2.3.5")
     sshAntTask("org.apache.ant:ant-jsch:1.10.12")
+
+//    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

@@ -9,7 +9,7 @@ fun Application.configureMonitoring() {
     install(CallLogging) {
         level = Level.INFO
         filter { call ->
-            call.request.path().startsWith("/api/v1")
+            call.request.path().startsWith("/")
         }
     }
 }

@@ -1,43 +1,66 @@
-//package org.example.project.routes
-//
-//import entity.Post
-//import io.ktor.http.*
-//import io.ktor.server.application.*
-//import io.ktor.server.request.*
-//import io.ktor.server.response.*
-//import io.ktor.server.routing.*
-//
-//fun Route.postRoute() {
-//    route("/post") {
-//        post {
-//            val post = call.receive<Post>()
-//
-//            // Validate mandatory fields
-//            if (post.userId.isNullOrBlank() || post.location.isNullOrBlank() || post.postDetails.isNullOrBlank()) {
-//                call.respond(HttpStatusCode.BadRequest, "Mandatory fields are missing.")
-//            } else {
-//                // Add post to the database (you need to implement this logic)
-//                // Ensure the postId is generated uniquely (e.g., auto-increment in the database)
-//                // Respond with the newly created post
-//                call.respond(HttpStatusCode.Created, post)
-//            }
-//        }
-//
-//        put("/{postId}") {
+package org.example.project.routes
+
+import data.request.PostRequest
+import io.ktor.http.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import org.example.project.dao.DAOPostImpl
+
+fun Route.postRoute(postDao: DAOPostImpl) {
+
+    authenticate {
+
+        get("post") {
+            println("XXX : getting all post ")
+            val postList = postDao.getAllPost()
+            call.respond(HttpStatusCode.OK, postList)
+        }
+
+        get("post/{userId}") {
+            val userId = call.parameters["userId"]?.toIntOrNull()
+            userId?.let {
+                val postList = postDao.getPostOfUser(userId)
+                call.respond(HttpStatusCode.OK, postList)
+            }
+
+        }
+
+//        get("post/{postId}") {
 //            val postId = call.parameters["postId"]?.toIntOrNull()
-//            if (postId == null) {
-//                call.respond(HttpStatusCode.BadRequest, "Invalid post ID")
-//                return@put
+//            postId?.let {
+//                val postDetail = postDao.getPostDetail(postId)
+//                call.respond(HttpStatusCode.OK, postDetail)
 //            }
-//
-//            // Retrieve existing post from the database based on postId
-//            // Update post fields as needed
-//            // Respond with the updated post
-//            val updatedPost = getPostById(postId) // You need to implement this function
-//            call.respond(HttpStatusCode.OK, updatedPost)
 //        }
-//
-//        delete("/{postId}") {
+
+        post("post") {
+            val principal = call.principal<JWTPrincipal>()
+            val userId = principal?.getClaim("userId", Int::class)
+            println("XXX $userId")
+            if (userId == null) {
+                call.respond(HttpStatusCode.Conflict, "userId is Null")
+                return@post
+            }
+
+            val post = call.receive<PostRequest>()
+            if (post.content.isBlank()) {
+                call.respond(HttpStatusCode.BadRequest, "Empty Content")
+            }
+
+            val postRes = postDao.createPost(userId, post)
+            if (postRes == null) {
+                call.respond(HttpStatusCode.NoContent, "Post Not Created")
+                return@post
+            }
+
+            call.respond(HttpStatusCode.OK, "Created")
+        }
+
+//        delete("post/{postId}/delete") {
 //            val postId = call.parameters["postId"]?.toIntOrNull()
 //            if (postId == null) {
 //                call.respond(HttpStatusCode.BadRequest, "Invalid post ID")
@@ -48,5 +71,6 @@
 //            // Respond with a success message
 //            call.respond(HttpStatusCode.OK, "Post deleted successfully")
 //        }
-//    }
-//}
+
+    }
+}

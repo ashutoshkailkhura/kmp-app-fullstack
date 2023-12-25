@@ -50,6 +50,7 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
+                implementation(compose.materialIconsExtended)
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
                 implementation(libs.ktor.serialization)
@@ -60,6 +61,10 @@ kotlin {
                 implementation(libs.voyagerTabNavigator)
                 implementation(libs.voyagerScreenModel)
                 implementation(libs.voyagerTransitions)
+
+                implementation("dev.icerock.moko:mvvm-compose:0.16.1") // api mvvm-core, getViewModel for Compose Multiplatform
+                implementation("dev.icerock.moko:mvvm-flow-compose:0.16.1") // api mvvm-flow, binding extensions for Compose Multiplatform
+
             }
         }
     }

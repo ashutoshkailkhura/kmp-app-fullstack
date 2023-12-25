@@ -1,9 +1,13 @@
-package ui.screen.home
+package ui.screens.home.postDetail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,14 +24,18 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 
-data class PostDetail(val postId: Int) : Screen {
+data class PostDetailScreen(val postId: Int? = null) : Screen {
 
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
 
+        if (postId == null) return
+
         val navigator = LocalNavigator.currentOrThrow
+
+        val postDetail = DataUtil.getPostDetail(postId)
 
         Scaffold(
             topBar = {
@@ -44,13 +52,10 @@ data class PostDetail(val postId: Int) : Screen {
                 )
             }
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize().background(Color.Cyan),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-
-                Text("Selected Post $postId")
+            Column(Modifier.padding(it)) {
+                postDetail?.let {
+                    Text(text = it.postText)
+                }
             }
         }
 

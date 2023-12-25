@@ -1,5 +1,8 @@
 package org.example.project.routes
 
+import data.request.AuthRequest
+import data.response.AuthResponse
+import entity.User
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -9,15 +12,10 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.codec.digest.DigestUtils
 import org.example.project.dao.DAOUser
-import data.request.AuthRequest
-import data.response.AuthResponse
-import data.user.User
-import org.example.project.security.JwtTokenService
 import org.example.project.security.TokenClaim
 import org.example.project.security.TokenConfig
 import org.example.project.security.TokenService
 import org.example.project.security.hasing.HashingService
-import org.example.project.security.hasing.SHA256HashingService
 import org.example.project.security.hasing.SaltedHash
 
 fun Route.authentication(
@@ -51,7 +49,7 @@ fun Route.authentication(
             return@post
         }
 
-        call.respond(HttpStatusCode.OK)
+        call.respond(HttpStatusCode.OK,"Success")
     }
     post("signin") {
         val request = call.receiveOrNull<AuthRequest>() ?: kotlin.run {

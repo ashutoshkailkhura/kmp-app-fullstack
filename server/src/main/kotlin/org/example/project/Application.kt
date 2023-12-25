@@ -4,10 +4,7 @@ import io.ktor.server.application.*
 import org.example.project.dao.DAOUser
 import org.example.project.dao.DAOUserImpl
 import org.example.project.dao.DatabaseFactory
-import org.example.project.plugin.configureMonitoring
-import org.example.project.plugin.configureRouting
-import org.example.project.plugin.configureSecurity
-import org.example.project.plugin.configureSerialization
+import org.example.project.plugin.*
 import org.example.project.security.JwtTokenService
 import org.example.project.security.TokenConfig
 import org.example.project.security.hasing.SHA256HashingService
@@ -23,12 +20,13 @@ fun Application.module() {
     )
     val hashingService = SHA256HashingService()
 
-
-
     DatabaseFactory.init()
 
     configureSecurity(tokenConfig)
+    configureSockets()
     configureRouting(hashingService, tokenService, tokenConfig)
+    configureSession()
     configureSerialization()
     configureMonitoring()
+
 }

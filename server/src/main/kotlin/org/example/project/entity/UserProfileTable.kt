@@ -8,17 +8,22 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.kotlin.datetime.CurrentDateTime
 import org.jetbrains.exposed.sql.kotlin.datetime.datetime
 
-object PostTable : IntIdTable() {
+object UserProfileTable : IntIdTable() {
     val user = reference("user", UserTable)
-    val content = text("content")
-    val timestamp = datetime("timestamp").defaultExpression(CurrentDateTime)
+    val name = varchar("name", 100)
+    val state = varchar("state", 100)
 }
 
-class Post(id: EntityID<Int>) : IntEntity(id) {
+class UserProfile(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<UserProfile>(UserProfileTable)
 
-    companion object : IntEntityClass<Post>(PostTable)
-
-    val user by User referencedOn PostTable.user
-    val content by PostTable.content
-    val timestamp by PostTable.timestamp
+    val user by User referencedOn UserProfileTable.user  // use referencedOn for normal references
+    val name by UserProfileTable.name
+    val state by UserProfileTable.state
 }
+
+
+
+
+
+
