@@ -20,6 +20,9 @@ kotlin {
             dependencies {
                 //put your multiplatform dependencies here
                 implementation(libs.ktor.serialization)
+                implementation(libs.ktorClientCore)
+                implementation(libs.ktorClientContentNegotiation)
+                implementation(libs.kotlinxCoroutinesCore)
             }
         }
         val commonTest by getting {

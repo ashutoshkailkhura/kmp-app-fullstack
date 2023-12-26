@@ -1,5 +1,3 @@
-package network
-
 import data.request.AuthRequest
 import data.response.AuthResponse
 import entity.Animal
