@@ -1,76 +1,109 @@
 package ui.screens.auth
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import data.response.AuthResponse
+import androidx.compose.runtime.setValue
+import data.request.AuthRequest
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import network.APIService
-import network.Resource
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import APIService
+import Response
 
 
 data class LogInUiState(
+    var token: String = "",
     var result: String = "",
-    var navigation: Boolean = false
+    var loading: Boolean = false
 )
 
 data class SignUpInUiState(
-    val result: String = ""
+    var result: String = "",
+    var loading: Boolean = false
 )
 
-@OptIn(ExperimentalResourceApi::class)
+
 class AuthViewModel : ViewModel() {
 
     private val apiService = APIService()
 
-    private val _logInUiState = MutableStateFlow<Resource<LogInUiState>>(
-        Resource.Success(
-            LogInUiState()
-        )
-    )
-    val logInUiState: StateFlow<Resource<LogInUiState>> = _logInUiState.asStateFlow()
+    var logInUiState by mutableStateOf(LogInUiState())
+        private set
 
-    private val _signUpUiState =
-        MutableStateFlow<Resource<SignUpInUiState>>(Resource.Success(SignUpInUiState()))
-    val signUpUiState: StateFlow<Resource<SignUpInUiState>> = _signUpUiState.asStateFlow()
+    var signUpUiState by mutableStateOf(SignUpInUiState())
+        private set
 
     fun logIn(mail: String, password: String) {
 
-        _logInUiState.value = Resource.Loading
+        if (mail.isEmpty() || password.isEmpty()) {
+            logInUiState = logInUiState.copy(result = "Empty field", loading = false)
+            return
+        }
 
         viewModelScope.launch {
-            val result = apiService.logIn(mail, password)
-            if (result != null) {
-                _logInUiState.value = Resource.Success(LogInUiState(result.token, true))
-            } else {
-                _logInUiState.value = Resource.Error(Exception("Unable To Connect"))
+
+            logInUiState = logInUiState.copy(loading = true)
+
+
+            logInUiState = when (val result = apiService.logIn(AuthRequest(mail, password))) {
+
+                is Response.Error -> {
+                    logInUiState.copy(
+                        result = result.exception.message ?: "error",
+                        loading = false
+                    )
+                }
+
+                is Response.Loading -> {
+                    logInUiState.copy(loading = true)
+                }
+
+                is Response.Success -> {
+                    logInUiState.copy(token = result.data.token, loading = false)
+                }
             }
         }
     }
 
     fun signUp(mail: String, password: String) {
-        _signUpUiState.value = Resource.Loading
+
+        if (mail.isEmpty() || password.isEmpty()) {
+            signUpUiState = signUpUiState.copy(result = "Field are empty", loading = false)
+            return
+        }
 
         viewModelScope.launch {
-            val result = apiService.signUp(mail, password)
-            if (result == "Success") {
-                _signUpUiState.value = Resource.Success(SignUpInUiState(result))
-            } else {
-                _signUpUiState.value = Resource.Error(Exception("Unable To Connect"))
+
+            signUpUiState = signUpUiState.copy(result = "", loading = true)
+
+
+            signUpUiState = when (val result = apiService.signUp(AuthRequest(mail, password))) {
+
+                is Response.Error -> {
+                    signUpUiState.copy(
+                        result = result.exception.message ?: "error",
+                        loading = false
+                    )
+                }
+
+                is Response.Loading -> {
+                    signUpUiState.copy(result = "", loading = true)
+                }
+
+                is Response.Success -> {
+                    signUpUiState.copy(result = result.data, loading = false)
+                }
+
             }
         }
     }
 
     fun resetResult() {
-//        viewModelScope.launch {
-//            delay(1_000)
-//            _logInUiState.value = LogInUiState(false)
-//        }
+        viewModelScope.launch {
+            delay(3_200)
+            signUpUiState = SignUpInUiState()
+            logInUiState = LogInUiState()
+        }
     }
 
 
