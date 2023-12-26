@@ -2,9 +2,7 @@ package ui.screens.auth.login
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,10 +46,9 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import cafe.adriel.voyager.transitions.SlideTransition
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
-import network.Resource
+import network.Response
 import ui.screens.auth.AuthViewModel
 import ui.screens.auth.LogInUiState
 import ui.screens.auth.signup.SignUpScreen
@@ -63,13 +60,12 @@ class LogInScreen : Screen {
     override fun Content() {
 
         val authViewModel = getViewModel(LogInScreen().key, viewModelFactory { AuthViewModel() })
-        val uiState = authViewModel.logInUiState.collectAsState()
 
         val navigator = LocalNavigator.currentOrThrow
 
 
         LogInScreenContent(
-            uiState = uiState.value,
+            uiState = authViewModel.logInUiState,
             onLogInClick = { mail, pass ->
                 authViewModel.logIn(mail, pass)
             },
@@ -81,8 +77,6 @@ class LogInScreen : Screen {
                 navigator.push(HomeScreen())
             }
         )
-
-
     }
 }
 
@@ -90,7 +84,7 @@ class LogInScreen : Screen {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LogInScreenContent(
-    uiState: Resource<LogInUiState>,
+    uiState: LogInUiState,
     onLogInClick: (String, String) -> Unit,
     onSignUpClick: () -> Unit,
     resetResult: () -> Unit,
@@ -107,137 +101,122 @@ fun LogInScreenContent(
             .fillMaxSize()
     ) {
 
-        when (uiState) {
-            is Resource.Success -> {
-                // Display UI for success state
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    // Spacer to push content to the top
-                    Spacer(modifier = Modifier.height(16.dp))
+        // Display UI for success state
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Spacer to push content to the top
+            Spacer(modifier = Modifier.height(16.dp))
 
-                    if (uiState.data.result == "Success") {
-                        navigateToHome()
-                    }
-                    AnimatedVisibility(
-                        uiState.data.result.isNotEmpty(),
-                        enter = slideInHorizontally(initialOffsetX = { it }),
-                        exit = slideOutHorizontally(targetOffsetX = { it }),
+            if (uiState.token.isNotEmpty()) {
+//                TODO save token
+                val token = uiState.token
+                println("XXX $token")
+                navigateToHome()
+            }
+
+            if (uiState.loading) {
+                CircularProgressIndicator()
+            }
+
+            AnimatedVisibility(
+                uiState.result.isNotEmpty(),
+                enter = slideInHorizontally(initialOffsetX = { it }),
+                exit = slideOutHorizontally(targetOffsetX = { it }),
+            ) {
+                Text(
+                    text = uiState.result,
+                    fontSize = 22.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(24.dp)
+                )
+                resetResult()
+            }
+
+
+            // Text Field for User Email
+            TextField(
+                value = email,
+                onValueChange = { email = it },
+                label = { Text("Email") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email,
+                    imeAction = ImeAction.Next
+                ),
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Email, contentDescription = null)
+                }
+            )
+
+            // Spacer to add vertical space between email and password fields
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Text Field for Password
+            TextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Password") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done
+                ),
+                trailingIcon = {
+                    IconButton(
+                        onClick = { isPasswordVisible = !isPasswordVisible }
                     ) {
-                        Text(
-                            text = uiState.data.result,
-                            fontSize = 22.sp,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.fillMaxWidth().padding(24.dp)
+                        Icon(
+                            imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            contentDescription = null
                         )
-                        resetResult()
                     }
-
-
-                    // Text Field for User Email
-                    TextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = { Text("Email") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
-                        ),
-                        leadingIcon = {
-                            Icon(imageVector = Icons.Default.Email, contentDescription = null)
-                        }
-                    )
-
-                    // Spacer to add vertical space between email and password fields
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Text Field for Password
-                    TextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        label = { Text("Password") },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp),
-                        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Done
-                        ),
-                        trailingIcon = {
-                            IconButton(
-                                onClick = { isPasswordVisible = !isPasswordVisible }
-                            ) {
-                                Icon(
-                                    imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        leadingIcon = {
-                            Icon(imageVector = Icons.Default.Lock, contentDescription = null)
-                        }
-                    )
-
-                    // Spacer to add vertical space between password and login button
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Button to perform login action
-                    Button(
-                        onClick = { onLogInClick(email, password) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        Text("Log In")
-                    }
-
-                    // Spacer to add vertical space between login button and signup text
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Text "Don't have an account, create one" followed by Sign Up button
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text("Don't have an account,")
-                        Spacer(modifier = Modifier.width(4.dp))
-                        TextButton(
-                            onClick = onSignUpClick
-                        ) {
-                            Text("Sign Up")
-                        }
-                    }
+                },
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Lock, contentDescription = null)
                 }
+            )
+
+            // Spacer to add vertical space between password and login button
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Button to perform login action
+            Button(
+                onClick = { onLogInClick(email, password) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            ) {
+                Text("Log In")
             }
 
-            is Resource.Error -> {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    Text("Loading...")
-                }
-            }
+            // Spacer to add vertical space between login button and signup text
+            Spacer(modifier = Modifier.height(16.dp))
 
-            is Resource.Loading -> {
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier.fillMaxSize()
+            // Text "Don't have an account, create one" followed by Sign Up button
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("Don't have an account,")
+                Spacer(modifier = Modifier.width(4.dp))
+                TextButton(
+                    onClick = onSignUpClick
                 ) {
-                    CircularProgressIndicator()
+                    Text("Sign Up")
                 }
             }
         }
+
     }
 }
