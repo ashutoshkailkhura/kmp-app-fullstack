@@ -10,8 +10,8 @@ plugins {
 }
 
 kotlin {
-    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-    targetHierarchy.default()
+//    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+//    targetHierarchy.default()
 
     androidTarget {
         compilations.all {
@@ -33,15 +33,15 @@ kotlin {
     }
 
     sourceSets {
-        val ktorVersion = "2.3.5"
-        val voyagerVersion = "1.0.0"
 
         val androidMain by getting {
             dependencies {
                 implementation(libs.compose.ui)
                 implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.androidx.activity.compose)
-                implementation(libs.ktorClientOkhttp)
+
+                implementation(libs.ktor.client.okhttp)
+
             }
         }
         val commonMain by getting {
@@ -53,10 +53,7 @@ kotlin {
                 implementation(compose.materialIconsExtended)
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
-//                implementation(libs.ktor.serialization)
-//                implementation(libs.ktorClientCore)
-//                implementation(libs.ktorClientContentNegotiation)
-//                implementation(libs.kotlinxCoroutinesCore)
+
                 implementation(libs.voyagerNavigator)
                 implementation(libs.voyagerTabNavigator)
                 implementation(libs.voyagerScreenModel)
@@ -66,6 +63,29 @@ kotlin {
                 implementation("dev.icerock.moko:mvvm-flow-compose:0.16.1") // api mvvm-flow, binding extensions for Compose Multiplatform
 
             }
+        }
+
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val iosMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+//                implementation("com.squareup.sqldelight:native-driver:$sqlDelightVersion")
+            }
+        }
+        val iosX64Test by getting
+        val iosArm64Test by getting
+        val iosSimulatorArm64Test by getting
+        val iosTest by creating {
+//            dependsOn(commonTest)
+            iosX64Test.dependsOn(this)
+            iosArm64Test.dependsOn(this)
+            iosSimulatorArm64Test.dependsOn(this)
         }
     }
 }

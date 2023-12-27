@@ -21,9 +21,9 @@ dependencies {
     implementation(libs.logback)
     implementation(libs.logback)
 
-    implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.core.jvm)
     implementation(libs.ktor.server.netty)
-    implementation(libs.ktor.content.negotiation)
+    implementation(libs.ktor.content.negotiation.server)
     implementation(libs.ktor.serialization)
     implementation("io.ktor:ktor-server-auth:2.3.5")
     implementation("io.ktor:ktor-server-auth-jwt:2.3.5")
