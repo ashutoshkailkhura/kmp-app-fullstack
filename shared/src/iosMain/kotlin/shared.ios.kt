@@ -1,1 +1,1 @@
-actual fun getPlatformName(): String = "iOS"
+//actual fun getPlatformName(): String = "iOS"

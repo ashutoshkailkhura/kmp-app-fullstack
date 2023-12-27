@@ -4,12 +4,14 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -47,6 +49,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.components.SlideMessage
 import ui.screens.auth.AuthViewModel
 import ui.screens.auth.SignUpInUiState
 
@@ -93,21 +96,23 @@ class SignUpScreen : Screen {
         val keyboardController = LocalSoftwareKeyboardController.current
 
 
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = "") },
-                    navigationIcon = {
-                        IconButton(onClick = onBackPressed) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = "Localized description"
-                            )
-                        }
-                    }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+
+            IconButton(onClick = onBackPressed, modifier = Modifier.align(Alignment.TopStart)) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Localized description"
                 )
             }
-        ) {
+
+            SlideMessage(uiState.result) {
+                resetResult()
+            }
+
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -119,25 +124,13 @@ class SignUpScreen : Screen {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (uiState.loading) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(Modifier.size(32.dp))
+                } else {
+                    Spacer(Modifier.height(32.dp))
                 }
 
                 if (uiState.result == "Success") {
                     onBackPressed()
-                }
-
-                AnimatedVisibility(
-                    uiState.result.isNotEmpty(),
-                    enter = slideInHorizontally(initialOffsetX = { it }),
-                    exit = slideOutHorizontally(targetOffsetX = { it }),
-                ) {
-                    Text(
-                        text = uiState.result,
-                        fontSize = 22.sp,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().padding(24.dp)
-                    )
-                    resetResult()
                 }
 
 

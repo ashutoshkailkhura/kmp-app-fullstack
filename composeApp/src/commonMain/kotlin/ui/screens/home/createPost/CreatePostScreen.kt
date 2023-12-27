@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -16,6 +18,7 @@ import androidx.compose.material.icons.outlined.AttachFile
 import androidx.compose.material.icons.outlined.PermMedia
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,28 +37,73 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.components.SlideMessage
+import ui.screens.home.CreatePostUiState
+import ui.screens.home.HomeViewModel
+import ui.screens.home.postList.PostListScreen
 
 class CreatePostScreen : Screen {
 
     @Composable
     override fun Content() {
 
+        val homeViewModel =
+            getViewModel(CreatePostScreen().key, viewModelFactory { HomeViewModel() })
+
         val navigator = LocalNavigator.currentOrThrow
 
+
+
+
+        CreatePostContent(
+            uiState = homeViewModel.createPostUiState,
+            createPost = {
+                homeViewModel.createPost(it)
+            },
+            onBackPress = navigator::pop,
+            resetResult = {
+                homeViewModel.resetResult()
+            }
+        )
+
+
+    }
+
+    @Composable
+    fun CreatePostContent(
+        uiState: CreatePostUiState,
+        createPost: (content: String) -> Unit,
+        onBackPress: () -> Unit,
+        resetResult: () -> Unit,
+    ) {
 
         var postTextState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
             mutableStateOf(TextFieldValue())
         }
 
+
         Column(
 
         ) {
+
+            if (uiState.loading) {
+                CircularProgressIndicator(Modifier.size(32.dp))
+            } else {
+                Spacer(Modifier.height(32.dp))
+            }
+
+            SlideMessage(uiState.result) {
+                resetResult()
+            }
+
             Row(
                 modifier = Modifier.fillMaxWidth().padding(12.dp),
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = navigator::pop) {
+                IconButton(onClick = { onBackPress() }) {
                     Icon(Icons.Filled.Close, "Localized Description")
                 }
 
@@ -78,7 +126,7 @@ class CreatePostScreen : Screen {
 
                 Button(
                     enabled = postTextState.text.isNotBlank(),
-                    onClick = { /*TODO call api*/ },
+                    onClick = { createPost(postTextState.text) },
                     colors = buttonColors,
                     border = border,
                     contentPadding = PaddingValues(0.dp)

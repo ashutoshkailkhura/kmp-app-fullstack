@@ -1,8 +1,5 @@
 package ui.screens.auth.login
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -39,14 +37,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.components.SlideMessage
 import ui.screens.auth.AuthViewModel
 import ui.screens.auth.LogInUiState
 import ui.screens.auth.signup.SignUpScreen
@@ -65,7 +62,8 @@ class LogInScreen : Screen {
         LogInScreenContent(
             uiState = authViewModel.logInUiState,
             onLogInClick = { mail, pass ->
-                authViewModel.logIn(mail, pass)
+//                authViewModel.logIn(mail, pass)
+                navigator.push(HomeScreen())
             },
             onSignUpClick = { navigator.push(SignUpScreen()) },
             resetResult = {
@@ -99,6 +97,10 @@ fun LogInScreenContent(
             .fillMaxSize()
     ) {
 
+        SlideMessage(uiState.result) {
+            resetResult()
+        }
+
         // Display UI for success state
         Column(
             modifier = Modifier
@@ -107,6 +109,8 @@ fun LogInScreenContent(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+
             // Spacer to push content to the top
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -118,23 +122,10 @@ fun LogInScreenContent(
             }
 
             if (uiState.loading) {
-                CircularProgressIndicator()
+                CircularProgressIndicator(Modifier.size(32.dp))
+            } else {
+                Spacer(Modifier.height(32.dp))
             }
-
-            AnimatedVisibility(
-                uiState.result.isNotEmpty(),
-                enter = slideInHorizontally(initialOffsetX = { it }),
-                exit = slideOutHorizontally(targetOffsetX = { it }),
-            ) {
-                Text(
-                    text = uiState.result,
-                    fontSize = 22.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(24.dp)
-                )
-                resetResult()
-            }
-
 
             // Text Field for User Email
             TextField(

@@ -1,1 +1,1 @@
-expect fun getPlatformName(): String
+//expect fun getPlatformName(): String

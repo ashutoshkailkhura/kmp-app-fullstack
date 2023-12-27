@@ -1,16 +1,3 @@
-install MySQL , create new user 
-
-```
-create user ashu@localhost identified by 'Ashu@123';
-grant all privileges on *.* to ashu@localhost;
-ALTER USER 'ashu'@localhost IDENTIFIED WITH mysql_native_password BY 'Ashu@123';
-
-```
-
-[Navigation] - (https://voyager.adriel.cafe/)
-
-for Jwt authentication [video](https://www.youtube.com/watch?v=uezSuUQt6DY)
-
 This is a Kotlin Multiplatform project targeting Android, iOS, Server.
 
 * `/server` is for the Ktor server application.
@@ -30,3 +17,18 @@ This is a Kotlin Multiplatform project targeting Android, iOS, Server.
 
 
 Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+
+## Connecting Database
+
+install MySQL , create new user
+
+```
+create user ashu@localhost identified by 'Ashu@123';
+grant all privileges on *.* to ashu@localhost;
+ALTER USER 'ashu'@localhost IDENTIFIED WITH mysql_native_password BY 'Ashu@123';
+
+```
+
+[Navigation] - (https://voyager.adriel.cafe/)
+
+for Jwt authentication [video](https://www.youtube.com/watch?v=uezSuUQt6DY)

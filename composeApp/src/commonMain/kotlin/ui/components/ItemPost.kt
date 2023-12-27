@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ItemPost(
-    post: Post,
-    onPostSelect:(postId:Int) -> Unit,
+    post: entity.Post,
+    onPostSelect: (postId: Int) -> Unit,
 ) {
 
     Card(
@@ -33,7 +33,7 @@ fun ItemPost(
         elevation = CardDefaults.cardElevation(6.dp)
     ) {
         Text(
-            post.postText,
+            post.postDetail,
             textAlign = TextAlign.Start,
             maxLines = 2,
             modifier = Modifier.fillMaxWidth().padding(6.dp)
@@ -43,9 +43,9 @@ fun ItemPost(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            ButtonWithIcon(post.location, Icons.Filled.LocationOn, false)
+//            ButtonWithIcon(post.location, Icons.Filled.LocationOn, false)
             Spacer(Modifier.weight(1f))
-            Text(post.timestamp.toString())
+            Text(post.timeStamp.toString())
         }
     }
 
