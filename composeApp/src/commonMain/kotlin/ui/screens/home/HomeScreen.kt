@@ -58,7 +58,6 @@ class HomeScreen : Screen {
                 content = {
                     CurrentTab()
                 },
-
                 bottomBar = {
                     AnimatedVisibility(
                         bottomVisibility && listState.firstVisibleItemIndex == 0,
