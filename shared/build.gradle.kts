@@ -12,7 +12,7 @@ kotlin {
 //    targetHierarchy.default()
 
     jvm()
-    android()
+    androidTarget()
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -22,11 +22,13 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 //put your multiplatform dependencies here
+                implementation(libs.ktor.client.core)
                 implementation(libs.ktor.serialization)
                 implementation(libs.ktor.content.negotiation.client)
-                implementation(libs.ktor.client.core)
                 implementation(libs.kotlinxCoroutinesCore)
+                implementation("io.ktor:ktor-client-websockets:2.3.5")
 
+//                implementation("io.ktor:ktor-client-cio:$ktor_version")
 //                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 //                implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
             }

@@ -15,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -31,7 +32,9 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.components.FullScreenError
 import ui.components.ItemPost
+import ui.components.SimpleLoading
 import ui.components.SlideMessage
 import ui.screens.auth.AuthViewModel
 import ui.screens.auth.login.LogInScreen
@@ -67,8 +70,9 @@ class PostListScreen(
                     CreatePostScreen()
                 )
             },
-            resetResult = {
+            reTry = {
                 homeViewModel.resetResult()
+                homeViewModel.getPost()
             }
         )
 
@@ -80,54 +84,50 @@ class PostListScreen(
         uiState: HomeUiState,
         onPostClick: (postId: Int) -> Unit,
         onClickCreatePost: () -> Unit,
-        resetResult: () -> Unit,
-    ) {
+        reTry: () -> Unit,
+
+        ) {
         val expandedFab by remember {
             derivedStateOf {
                 listState.firstVisibleItemIndex == 0
             }
         }
 
-        Scaffold(
-            modifier = Modifier.padding(bottom = if (listState.firstVisibleItemIndex == 0) 80.dp else 0.dp),
-            topBar = {
-                TopAppBar(
-                    title = { Text(text = "Home") },
-                )
-            },
-            floatingActionButton = {
-                ExtendedFloatingActionButton(
-                    onClick = { onClickCreatePost() },
-                    expanded = expandedFab,
-                    icon = { Icon(Icons.Filled.Add, "Localized Description") },
-                    text = { Text(text = "Create FAB") },
-                )
-            },
-            floatingActionButtonPosition = FabPosition.End,
-        ) {
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.padding(it)
+        if (uiState.loading) {
+            SimpleLoading()
+        } else if (uiState.error.isNotEmpty()) {
+            FullScreenError(uiState.error) {
+                reTry()
+            }
+        } else if (uiState.postList.isNotEmpty()) {
+            Scaffold(
+                modifier = Modifier.padding(bottom = if (listState.firstVisibleItemIndex == 0) 80.dp else 0.dp),
+                topBar = {
+                    TopAppBar(
+                        title = { Text(text = "Home") },
+                    )
+                },
+                floatingActionButton = {
+                    ExtendedFloatingActionButton(
+                        containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                        onClick = { onClickCreatePost() },
+                        expanded = expandedFab,
+                        icon = { Icon(Icons.Filled.Add, "Localized Description") },
+                        text = { Text(text = "Create FAB") },
+                    )
+                },
+                floatingActionButtonPosition = FabPosition.End,
             ) {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.padding(it)
+                ) {
 
-                item {
-
-                    if (uiState.loading) {
-                        CircularProgressIndicator(Modifier.size(32.dp))
-                    } else {
-                        Spacer(Modifier.height(32.dp))
-                    }
-                }
-
-                item {
-                    SlideMessage(uiState.error) {
-                        resetResult()
-                    }
-                }
-
-                items(uiState.postList) { post ->
-                    ItemPost(post) { postId ->
-                        onPostClick(postId)
+                    items(uiState.postList) { post ->
+                        ItemPost(Modifier, post) { postId ->
+                            onPostClick(postId)
+                        }
                     }
                 }
             }

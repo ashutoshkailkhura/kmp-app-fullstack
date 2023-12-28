@@ -107,7 +107,6 @@ class APIService {
         }
     }
 
-
     suspend fun getPost(): Response<List<Post>> {
 
         return withContext(Dispatchers.IO) {
@@ -163,6 +162,7 @@ class APIService {
             }
         }
     }
+
 
     suspend fun getAnimals(): Response<List<Animal>> {
         val result = client.get("$BASE_URL/animal")

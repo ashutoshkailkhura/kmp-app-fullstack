@@ -5,8 +5,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.toArgb
 
 // Material 3 color schemes
 private val replyDarkColorScheme = darkColorScheme(
@@ -68,7 +66,7 @@ private val replyLightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun ReplyTheme(
+fun KMPTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
