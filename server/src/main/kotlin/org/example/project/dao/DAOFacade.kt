@@ -1,9 +1,9 @@
 package org.example.project.dao
 
-import data.request.PostRequest
-import entity.Post
-import entity.User
-import entity.UserProfile
+import org.example.project.data.request.PostRequest
+import org.example.project.entity.Post
+import org.example.project.entity.User
+import org.example.project.entity.UserProfile
 import org.example.project.data.model.ChatMessage
 import org.jetbrains.exposed.dao.id.EntityID
 

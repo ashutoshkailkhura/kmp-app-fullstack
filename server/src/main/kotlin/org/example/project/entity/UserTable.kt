@@ -19,11 +19,11 @@ object UserTable : IntIdTable() {
  * An entity instance or a row in the table is defined as a class instance:
  * */
 
-class User(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<User>(UserTable)
-
-    var email by UserTable.email
-    var password by UserTable.password
-    var salt by UserTable.salt
-    var timestamp by UserTable.timestamp
-}
+//class User(id: EntityID<Int>) : IntEntity(id) {
+//    companion object : IntEntityClass<User>(UserTable)
+//
+//    var email by UserTable.email
+//    var password by UserTable.password
+//    var salt by UserTable.salt
+//    var timestamp by UserTable.timestamp
+//}

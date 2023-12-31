@@ -1,6 +1,6 @@
 package org.example.project.routes
 
-import data.request.PostRequest
+import org.example.project.data.request.PostRequest
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

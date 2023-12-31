@@ -12,9 +12,10 @@ object ChatConversationsTable : IntIdTable() {
     val user2_id = reference("user2_id", UserTable)
 }
 
-class ChatConversations(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<ChatMessages>(ChatMessagesTable)
 
-    val user1_id by User referencedOn UserTable.id
-    val user2_id by User referencedOn UserTable.id
-}
+//class ChatConversations(id: EntityID<Int>) : IntEntity(id) {
+//    companion object : IntEntityClass<ChatMessages>(ChatMessagesTable)
+//
+//    val user1_id by User referencedOn UserTable.id
+//    val user2_id by User referencedOn UserTable.id
+//}

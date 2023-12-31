@@ -1,13 +1,14 @@
 package org.example.project.dao
 
-import data.request.PostRequest
-import entity.Post
+import org.example.project.data.request.PostRequest
 import org.example.project.entity.PostTable
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
+import org.example.project.entity.Post
+
 
 class DAOPostImpl : DAOPost {
     private fun resultRowToPost(row: ResultRow) = Post(

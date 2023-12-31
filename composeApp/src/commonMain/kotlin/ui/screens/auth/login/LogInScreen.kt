@@ -55,23 +55,21 @@ class LogInScreen : Screen {
     override fun Content() {
 
         val authViewModel = getViewModel(LogInScreen().key, viewModelFactory { AuthViewModel() })
-
         val navigator = LocalNavigator.currentOrThrow
 
 
         LogInScreenContent(
             uiState = authViewModel.logInUiState,
             onLogInClick = { mail, pass ->
-//                authViewModel.logIn(mail, pass)
-                navigator.push(HomeScreen())
+                authViewModel.logIn(mail, pass)
             },
             onSignUpClick = { navigator.push(SignUpScreen()) },
             resetResult = {
                 authViewModel.resetResult()
             },
             navigateToHome = {
-                navigator.push(HomeScreen())
-            }
+                navigator.replace(HomeScreen())
+            }, token = authViewModel.token
         )
     }
 }
@@ -85,6 +83,7 @@ fun LogInScreenContent(
     onSignUpClick: () -> Unit,
     resetResult: () -> Unit,
     navigateToHome: () -> Unit,
+    token: String
 ) {
 
     var email by remember { mutableStateOf("") }
@@ -115,9 +114,6 @@ fun LogInScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
 
             if (uiState.token.isNotEmpty()) {
-//                TODO save token
-                val token = uiState.token
-                println("XXX $token")
                 navigateToHome()
             }
 

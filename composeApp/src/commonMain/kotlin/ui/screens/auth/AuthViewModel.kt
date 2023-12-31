@@ -1,14 +1,16 @@
 package ui.screens.auth
 
+import SharedSDK
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import data.request.AuthRequest
+import org.example.project.data.request.AuthRequest
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import getPlatformName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import APIService
-import Response
+import org.example.project.netio.APIService
+import org.example.project.netio.Response
 
 
 data class LogInUiState(
@@ -25,7 +27,16 @@ data class SignUpInUiState(
 
 class AuthViewModel : ViewModel() {
 
-    private val apiService = APIService()
+    private val sdk = SharedSDK()
+
+    var token by mutableStateOf("")
+        private set
+
+    init {
+        viewModelScope.launch {
+            token = sdk.getToken() ?: "error"
+        }
+    }
 
     var logInUiState by mutableStateOf(LogInUiState())
         private set
@@ -45,7 +56,7 @@ class AuthViewModel : ViewModel() {
             logInUiState = logInUiState.copy(loading = true)
 
 
-            logInUiState = when (val result = apiService.logIn(AuthRequest(mail, password))) {
+            logInUiState = when (val result = sdk.remoteApi.logIn(AuthRequest(mail, password))) {
 
                 is Response.Error -> {
                     logInUiState.copy(
@@ -59,7 +70,17 @@ class AuthViewModel : ViewModel() {
                 }
 
                 is Response.Success -> {
-                    logInUiState.copy(token = result.data.token, loading = false)
+                    if (result.data.token.isNotEmpty()) {
+                        println("XXX $token")
+                        sdk.saveToken(result.data.token)
+                        logInUiState.copy(token = result.data.token, loading = false)
+                    } else {
+                        logInUiState.copy(
+                            token = "",
+                            loading = false,
+                            result = "Something went wrong"
+                        )
+                    }
                 }
             }
         }
@@ -77,7 +98,7 @@ class AuthViewModel : ViewModel() {
             signUpUiState = signUpUiState.copy(result = "", loading = true)
 
 
-            signUpUiState = when (val result = apiService.signUp(AuthRequest(mail, password))) {
+            signUpUiState = when (val result = sdk.remoteApi.signUp(AuthRequest(mail, password))) {
 
                 is Response.Error -> {
                     signUpUiState.copy(

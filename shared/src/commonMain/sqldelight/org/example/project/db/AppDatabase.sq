@@ -1,0 +1,15 @@
+
+CREATE TABLE UserSetting (
+ token TEXT NOT NULL
+ );
+
+ addUserSetting:
+ INSERT INTO UserSetting (token)
+ VALUES(?);
+
+ removeUserSetting:
+ DELETE FROM UserSetting;
+
+ getUserSetting:
+ SELECT UserSetting.*
+ FROM UserSetting;

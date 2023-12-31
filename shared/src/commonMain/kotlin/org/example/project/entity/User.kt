@@ -1,4 +1,4 @@
-package entity
+package org.example.project.entity
 
 //import org.bson.codecs.pojo.annotations.BsonId
 //import org.bson.types.ObjectId

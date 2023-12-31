@@ -1,8 +1,8 @@
 package org.example.project.routes
 
-import data.request.ProfileUpdateRequest
-import entity.User
-import entity.UserProfile
+import org.example.project.data.request.ProfileUpdateRequest
+import org.example.project.entity.User
+import org.example.project.entity.UserProfile
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

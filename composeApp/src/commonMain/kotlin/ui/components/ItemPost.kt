@@ -36,7 +36,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun ItemPost(
     modifier: Modifier = Modifier,
-    post: entity.Post,
+    post: org.example.project.entity.Post,
     onPostSelect: (postId: Int) -> Unit,
 ) {
 

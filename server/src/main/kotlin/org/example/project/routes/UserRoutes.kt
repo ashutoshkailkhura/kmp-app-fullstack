@@ -1,8 +1,7 @@
 package org.example.project.routes
 
-import data.request.AuthRequest
-import data.response.AuthResponse
-import entity.User
+import org.example.project.data.request.AuthRequest
+import org.example.project.data.response.AuthResponse
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -12,6 +11,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.codec.digest.DigestUtils
 import org.example.project.dao.DAOUser
+import org.example.project.entity.User
 import org.example.project.security.TokenClaim
 import org.example.project.security.TokenConfig
 import org.example.project.security.TokenService
@@ -42,6 +42,7 @@ fun Route.authentication(
             password = saltedHash.hash,
             salt = saltedHash.salt
         )
+
         val wasAcknowledged = userDao.addUser(user)
         println("XXX $wasAcknowledged")
         if (wasAcknowledged == null) {

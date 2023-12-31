@@ -14,13 +14,13 @@ object UserProfileTable : IntIdTable() {
     val state = varchar("state", 100)
 }
 
-class UserProfile(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<UserProfile>(UserProfileTable)
-
-    val user by User referencedOn UserProfileTable.user  // use referencedOn for normal references
-    val name by UserProfileTable.name
-    val state by UserProfileTable.state
-}
+//class UserProfile(id: EntityID<Int>) : IntEntity(id) {
+//    companion object : IntEntityClass<UserProfile>(UserProfileTable)
+//
+//    val user by User referencedOn UserProfileTable.user  // use referencedOn for normal references
+//    val name by UserProfileTable.name
+//    val state by UserProfileTable.state
+//}
 
 
 

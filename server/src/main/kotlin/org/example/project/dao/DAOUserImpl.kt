@@ -1,7 +1,7 @@
 package org.example.project.dao
 
 import org.example.project.dao.DatabaseFactory.dbQuery
-import entity.User
+import org.example.project.entity.User
 import org.example.project.entity.UserProfileTable
 import org.example.project.entity.UserTable
 import org.jetbrains.exposed.dao.id.EntityID

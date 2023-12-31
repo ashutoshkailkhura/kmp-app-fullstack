@@ -1,4 +1,4 @@
-package entity
+package org.example.project.entity
 
 import kotlinx.serialization.Serializable
 

@@ -1,18 +1,14 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.compose.ExperimentalComposeLibrary
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.serialization)
-//    id("com.squareup.sqldelight")
+    id("com.squareup.sqldelight")
 }
 
 kotlin {
-//    @OptIn(ExperimentalKotlinGradlePluginApi::class)
-//    targetHierarchy.default()
 
     androidTarget {
         compilations.all {
@@ -29,24 +25,13 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
-            isStatic = true
+//            isStatic = true
+            linkerOpts.add("-lsqlite3")
         }
     }
 
     sourceSets {
-//        val sqlDelightVersion = "1.5.5"
 
-        val androidMain by getting {
-            dependencies {
-                implementation(libs.compose.ui)
-                implementation(libs.compose.ui.tooling.preview)
-                implementation(libs.androidx.activity.compose)
-
-//                implementation(libs.ktor.client.okhttp)
-//                implementation("com.squareup.sqldelight:android-driver:$sqlDelightVersion")
-
-            }
-        }
         val commonMain by getting {
             dependencies {
                 implementation(projects.shared)
@@ -57,49 +42,47 @@ kotlin {
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
+                implementation(libs.sqldelightRuntime)
+
                 implementation(libs.voyagerNavigator)
                 implementation(libs.voyagerTabNavigator)
                 implementation(libs.voyagerScreenModel)
                 implementation(libs.voyagerTransitions)
 
-//                implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
-
-                implementation("dev.icerock.moko:mvvm-compose:0.16.1") // api mvvm-core, getViewModel for Compose Multiplatform
-                implementation("dev.icerock.moko:mvvm-flow-compose:0.16.1") // api mvvm-flow, binding extensions for Compose Multiplatform
-
+                implementation(libs.mvvmCompose)
+                implementation(libs.mvvmFlowCompose)
             }
         }
 
-//        val iosX64Main by getting
-//        val iosArm64Main by getting
-//        val iosSimulatorArm64Main by getting
-//        val iosMain by creating {
-//            dependsOn(commonMain)
-//            iosX64Main.dependsOn(this)
-//            iosArm64Main.dependsOn(this)
-//            iosSimulatorArm64Main.dependsOn(this)
-//            dependencies {
-//
-//                implementation(libs.ktor.client.darwin)
-////                implementation("com.squareup.sqldelight:native-driver:$sqlDelightVersion")
-//            }
-//
-//        }
-//        val iosX64Test by getting
-//        val iosArm64Test by getting
-//        val iosSimulatorArm64Test by getting
-//        val iosTest by creating {
-////            dependsOn(commonTest)
-//            iosX64Test.dependsOn(this)
-//            iosArm64Test.dependsOn(this)
-//            iosSimulatorArm64Test.dependsOn(this)
-//        }
+        val androidMain by getting {
+            dependencies {
+                implementation(libs.compose.ui)
+                implementation(libs.compose.ui.tooling.preview)
+                implementation(libs.androidx.activity.compose)
+
+                implementation(libs.sqldelightAndroid)
+            }
+        }
+
+        val iosX64Main by getting
+        val iosArm64Main by getting
+        val iosSimulatorArm64Main by getting
+        val iosMain by creating {
+            dependsOn(commonMain)
+            iosX64Main.dependsOn(this)
+            iosArm64Main.dependsOn(this)
+            iosSimulatorArm64Main.dependsOn(this)
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+                implementation(libs.sqldelightNative)
+            }
+        }
     }
 }
 
 android {
     namespace = "org.example.project"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdkVersion(libs.versions.android.compileSdk.get().toInt())
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
@@ -139,9 +122,11 @@ android {
     }
 }
 
-//sqldelight {
-//    database("AppDatabase") {
-//        packageName = "com.egample.kmmdemoapp.cache"
-//    }
-//}
+sqldelight {
+    database("AppDatabase") {
+        packageName = "org.example.project.db"
+    }
+    linkSqlite = true
+}
+
 

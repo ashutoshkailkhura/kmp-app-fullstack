@@ -16,12 +16,12 @@ object ChatMessagesTable : IntIdTable() {
     val timestamp = datetime("timestamp").defaultExpression(CurrentDateTime)
 }
 
-class ChatMessages(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<ChatMessages>(ChatMessagesTable)
-
-    val senderId by User referencedOn UserTable.id
-    val receiverId by User referencedOn UserTable.id
-    val conversation by ChatConversations referencedOn ChatConversationsTable.id
-    val content by ChatMessagesTable.messageContent
-    val timestamp by ChatMessagesTable.timestamp
-}
+//class ChatMessages(id: EntityID<Int>) : IntEntity(id) {
+//    companion object : IntEntityClass<ChatMessages>(ChatMessagesTable)
+//
+//    val senderId by User referencedOn UserTable.id
+//    val receiverId by User referencedOn UserTable.id
+//    val conversation by ChatConversations referencedOn ChatConversationsTable.id
+//    val content by ChatMessagesTable.messageContent
+//    val timestamp by ChatMessagesTable.timestamp
+//}

@@ -21,6 +21,8 @@ junit = "4.13.2"
 voyagerVersion = "1.0.0"
 coroutinesCore = "1.6.4"
 kotlinxCoroutinesVersion = "1.6.4"
+mvvmComposeVersion = "0.16.1"
+sqldelightVersion = "1.5.5"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -56,6 +58,12 @@ voyagerScreenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", versi
 voyagerTransitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerVersion" }
 kotlinxCoroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesCore" }
 kotlinxCoroutinesAndroid = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesVersion" }
+#
+mvvmCompose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "mvvmComposeVersion" }
+mvvmFlowCompose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "mvvmComposeVersion" }
+sqldelightRuntime = { module = "com.squareup.sqldelight:runtime", version.ref = "sqldelightVersion" }
+sqldelightAndroid = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelightVersion" }
+sqldelightNative = { module = "com.squareup.sqldelight:native-driver", version.ref = "sqldelightVersion" }
 
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
