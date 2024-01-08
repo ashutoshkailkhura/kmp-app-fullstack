@@ -57,7 +57,6 @@ class LogInScreen : Screen {
         val authViewModel = getViewModel(LogInScreen().key, viewModelFactory { AuthViewModel() })
         val navigator = LocalNavigator.currentOrThrow
 
-
         LogInScreenContent(
             uiState = authViewModel.logInUiState,
             onLogInClick = { mail, pass ->
@@ -69,7 +68,7 @@ class LogInScreen : Screen {
             },
             navigateToHome = {
                 navigator.replace(HomeScreen())
-            }, token = authViewModel.token
+            }
         )
     }
 }
@@ -83,7 +82,6 @@ fun LogInScreenContent(
     onSignUpClick: () -> Unit,
     resetResult: () -> Unit,
     navigateToHome: () -> Unit,
-    token: String
 ) {
 
     var email by remember { mutableStateOf("") }
@@ -118,6 +116,7 @@ fun LogInScreenContent(
             }
 
             if (uiState.loading) {
+                keyboardController?.hide()
                 CircularProgressIndicator(Modifier.size(32.dp))
             } else {
                 Spacer(Modifier.height(32.dp))
@@ -179,7 +178,8 @@ fun LogInScreenContent(
                 onClick = { onLogInClick(email, password) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(8.dp),
+                enabled = !uiState.loading
             ) {
                 Text("Log In")
             }

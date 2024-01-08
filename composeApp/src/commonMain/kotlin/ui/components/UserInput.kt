@@ -1,9 +1,14 @@
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.text.BasicTextField
@@ -15,6 +20,8 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +34,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
@@ -46,22 +54,23 @@ fun UserInput(
     var textFieldFocusState by remember { mutableStateOf(false) }
     var lastFocusState by remember { mutableStateOf(false) }
 
-    Surface(tonalElevation = 2.dp, contentColor = MaterialTheme.colorScheme.secondary) {
+    Surface(tonalElevation = 5.dp, contentColor = MaterialTheme.colorScheme.secondary) {
 
         Row(
             modifier = modifier
-//                .height(72.dp)
-//                .wrapContentHeight()
+                .navigationBarsPadding()
+                .imePadding()
+                .height(72.dp)
+                .wrapContentHeight()
                 .padding(vertical = 6.dp, horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
-            BasicTextField(
+            TextField(
                 value = textState,
                 onValueChange = { textState = it },
-                modifier = modifier
-                    .padding(4.dp)
+                modifier = Modifier
                     .weight(1f)
+                    .fillMaxWidth()
                     .onFocusChanged { state ->
                         if (lastFocusState != state.isFocused) {
                             if (state.isFocused) {
@@ -72,24 +81,16 @@ fun UserInput(
                         lastFocusState = state.isFocused
                     },
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Send
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done
                 ),
-                cursorBrush = SolidColor(LocalContentColor.current),
-                textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current)
+//                cursorBrush = SolidColor(LocalContentColor.current),
+                textStyle = LocalTextStyle.current.copy(color = LocalContentColor.current),
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Yellow,
+                    unfocusedContainerColor = Color.Green
+                )
             )
-
-//            val disableContentColor =
-//                MaterialTheme.colorScheme.onSurfaceVariant
-
-//            if (textState.text.isEmpty() && !textFieldFocusState) {
-//                Text(
-//                    modifier = Modifier
-//                        .padding(start = 32.dp),
-//                    text = "Type here",
-//                    style = MaterialTheme.typography.bodyLarge.copy(color = disableContentColor)
-//                )
-//            }
-
 
             val border = if (!textState.text.isNotBlank()) {
                 BorderStroke(

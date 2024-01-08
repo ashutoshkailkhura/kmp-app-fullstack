@@ -18,7 +18,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import cafe.adriel.voyager.transitions.SlideTransition
 import ui.screens.home.chat.ChatListScreen
-import ui.screens.home.postList.PostListScreen
+import ui.screens.home.post.postList.PostListScreen
 
 data class ChatTab(
     val hideBottomBar: (status: Boolean) -> Unit = {}

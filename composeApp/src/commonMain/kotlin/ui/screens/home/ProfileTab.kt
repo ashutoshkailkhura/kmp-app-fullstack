@@ -17,11 +17,11 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import cafe.adriel.voyager.transitions.SlideTransition
-import ui.screens.home.postList.PostListScreen
+import ui.screens.home.post.postList.PostListScreen
 import ui.screens.home.profile.ProfileScreen
 
 data class ProfileTab(
-    val hideBottomBar: (status: Boolean) -> Unit = {}
+    val hideBottomBar: (status: Boolean) -> Unit = {},
 ) : Tab {
 
     override val options: TabOptions

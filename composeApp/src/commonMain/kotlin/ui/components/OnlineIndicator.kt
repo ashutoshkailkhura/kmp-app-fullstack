@@ -11,7 +11,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun OnlineIndicator(onOff: Boolean) {
+fun OnlineIndicator(
+    onOff: Boolean,
+    modifier: Modifier = Modifier
+) {
     val onOffColor = if (onOff) Color.Green else Color.Gray
     Box(
         modifier = Modifier

@@ -1,6 +1,6 @@
 import org.example.project.netio.APIService
 
-class SharedSDK() {
+object SharedSDK {
 
     private val localDb = Database(getDatabaseDriverFactory())
     val remoteApi = APIService()

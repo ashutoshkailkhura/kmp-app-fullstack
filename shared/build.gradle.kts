@@ -1,8 +1,8 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.serialization)
-//    alias(libs.plugins.androidApplication)
-    id("com.android.library")
+    alias(libs.plugins.androidLibrary)
+//    id("com.android.library")
     id("com.squareup.sqldelight")
 }
 
@@ -32,6 +32,7 @@ kotlin {
                 implementation(libs.ktor.content.negotiation.client)
                 implementation(libs.kotlinxCoroutinesCore)
                 implementation(libs.sqldelightRuntime)
+                implementation("io.ktor:ktor-client-cio:2.3.5")
                 implementation("io.ktor:ktor-client-websockets:2.3.5")
             }
         }

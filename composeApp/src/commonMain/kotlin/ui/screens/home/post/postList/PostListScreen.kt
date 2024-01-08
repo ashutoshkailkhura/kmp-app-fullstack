@@ -1,16 +1,11 @@
-package ui.screens.home.postList
+package ui.screens.home.post.postList
 
-import DataUtil
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
@@ -27,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.mvvm.compose.getViewModel
@@ -35,31 +29,32 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import ui.components.FullScreenError
 import ui.components.ItemPost
 import ui.components.SimpleLoading
-import ui.components.SlideMessage
-import ui.screens.auth.AuthViewModel
-import ui.screens.auth.login.LogInScreen
-import ui.screens.home.HomeUiState
-import ui.screens.home.HomeViewModel
-import ui.screens.home.postDetail.PostDetailScreen
-import ui.screens.home.createPost.CreatePostScreen
+import ui.screens.home.post.PostListUiState
+import ui.screens.home.post.PostViewModel
+import ui.screens.home.post.createPost.CreatePostScreen
+import ui.screens.home.post.postDetail.PostDetailScreen
 
 class PostListScreen(
     private var listState: LazyListState = LazyListState()
 ) : Screen {
 
+    companion object {
+        const val TAG = "PostListScreen"
+    }
+
     @Composable
     override fun Content() {
 
-        val homeViewModel = getViewModel(PostListScreen().key, viewModelFactory { HomeViewModel() })
-
+        val postViewModel = getViewModel(PostListScreen().key, viewModelFactory { PostViewModel() })
         val navigator = LocalNavigator.currentOrThrow
 
         LaunchedEffect(Unit) {
-            homeViewModel.getPost()
+            println("$TAG LaunchEffect getPost")
+            postViewModel.getPost()
         }
 
         PostListContent(
-            uiState = homeViewModel.homeUiState,
+            uiState = postViewModel.postListUiState,
             onPostClick = {
                 navigator.push(
                     PostDetailScreen(it)
@@ -71,8 +66,8 @@ class PostListScreen(
                 )
             },
             reTry = {
-                homeViewModel.resetResult()
-                homeViewModel.getPost()
+                postViewModel.resetResult()
+                postViewModel.getPost()
             }
         )
 
@@ -81,7 +76,7 @@ class PostListScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun PostListContent(
-        uiState: HomeUiState,
+        uiState: PostListUiState,
         onPostClick: (postId: Int) -> Unit,
         onClickCreatePost: () -> Unit,
         reTry: () -> Unit,

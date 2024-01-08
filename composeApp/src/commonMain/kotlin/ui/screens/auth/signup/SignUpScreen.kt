@@ -223,7 +223,8 @@ class SignUpScreen : Screen {
                     onClick = { onSignUpClick(email, password) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp)
+                        .padding(8.dp),
+                    enabled = !uiState.loading
                 ) {
                     Text("Sign Up")
                 }

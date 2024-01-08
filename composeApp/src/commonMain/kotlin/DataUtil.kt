@@ -10,12 +10,6 @@ data class Post(
     val timestamp: Long
 )
 
-data class Chat(
-    val userId: Int,
-    val message: String,
-    val lastTimeStamp: Long
-)
-
 @Immutable
 data class Message(
     val author: String,
@@ -109,13 +103,6 @@ object DataUtil {
             postBlob = "",
             timestamp = 1674411796305
         )
-    )
-
-    val chatList = listOf(
-        Chat(1, "Hello", 1674411796305),
-        Chat(2, "Hi", 1674411796305),
-        Chat(3, "Accept Reject", 1674411796305),
-        Chat(4, "see ya", 1674411796305),
     )
 
     val initialMessages = listOf(

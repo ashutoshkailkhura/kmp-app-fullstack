@@ -2,8 +2,8 @@
 ktor = "2.3.5"
 logback = "1.4.11"
 compose = "1.5.4"
-compose-plugin = "1.5.3"
-compose-compiler = "1.5.3"
+compose-plugin = "1.5.11"
+compose-compiler = "1.5.5"
 agp = "8.1.2"
 android-minSdk = "24"
 android-compileSdk = "34"
@@ -70,5 +70,6 @@ kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }

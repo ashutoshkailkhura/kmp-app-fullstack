@@ -27,16 +27,7 @@ data class SignUpInUiState(
 
 class AuthViewModel : ViewModel() {
 
-    private val sdk = SharedSDK()
-
-    var token by mutableStateOf("")
-        private set
-
-    init {
-        viewModelScope.launch {
-            token = sdk.getToken() ?: "error"
-        }
-    }
+    private val sdk = SharedSDK
 
     var logInUiState by mutableStateOf(LogInUiState())
         private set
@@ -71,7 +62,6 @@ class AuthViewModel : ViewModel() {
 
                 is Response.Success -> {
                     if (result.data.token.isNotEmpty()) {
-                        println("XXX $token")
                         sdk.saveToken(result.data.token)
                         logInUiState.copy(token = result.data.token, loading = false)
                     } else {

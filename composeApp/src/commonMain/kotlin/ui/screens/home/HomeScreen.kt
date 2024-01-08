@@ -10,6 +10,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -20,14 +21,25 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.tab.CurrentTab
 import cafe.adriel.voyager.navigator.tab.TabDisposable
 import cafe.adriel.voyager.navigator.tab.TabNavigator
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.screens.auth.AuthViewModel
+import ui.screens.auth.login.LogInScreen
 
 class HomeScreen : Screen {
 
     @OptIn(ExperimentalVoyagerApi::class)
     @Composable
     override fun Content() {
+
         val listState = rememberLazyListState()
         var bottomVisibility by rememberSaveable { mutableStateOf(true) }
+
+        val homeViewModel = getViewModel(HomeScreen().key, viewModelFactory { HomeViewModel() })
+
+        LaunchedEffect(Unit) {
+            homeViewModel.connectUser()
+        }
 
         val tabs by remember {
             mutableStateOf(
@@ -38,9 +50,10 @@ class HomeScreen : Screen {
                     ChatTab {
                         bottomVisibility = it
                     },
-                    ProfileTab {
-                        bottomVisibility = it
-                    },
+                    ProfileTab(
+                        hideBottomBar = {
+                            bottomVisibility = it
+                        }),
                 )
             )
         }
