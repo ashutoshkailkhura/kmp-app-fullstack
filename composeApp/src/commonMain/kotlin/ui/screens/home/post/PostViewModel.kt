@@ -37,7 +37,7 @@ class PostViewModel : ViewModel() {
 
 
     fun getPost() {
-        println("${HomeViewModel.TAG} getPost")
+        println("$TAG getPost")
         val getPostJob = viewModelScope.launch {
             postListUiState = postListUiState.copy(loading = true)
 

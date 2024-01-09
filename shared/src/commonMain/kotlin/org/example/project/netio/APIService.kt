@@ -235,6 +235,10 @@ class APIService {
         }
     }
 
+    suspend fun isUserConnected(): Boolean {
+        return sockets?.isActive == true
+    }
+
     suspend fun getOnlineUser(token: String): Response<List<OnlineUser>> {
         return withContext(Dispatchers.IO) {
             try {

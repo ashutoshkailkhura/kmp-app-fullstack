@@ -46,14 +46,17 @@ class HomeScreen : Screen {
                 listOf(
                     HomeTab(
                         listState = listState
-                    ) { bottomVisibility = it },
+                    ) {
+                        bottomVisibility = it
+                    },
                     ChatTab {
                         bottomVisibility = it
                     },
                     ProfileTab(
                         hideBottomBar = {
                             bottomVisibility = it
-                        }),
+                        },
+                    ),
                 )
             )
         }

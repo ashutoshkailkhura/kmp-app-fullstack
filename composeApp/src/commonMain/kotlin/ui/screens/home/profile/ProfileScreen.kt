@@ -2,13 +2,11 @@ package ui.screens.home.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -44,18 +42,18 @@ class ProfileScreen() : Screen {
     @Composable
     override fun Content() {
 
-        val homeViewModel = getViewModel(HomeScreen().key, viewModelFactory { HomeViewModel() })
+        val profileViewModel =
+            getViewModel(ProfileScreen().key, viewModelFactory { ProfileViewModel() })
 
         ProfileScreenContent(
-            uiState = homeViewModel.onLineUiState
+            uiState = profileViewModel.onLineUiState
         )
 
     }
 
     @OptIn(ExperimentalResourceApi::class)
-    private
     @Composable
-    fun ProfileScreenContent(uiState: OnLineUiState) {
+    fun ProfileScreenContent(uiState: Boolean) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,8 +86,8 @@ class ProfileScreen() : Screen {
                     )
 
                     OnlineIndicator(
-                        modifier = Modifier.align(Alignment.TopStart),
-                        onOff = uiState.connected
+                        modifier = Modifier.align(Alignment.Center),
+                        onOff = uiState
                     )
                 }
             }

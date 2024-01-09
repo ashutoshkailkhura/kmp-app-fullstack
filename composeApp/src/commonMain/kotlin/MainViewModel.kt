@@ -23,6 +23,7 @@ class MainViewModel : ViewModel() {
         private set
 
     fun isUserLogIn() {
+        println("$TAG isUserLogIn")
         viewModelScope.launch {
             mainUiState = when (val token = sdk.getToken()) {
                 "" -> mainUiState.copy(loading = false)

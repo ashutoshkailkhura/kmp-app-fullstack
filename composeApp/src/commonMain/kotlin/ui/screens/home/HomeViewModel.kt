@@ -11,9 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.example.project.entity.Post
-
-
-
+import ui.screens.home.post.PostViewModel
 
 class HomeViewModel : ViewModel() {
 
@@ -31,6 +29,7 @@ class HomeViewModel : ViewModel() {
         private set
 
     fun connectUser() {
+        println("$TAG connectUser")
         viewModelScope.launch {
             val userToken = sdk.getToken()
             userToken?.let { token ->
