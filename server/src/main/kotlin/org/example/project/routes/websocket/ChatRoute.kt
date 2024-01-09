@@ -5,21 +5,21 @@ import com.google.gson.JsonParseException
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.server.sessions.*
 import io.ktor.server.websocket.*
+import io.ktor.util.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.consumeEach
-import org.example.project.dao.DAOChatConversationImpl
-import org.example.project.dao.DAOChatMessageImpl
-import org.example.project.plugin.ChatSession
+import org.example.project.entity.OnlineUser
+import org.example.project.plugin.UserSession
 
 private val server = ChatServer()
 
 fun Route.chatRoute(
-    chatMessageDao: DAOChatMessageImpl,
-    chatConversationDao: DAOChatConversationImpl
+//    chatMessageDao: DAOChatMessageImpl,
+//    chatConversationDao: DAOChatConversationImpl
 ) {
 //    route("/chat") {
 //        // Get Chat request
@@ -115,45 +115,84 @@ fun Route.chatRoute(
 //        }
 //    }
 
-    // Defines a websocket `/ws` route that allows a protocol upgrade to convert a HTTP request/response request
-    // into a bidirectional packetized connection.
-    webSocket("/ws") { // this: WebSocketSession ->
 
-        // First of all we get the session.
-        val userSession = call.sessions.get<ChatSession>()
-
-        // We check that we actually have a session. We should always have one,
-        // since we have defined an interceptor before to set one.
-        if (userSession == null) {
-            close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "No session"))
-            return@webSocket
+    get("/onlineuser") {
+//        val userId = call.principal<JWTPrincipal>()?.payload?.getClaim("userId")?.asInt()
+//        if (userId == null) {
+//            call.respond(HttpStatusCode.OK, "userId nai hai, kon puch ra hai ??")
+//        }
+        val onlineUser: List<OnlineUser> = server.members.map { it ->
+            println("XXX onlineUser ${it.key} onlineUser ${it.value.size}")
+            OnlineUser(
+                userId = it.key.toInt(), lastSeen = System.currentTimeMillis()
+            )
         }
+        println("XXX onlineUser ${onlineUser.size}")
+//        val demo = listOf(
+//            OnlineUser(1, 1674411796305),
+//            OnlineUser(2, 1674411796305),
+//            OnlineUser(3, 1674411796305),
+//            OnlineUser(4, 1674411796305),
+//            OnlineUser(5, 1674411796305),
+//        )
+        call.respond(HttpStatusCode.OK, onlineUser)
+    }
+    authenticate {
 
 
-        // We notify that a member joined by calling the server handler [memberJoin].
-        // This allows associating the session ID to a specific WebSocket connection.
-        server.memberJoin(userSession, this)
+        // Get Chat request
 
-        try {
-            // We start receiving messages (frames).
-            // Since this is a coroutine, it is suspended until receiving frames.
-            // Once the connection is closed, this consumeEach will finish and the code will continue.
-            incoming.consumeEach { frame ->
-                // Frames can be [Text], [Binary], [Ping], [Pong], [Close].
-                // We are only interested in textual messages, so we filter it.
-                if (frame is Frame.Text) {
-                    // Now it is time to process the text sent from the user.
-                    // At this point, we have context about this connection,
-                    // the session, the text and the server.
-                    // So we have everything we need.
-                    receivedMessage(userSession, frame.readText(), this)
-                }
+
+        // Defines a websocket `/ws` route that allows a protocol upgrade to convert a HTTP request/response request
+        // into a bidirectional packetized connection.
+        webSocket("/ws") { // this: WebSocketSession ->
+            // First of all we get the session.
+            val userId = call.principal<JWTPrincipal>()?.payload?.getClaim("userId")?.asString()
+            println("XXX /ws userId $userId")
+//        call.sessions.set(userId?.let { it1 -> ChatSession(it1, generateNonce()) })
+            if (userId == null) {
+                close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "are token ni mila"))
+                return@webSocket
             }
-        } finally {
-            // Either if there was an error, or if the connection was closed gracefully,
-            // we notified the server that the member had left.
-            server.memberLeft(userSession, this)
+
+//        val userSession = call.sessions.get<UserSession>()
+            val userSession = UserSession(userId, generateNonce())
+            println("XXX Creating user session $userSession")
+            // We check that we actually have a session. We should always have one,
+            // since we have defined an interceptor before to set one.
+//        if (userSession == null) {
+//            close(CloseReason(CloseReason.Codes.VIOLATED_POLICY, "please check user session"))
+//            return@webSocket
+//        }
+
+
+            // We notify that a member joined by calling the server handler [memberJoin].
+            // This allows associating the session ID to a specific WebSocket connection.
+            server.memberJoin(userSession, this)
+            println("XXX memberJoin")
+
+            try {
+                // We start receiving messages (frames).
+                // Since this is a coroutine, it is suspended until receiving frames.
+                // Once the connection is closed, this consumeEach will finish and the code will continue.
+                incoming.consumeEach { frame ->
+                    // Frames can be [Text], [Binary], [Ping], [Pong], [Close].
+                    // We are only interested in textual messages, so we filter it.
+                    if (frame is Frame.Text) {
+                        // Now it is time to process the text sent from the user.
+                        // At this point, we have context about this connection,
+                        // the session, the text and the server.
+                        // So we have everything we need.
+                        receivedMessage(userSession, frame.readText(), this)
+                    }
+                }
+            } finally {
+                // Either if there was an error, or if the connection was closed gracefully,
+                // we notified the server that the member had left.
+                server.memberLeft(userSession, this)
+            }
         }
+
     }
 }
 
@@ -161,7 +200,7 @@ fun Route.chatRoute(
  * We received a message. Let's process it.
  */
 private suspend fun receivedMessage(
-    session: ChatSession,
+    session: UserSession,
     command: String,
     socketSession: DefaultWebSocketSession
 ) {
@@ -196,7 +235,7 @@ private suspend fun receivedMessage(
             // Process incoming chat message
             // Example:
             // - Display the message in the chat interface
-            server.sendTo(payload.targetUserId,session.sessionId,payload.data)
+            server.sendTo(payload.targetUserId, session.sessionId, payload.data)
 //            socketSession.sendWebSocketMessage(
 //                WebSocketPayload(
 //                    WebSocketEventType.NEW_MESSAGE,
@@ -207,9 +246,9 @@ private suspend fun receivedMessage(
     }
 
 //    when {
-        // The command `who` responds the user about all the member names connected to the user.
+    // The command `who` responds the user about all the member names connected to the user.
 //        command.startsWith("/who") -> server.who(id)
-        // The command `user` allows the user to set its name.
+    // The command `user` allows the user to set its name.
 //        command.startsWith("/user") -> {
 //            // We strip the command part to get the rest of the parameters.
 //            // In this case the only parameter is the user's newName.
@@ -226,9 +265,9 @@ private suspend fun receivedMessage(
 //                else -> server.memberRenamed(id, newName)
 //            }
 //        }
-        // The command 'help' allows users to get a list of available commands.
+    // The command 'help' allows users to get a list of available commands.
 //        command.startsWith("/help") -> server.help(session.sessionId)
-        // Total user in chat
+    // Total user in chat
 //        command.startsWith("/total") -> server.sendTotal(session.userId, 3)
 //        // If no commands are matched at this point, we notify about it.
 //        command.startsWith("/") -> server.sendTo(

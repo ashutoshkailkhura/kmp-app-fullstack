@@ -20,26 +20,27 @@ fun Route.postRoute(postDao: DAOPostImpl) {
             call.respond(HttpStatusCode.OK, postList)
         }
 
-        get("post/{userId}") {
-            val userId = call.parameters["userId"]?.toIntOrNull()
-            userId?.let {
-                val postList = postDao.getPostOfUser(userId)
-                call.respond(HttpStatusCode.OK, postList)
-            }
-
-        }
-
-//        get("post/{postId}") {
-//            val postId = call.parameters["postId"]?.toIntOrNull()
-//            postId?.let {
-//                val postDetail = postDao.getPostDetail(postId)
-//                call.respond(HttpStatusCode.OK, postDetail)
+//        get("post/{userId}") {
+//            val userId = call.parameters["userId"]?.toIntOrNull()
+//            userId?.let {
+//                val postList = postDao.getPostOfUser(userId)
+//                call.respond(HttpStatusCode.OK, postList)
 //            }
 //        }
 
+        get("post/{postId}") {
+            val postId = call.parameters["postId"]?.toIntOrNull()
+            postId?.let {
+                val postDetail = postDao.getPostDetail(postId)
+                call.respond(HttpStatusCode.OK, postDetail)
+            } ?: run {
+                call.respond(HttpStatusCode.OK, "Post Id missing")
+            }
+        }
+
         post("post") {
             val principal = call.principal<JWTPrincipal>()
-            val userId = principal?.getClaim("userId", Int::class)
+            val userId = principal?.payload?.getClaim("userId")?.asInt()
             println("XXX $userId")
             if (userId == null) {
                 call.respond(HttpStatusCode.Conflict, "userId is Null")

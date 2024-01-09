@@ -13,12 +13,3 @@ object PostTable : IntIdTable() {
     val content = text("content")
     val timestamp = datetime("timestamp").defaultExpression(CurrentDateTime)
 }
-
-//class Post(id: EntityID<Int>) : IntEntity(id) {
-//
-//    companion object : IntEntityClass<Post>(PostTable)
-//
-//    val user by User referencedOn PostTable.user
-//    val content by PostTable.content
-//    val timestamp by PostTable.timestamp
-//}

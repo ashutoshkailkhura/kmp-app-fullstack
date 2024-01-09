@@ -1,5 +1,6 @@
 package org.example.project.dao
 
+import org.example.project.dao.DatabaseFactory.dbQuery
 import org.example.project.data.request.PostRequest
 import org.example.project.entity.PostTable
 import org.jetbrains.exposed.dao.id.EntityID
@@ -19,7 +20,7 @@ class DAOPostImpl : DAOPost {
     )
 
     override suspend fun createPost(userId: Int, post: PostRequest): EntityID<Int>? =
-        DatabaseFactory.dbQuery {
+        dbQuery {
             val createPostStatement = PostTable.insert { row ->
                 row[user] = userId
                 row[content] = post.content
@@ -29,20 +30,25 @@ class DAOPostImpl : DAOPost {
             }
         }
 
-
     override suspend fun getAllPost(): List<Post> =
-        DatabaseFactory.dbQuery {
+        dbQuery {
             println("XXX : getting all post dbQuery")
             val result = PostTable.selectAll().map(::resultRowToPost)
             result
         }
+
+    override suspend fun getPostDetail(postId: Int): Post = dbQuery {
+        PostTable.select {
+            PostTable.id eq postId
+        }.map(::resultRowToPost).first()
+    }
 
     override suspend fun deletePost(postId: Int): Boolean {
         TODO("Not yet implemented")
     }
 
     override suspend fun getPostOfUser(userId: Int): List<Post> =
-        DatabaseFactory.dbQuery {
+        dbQuery {
             PostTable.select { PostTable.user eq userId }.map(::resultRowToPost)
         }
 }
