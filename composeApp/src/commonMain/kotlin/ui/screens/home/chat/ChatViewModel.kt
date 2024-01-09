@@ -101,7 +101,7 @@ class ChatViewModel : ViewModel() {
         viewModelScope.launch {
             println("$TAG observeMsg ")
 //            try {
-                sdk.remoteApi.observeMsg()
+//                sdk.remoteApi.observeMsg()
 //                    .onEach {
 //                        println("$TAG observeMsg ${it.data}")
 //                        val newList = chatDetailUiState.msgList.toMutableList().apply {
