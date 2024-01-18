@@ -23,7 +23,7 @@ interface DAOPost {
     suspend fun createPost(userId: Int, post: PostRequest): EntityID<Int>?
     suspend fun getAllPost(): List<Post>
     suspend fun deletePost(postId: Int): Boolean
-
+    suspend fun getPostDetail(postId: Int): Post
     suspend fun getPostOfUser(userId: Int): List<Post>
 }
 

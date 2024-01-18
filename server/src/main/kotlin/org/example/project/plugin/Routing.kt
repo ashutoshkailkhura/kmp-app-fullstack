@@ -20,17 +20,13 @@ fun Application.configureRouting(
     val userDao: DAOUser = DAOUserImpl()
     val userProfileDao = DAOUserProfileImpl()
     val postDao = DAOPostImpl()
-    val chatMessageDao = DAOChatMessageImpl()
-    val chatConversationDao = DAOChatConversationImpl()
+//    val chatMessageDao = DAOChatMessageImpl()
+//    val chatConversationDao = DAOChatConversationImpl()
 
     routing {
         authentication(userDao, hashingService, tokenService, tokenConfig)
         userProfile(userProfileDao)
         postRoute(postDao)
-        chatRoute(chatMessageDao, chatConversationDao)
+        chatRoute()
     }
-}
-
-fun ApplicationCall.getUserIdFromPrincipal(): Int {
-    return principal<JWTPrincipal>()?.getClaim("userId", Int::class) ?: throw AuthenticationException("Invalid user")
 }

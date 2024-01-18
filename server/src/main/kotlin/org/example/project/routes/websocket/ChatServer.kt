@@ -1,10 +1,14 @@
 package org.example.project.routes.websocket
 
 import com.google.gson.Gson
+import com.google.gson.JsonParseException
 import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.channels.*
-import org.example.project.plugin.ChatSession
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import org.example.project.plugin.UserSession
 import java.util.*
 import java.util.concurrent.*
 import java.util.concurrent.atomic.*
@@ -17,10 +21,11 @@ enum class WebSocketEventType {
     NEW_MESSAGE
 }
 
+@Serializable
 data class WebSocketPayload(
     val type: WebSocketEventType,
     val data: String,
-    val targetUserId: Int
+    val targetUserId: String
 )
 
 /**
@@ -38,7 +43,7 @@ class ChatServer {
      * Since a browser is able to open several tabs and windows with the same cookies and thus the same session.
      * There might be several opened sockets for the same client.
      */
-    val members = ConcurrentHashMap<Int, MutableList<WebSocketSession>>()
+    val members = ConcurrentHashMap<String, MutableList<WebSocketSession>>()
 
     val userConnections = mutableMapOf<Int, WebSocketServerSession>() // Map to store user connections
 
@@ -51,7 +56,7 @@ class ChatServer {
     /**
      * Handles that a member is identified by a session ID and a socket joined.
      */
-    suspend fun memberJoin(member: ChatSession, socket: WebSocketSession) {
+    suspend fun memberJoin(member: UserSession, socket: WebSocketSession) {
         // Checks if this user is already registered in the server and gives him/her a temporal name if required.
 //        val name = memberNames.computeIfAbsent(member.sessionId) { "${member.userId}" }
 
@@ -62,17 +67,19 @@ class ChatServer {
         // But since this is a sample we are not doing it.
         val list = members.computeIfAbsent(member.userId) { CopyOnWriteArrayList() }
         list.add(socket)
+        println("XXX memberJoin list.add(socket)")
 
 //         Only when joining the first socket for a member notifies the rest of the users.
-        if (list.size == 1) {
-            broadcast("server", "Member joined: ${member.userId}.")
-        }
+//        if (list.size == 1) {
+//            broadcast("server", "Member joined: ${member.userId}.")
+//        }
 
         // Sends the user the latest messages from this server to let the member have a bit context.
         val messages = synchronized(lastMessages) { lastMessages.toList() }
         for (message in messages) {
             socket.send(Frame.Text(message))
         }
+        println("XXX memberJoin synchronized")
     }
 
     /**
@@ -88,7 +95,7 @@ class ChatServer {
     /**
      * Handles that a [member] with a specific [socket] left the server.
      */
-    suspend fun memberLeft(member: ChatSession, socket: WebSocketSession) {
+    suspend fun memberLeft(member: UserSession, socket: WebSocketSession) {
         // Removes the socket connection for this member
         val connections = members[member.userId]
         connections?.remove(socket)
@@ -104,8 +111,8 @@ class ChatServer {
     /**
      * Handles the 'who' command by sending the member a list of all member names in the server.
      */
-    suspend fun who(sender: Int) {
-        members[sender]?.send(Frame.Text(memberNames.values.joinToString(prefix = "[server::who] ")))
+    suspend fun who(sender: String) {
+//        members[sender]?.send(Frame.Text(memberNames.values.joinToString(prefix = "[server::who] ")))
     }
 
     /**
@@ -118,7 +125,7 @@ class ChatServer {
     /**
      * Handles 'total' command by sending number of available connection
      * */
-    suspend fun sendTotal(sender: Int, recipient: Int) {
+    suspend fun sendTotal(sender: Int, recipient: String) {
         val builder = StringBuilder().append {
             "Total"
         }
@@ -132,8 +139,20 @@ class ChatServer {
      *
      * Both [recipient] and [sender] are identified by its session-id.
      */
-    suspend fun sendTo(recipient: Int, sender: String, message: String) {
-        members[recipient]?.send(Frame.Text("[$sender] $message"))
+    suspend fun sendTo(recipient: String, sender: String, message: String) {
+        val wsMsg = WebSocketPayload(
+            type = WebSocketEventType.NEW_MESSAGE,
+            data = message,
+            targetUserId = recipient
+        )
+//            try {
+//            Gson().fromJson(command, WebSocketPayload::class.java)
+//        } catch (e: JsonParseException) {
+//            server.sendTo(session.userId, "server::help", "Invalid JSON format")
+//            return
+//        }
+
+        members[recipient]?.send(Frame.Text(Json.encodeToString(wsMsg)))
     }
 
     /**
@@ -145,7 +164,7 @@ class ChatServer {
         val formatted = "[$name] $message"
 
         // Sends this pre-formatted message to all the members in the server.
-        broadcast(formatted)
+//        broadcast(formatted)
 
         // Appends the message to the list of [lastMessages] and caps that collection to 100 items to prevent
         // growing too much.

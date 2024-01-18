@@ -30,7 +30,7 @@ object DatabaseFactory {
                 UserTable,
                 UserProfileTable,
                 PostTable,
-//                ChatMessagesTable,
+                PresenceTable,
 //                PetTable
             )
         }

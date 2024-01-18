@@ -1,8 +1,6 @@
 package org.example.project
 
 import io.ktor.server.application.*
-import org.example.project.dao.DAOUser
-import org.example.project.dao.DAOUserImpl
 import org.example.project.dao.DatabaseFactory
 import org.example.project.plugin.*
 import org.example.project.security.JwtTokenService
@@ -22,11 +20,11 @@ fun Application.module() {
 
     DatabaseFactory.init()
 
+    configureMonitoring()
+    configureSerialization()
     configureSecurity(tokenConfig)
     configureSockets()
     configureRouting(hashingService, tokenService, tokenConfig)
     configureSession()
-    configureSerialization()
-    configureMonitoring()
 
 }
