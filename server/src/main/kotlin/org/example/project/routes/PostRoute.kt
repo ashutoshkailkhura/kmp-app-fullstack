@@ -40,7 +40,7 @@ fun Route.postRoute(postDao: DAOPostImpl) {
 
         post("post") {
             val principal = call.principal<JWTPrincipal>()
-            val userId = principal?.payload?.getClaim("userId")?.asInt()
+            val userId = principal?.payload?.getClaim("userId")?.asString()
             println("XXX $userId")
             if (userId == null) {
                 call.respond(HttpStatusCode.Conflict, "userId is Null")
@@ -52,7 +52,7 @@ fun Route.postRoute(postDao: DAOPostImpl) {
                 call.respond(HttpStatusCode.BadRequest, "Empty Content")
             }
 
-            val postRes = postDao.createPost(userId, post)
+            val postRes = postDao.createPost(userId.toInt() , post)
             if (postRes == null) {
                 call.respond(HttpStatusCode.NoContent, "Post Not Created")
                 return@post
