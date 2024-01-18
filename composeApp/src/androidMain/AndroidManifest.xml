@@ -11,8 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
-        android:usesCleartextTraffic="true"
-        android:windowSoftInputMode="adjustResize">
+        android:usesCleartextTraffic="true">
 
         <activity
             android:name=".MainActivity"

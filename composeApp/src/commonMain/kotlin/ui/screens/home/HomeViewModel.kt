@@ -63,8 +63,11 @@ class HomeViewModel : ViewModel() {
     }
 
     override fun onCleared() {
-        super.onCleared()
+//        viewModelScope.launch {
+//            sdk.remoteApi.closeChatSession()
+//        }
         println("$TAG onCleared")
+        super.onCleared()
     }
 }
 

@@ -25,18 +25,14 @@ class MainViewModel : ViewModel() {
     fun isUserLogIn() {
         println("$TAG isUserLogIn")
         viewModelScope.launch {
-            mainUiState = when (val token = sdk.getToken()) {
-                "" -> mainUiState.copy(loading = false)
-                null -> mainUiState.copy(loading = false)
-                else -> {
-                    mainUiState.copy(userToken = token, loading = false)
-                }
+            val token = sdk.getToken()
+            token?.let {
+                mainUiState = mainUiState.copy(userToken = token, loading = false)
+            } ?: run {
+                mainUiState = mainUiState.copy(loading = false)
             }
-
         }
     }
-
-
 
     override fun onCleared() {
         super.onCleared()
@@ -47,6 +43,6 @@ class MainViewModel : ViewModel() {
 
 data class MainUiState(
     val loading: Boolean = true,
-    val userToken: String = ""
+    val userToken: String? = null
 )
 

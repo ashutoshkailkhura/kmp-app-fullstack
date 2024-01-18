@@ -57,38 +57,39 @@ class ProfileScreen() : Screen {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(vertical = 8.dp)
         ) {
 
             // Row with user avatar and online indicator
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.3f),
+                    .weight(0.2f),
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape)
-                        .background(Color.White)
-                        .align(Alignment.CenterVertically)
+//                        .clip(CircleShape)
+//                        .size(104.dp)
+//                        .background(Color.White)
+//                        .align(Alignment.CenterVertically)
                 ) {
-                    // User avatar image or icon goes here
                     Image(
                         painterResource("compose-multiplatform.xml"),
                         null,
                         modifier = Modifier
-                            .fillMaxSize()
+                            .clip(CircleShape)
+                            .size(80.dp)
                             .align(Alignment.Center),
                         contentScale = ContentScale.Crop,
                     )
 
                     OnlineIndicator(
-                        modifier = Modifier.align(Alignment.Center),
+                        modifier = Modifier.align(Alignment.BottomEnd),
                         onOff = uiState
                     )
+
                 }
             }
 
@@ -97,9 +98,9 @@ class ProfileScreen() : Screen {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(0.7f)
+                    .weight(0.8f)
             ) {
-                ClickableListItem("Update Profile Detail") {
+                ClickableListItem("My Profile") {
                     // Handle click action
                 }
 
@@ -112,6 +113,10 @@ class ProfileScreen() : Screen {
                 }
 
                 ClickableListItem("Help") {
+                    // Handle click action
+                }
+
+                ClickableListItem("LogOut") {
                     // Handle click action
                 }
             }

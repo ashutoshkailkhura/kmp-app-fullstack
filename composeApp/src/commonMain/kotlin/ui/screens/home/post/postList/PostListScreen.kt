@@ -66,7 +66,6 @@ class PostListScreen(
                 )
             },
             reTry = {
-                postViewModel.resetResult()
                 postViewModel.getPost()
             }
         )

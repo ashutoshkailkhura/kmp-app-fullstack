@@ -5,13 +5,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.example.project.entity.OnlineUser
 import org.example.project.entity.WebSocketEventType
 import org.example.project.entity.WebSocketPayload
 import org.example.project.netio.Response
+import kotlin.time.TimeSource
 
 data class OnlineUserChatListUiState(
     val onlineUserList: List<OnlineUser> = emptyList(),
@@ -41,23 +44,19 @@ class ChatViewModel : ViewModel() {
     var chatDetailUiState by mutableStateOf(ChatDetailUiState())
         private set
 
-//    fun getLastChat() {
-//        viewModelScope.launch {
-//            state = when (val result = sdk.remoteApi.getMessages(sdk.getToken() ?: "")) {
-//                is Response.Error -> state.copy(
-//                    connected = false,
-//                    isLoading = false,
-//                    error = result.exception.message ?: "error"
-//                )
-//
-//                is Response.Loading -> state.copy(isLoading = true)
-//                is Response.Success -> state.copy(isLoading = false, connected = true)
-//            }
-//        }
-//    }
-
     fun getOnlineUser() {
+        println("$TAG getOnlineUser ")
+
+//        onlineUserChatListUiState = OnlineUserChatListUiState(
+//            onlineUserList = listOf(
+//                OnlineUser(
+//                    userId = 1, lastSeen = 987987876
+//                )
+//            )
+//        )
+
         viewModelScope.launch {
+            onlineUserChatListUiState = OnlineUserChatListUiState(isLoading = true)
             onlineUserChatListUiState =
                 when (val result = sdk.remoteApi.getOnlineUser(sdk.getToken() ?: "")) {
                     is Response.Error -> {
@@ -92,28 +91,35 @@ class ChatViewModel : ViewModel() {
                     data = msg,
                     targetUserId = userId
                 )
-                sdk.remoteApi.sendMessage(wsMsg)
+                when (val result = sdk.remoteApi.sendMessage(wsMsg)) {
+                    is Response.Error -> TODO()
+                    is Response.Loading -> TODO()
+                    is Response.Success -> {
+                        val newList = chatDetailUiState.msgList.toMutableList().apply {
+                            add(0, wsMsg)
+                        }
+                        chatDetailUiState = chatDetailUiState.copy(
+                            msgList = newList
+                        )
+                    }
+                }
             }
         }
     }
 
     fun observeMsg() {
+        println("$TAG observeMsg ")
         viewModelScope.launch {
-            println("$TAG observeMsg ")
-//            try {
-//                sdk.remoteApi.observeMsg()
-//                    .onEach {
-//                        println("$TAG observeMsg ${it.data}")
-//                        val newList = chatDetailUiState.msgList.toMutableList().apply {
-//                            add(0, it)
-//                        }
-//                        chatDetailUiState = chatDetailUiState.copy(
-//                            msgList = newList
-//                        )
-//                    }
-//            } catch (ex: Exception) {
-//                println("$TAG observeMsg ${ex.message}")
-//            }
+            sdk.remoteApi.observeMsg()
+                .collect {
+                    println("$TAG observeMsg ${it.data}")
+                    val newList = chatDetailUiState.msgList.toMutableList().apply {
+                        add(0, it)
+                    }
+                    chatDetailUiState = chatDetailUiState.copy(
+                        msgList = newList
+                    )
+                }
         }
     }
 

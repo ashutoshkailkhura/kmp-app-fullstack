@@ -17,7 +17,7 @@ fun OnlineIndicator(
 ) {
     val onOffColor = if (onOff) Color.Green else Color.Gray
     Box(
-        modifier = Modifier
+        modifier
             .size(24.dp)
             .background(Color.White, CircleShape)
             .padding(4.dp)

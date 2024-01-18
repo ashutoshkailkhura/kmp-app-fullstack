@@ -1,7 +1,6 @@
 package ui.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,10 +14,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 
 @Composable
-fun FullScreenError(errMsg: String, retry: () -> Unit) {
+fun FullScreenError(
+    errMsg: String,
+    retry: (() -> Unit)? = null
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -30,8 +31,10 @@ fun FullScreenError(errMsg: String, retry: () -> Unit) {
             style = MaterialTheme.typography.bodyMedium
         )
         Spacer(Modifier.height(12.dp))
-        Button(onClick = { retry() }) {
-            Text("Retry")
+        retry?.let {
+            Button(onClick = { it() }) {
+                Text("Retry")
+            }
         }
     }
 }

@@ -67,7 +67,7 @@ class CreatePostScreen : Screen {
             },
             onBackPress = navigator::pop,
             resetResult = {
-                homeViewModel.resetResult()
+//                homeViewModel.resetResult()
             }
         )
 

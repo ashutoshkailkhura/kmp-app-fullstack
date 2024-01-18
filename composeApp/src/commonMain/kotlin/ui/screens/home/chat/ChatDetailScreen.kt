@@ -1,20 +1,22 @@
 package ui.screens.home.chat
 
-import DataUtil
-import Message
 import UserInput
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.size
@@ -26,7 +28,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -38,11 +39,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -56,8 +55,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.lifecycle.ScreenLifecycleOwner
-import cafe.adriel.voyager.core.lifecycle.ScreenLifecycleStore
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
@@ -66,7 +63,6 @@ import dev.icerock.moko.mvvm.compose.viewModelFactory
 import org.example.project.entity.WebSocketPayload
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
-import ui.components.OnlineIndicator
 
 data class ChatDetailScreen(val userId: Int) : Screen {
 
@@ -74,7 +70,6 @@ data class ChatDetailScreen(val userId: Int) : Screen {
         const val TAG = "ChatDetailScreen"
     }
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     @Composable
     override fun Content() {
 
@@ -82,8 +77,6 @@ data class ChatDetailScreen(val userId: Int) : Screen {
             getViewModel(ChatDetailScreen(userId).key, viewModelFactory { ChatViewModel() })
 
         val navigator = LocalNavigator.currentOrThrow
-
-        val scope = rememberCoroutineScope()
 
         LaunchedEffect(Unit) {
             println("$TAG LaunchedEffect observeMsg")
@@ -96,41 +89,6 @@ data class ChatDetailScreen(val userId: Int) : Screen {
             targetUser = userId,
             onMsgSend = { chatViewModel.sendMsg(it, userId.toString()) }
         )
-
-
-//        val topAppBarState = rememberTopAppBarState()
-//        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
-
-//        Surface(
-//            modifier = Modifier.fillMaxSize(),
-//            color = MaterialTheme.colorScheme.background
-//        ) {
-//            Scaffold(
-//                modifier = Modifier
-//                .nestedScroll(scrollBehavior.nestedScrollConnection),
-//                    .fillMaxSize(),
-//                topBar = {
-//                    TopAppBar(
-//                        title = { Text(text = "$userId") },
-//                        navigationIcon = {
-//                            IconButton(onClick = navigator::pop) {
-//                                Icon(
-//                                    imageVector = Icons.Filled.ArrowBack,
-//                                    contentDescription = "Localized description"
-//                                )
-//                            }
-//                        },
-//                        scrollBehavior = scrollBehavior
-//                    )
-//                },
-        // Exclude ime and navigation bar padding so this can be added by the UserInput composable
-//            contentWindowInsets = ScaffoldDefaults
-//                .contentWindowInsets
-//                .exclude(WindowInsets.navigationBars)
-//                .exclude(WindowInsets.ime),
-//            ) { paddingValues ->
-
-//        }
     }
 }
 
@@ -145,31 +103,38 @@ fun ChatDetailScreenContent(
     val keyboardController = LocalSoftwareKeyboardController.current
     val scrollState = rememberLazyListState()
     val topBarState = rememberTopAppBarState()
-    val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior()
-
-    var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue())
-    }
+    val scrollBehaviour = TopAppBarDefaults.pinnedScrollBehavior(topBarState)
 
     Scaffold(
         topBar = {
-            Row {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+//                    .background(MaterialTheme.colorScheme.primaryContainer),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 IconButton(onClick = onBackPressed) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Localized description"
+                        contentDescription = "Localized description",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 }
                 Text("$targetUser")
             }
         },
-        contentWindowInsets = ScaffoldDefaults
-            .contentWindowInsets
-            .exclude(WindowInsets.navigationBars)
-            .exclude(WindowInsets.ime),
+//        contentWindowInsets = ScaffoldDefaults
+//            .contentWindowInsets
+//            .exclude(WindowInsets.navigationBars)
+//            .exclude(WindowInsets.ime),
         modifier = Modifier.nestedScroll(scrollBehaviour.nestedScrollConnection)
     ) {
-        Column(Modifier.fillMaxSize().padding(it)) {
+        Column(
+            Modifier.fillMaxSize()
+                .padding(it)
+                .navigationBarsPadding()
+                .imePadding()
+        ) {
             Messages(
                 messages = uiState.msgList,
                 navigateToProfile = { },
@@ -178,8 +143,6 @@ fun ChatDetailScreenContent(
             )
             UserInput(
                 onMessageSent = { content ->
-//                      TODO
-                    keyboardController?.hide()
                     onMsgSend(content)
                 },
                 resetScroll = {
@@ -187,8 +150,6 @@ fun ChatDetailScreenContent(
 //                            scrollState.scrollToItem(0)
 //                }
                 },
-                // let this element handle the padding so that the elevation is shown behind the
-                // navigation bar
             )
         }
 

@@ -1,10 +1,13 @@
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.Navigator
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.components.SimpleLoading
 import ui.screens.auth.login.LogInScreen
 import ui.screens.home.HomeScreen
 import ui.theme.KMPTheme
@@ -28,10 +31,14 @@ fun App() {
 fun AppContent(uiState: MainUiState) {
     KMPTheme {
         Surface(tonalElevation = 5.dp) {
-            if (uiState.userToken.isNotEmpty()) {
-                Navigator(HomeScreen())
+            if (uiState.loading) {
+                SimpleLoading(modifier = Modifier.fillMaxSize())
             } else {
-                Navigator(LogInScreen())
+                if (uiState.userToken != null) {
+                    Navigator(HomeScreen())
+                } else {
+                    Navigator(LogInScreen())
+                }
             }
         }
     }

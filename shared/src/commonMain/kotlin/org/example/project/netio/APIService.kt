@@ -32,9 +32,12 @@ import io.ktor.websocket.readText
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.isActive
@@ -45,6 +48,7 @@ import kotlinx.serialization.json.encodeToJsonElement
 import org.example.project.data.domain.Message
 import org.example.project.data.response.MessageDto
 import org.example.project.entity.OnlineUser
+import org.example.project.entity.WebSocketEventType
 import org.example.project.entity.WebSocketPayload
 
 sealed class Response<out T> {
@@ -57,8 +61,8 @@ class APIService {
 
     companion object {
         const val TAG = "APIService"
-        const val BASE_URL = "http://192.168.1.6:8080"
-        const val WS_URL = "ws://192.168.1.6:8080/ws"
+        const val BASE_URL = "http://192.168.1.3:8080"
+        const val WS_URL = "ws://192.168.1.3:8080/ws"
     }
 
     private val client = HttpClient(CIO) {
@@ -73,6 +77,8 @@ class APIService {
     }
 
     private var sockets: WebSocketSession? = null
+
+//    private var chatData: Flow<WebSocketPayload>? = null
 
     suspend fun signUp(authReq: AuthRequest): Response<String> {
 
@@ -266,40 +272,40 @@ class APIService {
         }
     }
 
-    suspend fun sendMessage(msg: WebSocketPayload) {
+    suspend fun sendMessage(msg: WebSocketPayload): Response<Unit> {
         println("$TAG sendMessage ${Json.encodeToString(msg)}")
-        try {
+        return try {
             sockets?.send(Frame.Text(Json.encodeToString(msg)))
-//            while (true) {
-//                val omsg = sockets?.incoming?.receive() as Frame.Text ?: continue
-//                println("$TAG sendMessage ${omsg.readText()}")
-//            }
+            Response.Success(Unit)
         } catch (ex: Exception) {
             println("$TAG sendMessage ${ex.message}")
             ex.printStackTrace()
+            Response.Error(Exception("Unkonwn error"))
         }
     }
 
-//     look into it, issue with flow,suspend or god knows
-//    fun observeMsg(): Flow<WebSocketPayload> {
-//        return try {
-//            println("$TAG observeMsg ${sockets?.isActive}")
-//            sockets?.incoming
-//                ?.receiveAsFlow()
-//                ?.onEach {
-//                    println("$TAG ${it.data}")
-//                }
-//                ?.filter { it is Frame.Text }
-//                ?.map {
-//                    val json = (it as Frame.Text).readText() ?: ""
-//                    Json.decodeFromString<WebSocketPayload>(json)
-//                } ?: flow {}
-//        } catch (ex: Exception) {
-//            println("$TAG ${ex.message}")
-//            ex.printStackTrace()
-//            flow { }
-//        }
-//    }
+    //     look into it, issue with flow,suspend or god knows
+    fun observeMsg(): Flow<WebSocketPayload> {
+        return try {
+            println("$TAG observeMsg")
+//            if (sockets?.isActive == true) {
+//                println("$TAG observeMsg true")
+            sockets?.incoming
+                ?.receiveAsFlow()
+                ?.mapNotNull { it as? Frame.Text }
+                ?.map { it.readText() }
+                ?.map {
+//                        val json = (it as Frame.Text).readText() ?: ""
+                    Json.decodeFromString<WebSocketPayload>(it)
+                } ?: flow {}
+//            }
+//            flow { WebSocketPayload(WebSocketEventType.CHAT_REQUEST, "XXXX", "FUCK") }
+        } catch (ex: Exception) {
+            println("$TAG sendMessage ${ex.message}")
+            ex.printStackTrace()
+            flow { }
+        }
+    }
 
     suspend fun closeChatSession() {
         sockets?.close()
