@@ -1,16 +1,18 @@
 package org.example.project.plugin
 
-import io.ktor.server.routing.*
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
-import org.example.project.dao.*
-import org.example.project.routes.*
+import io.ktor.server.routing.*
+import org.example.project.dao.DAOPostImpl
+import org.example.project.dao.DAOUser
+import org.example.project.dao.DAOUserImpl
+import org.example.project.dao.DAOUserProfileImpl
+import org.example.project.routes.authRoute
+import org.example.project.routes.postRoute
+import org.example.project.routes.profileRoute
 import org.example.project.routes.websocket.chatRoute
 import org.example.project.security.TokenConfig
 import org.example.project.security.TokenService
 import org.example.project.security.hasing.HashingService
-import javax.naming.AuthenticationException
 
 fun Application.configureRouting(
     hashingService: HashingService,
@@ -24,8 +26,8 @@ fun Application.configureRouting(
 //    val chatConversationDao = DAOChatConversationImpl()
 
     routing {
-        authentication(userDao, hashingService, tokenService, tokenConfig)
-        userProfile(userProfileDao)
+        authRoute(userDao, hashingService, tokenService, tokenConfig)
+        profileRoute(userProfileDao)
         postRoute(postDao)
         chatRoute()
     }

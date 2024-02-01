@@ -23,15 +23,11 @@ object DatabaseFactory {
 //                UserTable,
 //                UserProfileTable,
 //                PostTable,
-////                ChatMessagesTable,
-////                PetTable
 //            )
             SchemaUtils.create(
                 UserTable,
                 UserProfileTable,
                 PostTable,
-                PresenceTable,
-//                PetTable
             )
         }
     }

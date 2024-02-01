@@ -1,25 +1,28 @@
 package org.example.project.routes
 
 import org.example.project.data.request.ProfileUpdateRequest
-import org.example.project.entity.User
 import org.example.project.entity.UserProfile
 import io.ktor.http.*
+import io.ktor.http.content.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.cio.*
+import io.ktor.utils.io.*
 import org.example.project.dao.DAOUserProfile
+import java.io.File
 
-fun Route.userProfile(
+fun Route.profileRoute(
     userProfileDao: DAOUserProfile
 ) {
     authenticate {
         get("profile") {
             val principal = call.principal<JWTPrincipal>()
             val userId = principal?.getClaim("userId", Int::class)
-            println("XXX $userId")
+
             if (userId == null) {
                 call.respond(HttpStatusCode.Conflict, "userId is Null")
                 return@get
@@ -36,7 +39,7 @@ fun Route.userProfile(
         }
 
         post("profile") {
-            val request = call.receiveOrNull<ProfileUpdateRequest>() ?: kotlin.run {
+            val request = call.receiveNullable<ProfileUpdateRequest>() ?: kotlin.run {
                 call.respond(HttpStatusCode.BadRequest, "Request Body Incorrect")
                 return@post
             }
@@ -59,13 +62,22 @@ fun Route.userProfile(
                 state = request.state
             )
             val wasAcknowledged = userProfileDao.updateUserProfile(userId, userInfo)
-            println("XXX $wasAcknowledged")
+
             if (wasAcknowledged == null) {
                 call.respond(HttpStatusCode.Conflict)
                 return@post
             }
 
             call.respond(HttpStatusCode.OK, "Updated")
+        }
+
+        post("/profile_pic") {
+            val principal = call.principal<JWTPrincipal>()
+            val userId = principal?.getClaim("userId", Int::class)
+
+            val file = File("uploads/${userId}.png")
+            call.receiveChannel().copyAndClose(file.writeChannel())
+            call.respondText("A file is uploaded")
         }
     }
 }
