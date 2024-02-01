@@ -11,6 +11,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.codec.digest.DigestUtils
 import org.example.project.dao.DAOUser
+import org.example.project.data.KMPConstant
+import org.example.project.data.KMPConstant.SUCCESS_MESSAGE
 import org.example.project.entity.User
 import org.example.project.security.TokenClaim
 import org.example.project.security.TokenConfig
@@ -18,23 +20,27 @@ import org.example.project.security.TokenService
 import org.example.project.security.hasing.HashingService
 import org.example.project.security.hasing.SaltedHash
 
-fun Route.authentication(
+fun Route.authRoute(
     userDao: DAOUser,
     hashingService: HashingService,
     tokenService: TokenService,
     tokenConfig: TokenConfig
-){
+) {
     post("signup") {
-        val request = call.receiveOrNull<AuthRequest>() ?: kotlin.run {
-            call.respond(HttpStatusCode.BadRequest)
+        val request = call.receiveNullable<AuthRequest>() ?: kotlin.run {
+            call.respond(HttpStatusCode.BadRequest, KMPConstant.ERROR_MESSAGE_4)
             return@post
         }
+
         val areFieldsBlank = request.userEmail.isBlank() || request.password.isBlank()
         val isPwTooShort = request.password.length < 8
+
         if (areFieldsBlank || isPwTooShort) {
-            call.respond(HttpStatusCode.Conflict, "Check Field and password length")
+            call.respond(HttpStatusCode.Conflict, KMPConstant.ERROR_MESSAGE_1)
             return@post
         }
+
+//        TODO: check if user already have account
 
         val saltedHash = hashingService.generateSaltedHash(request.password)
         val user = User(
@@ -44,23 +50,24 @@ fun Route.authentication(
         )
 
         val wasAcknowledged = userDao.addUser(user)
-        println("XXX $wasAcknowledged")
+
         if (wasAcknowledged == null) {
-            call.respond(HttpStatusCode.Conflict)
+            call.respond(HttpStatusCode.Conflict, KMPConstant.ERROR_MESSAGE_2)
             return@post
         }
 
-        call.respond(HttpStatusCode.OK,"Success")
+        call.respond(HttpStatusCode.OK, SUCCESS_MESSAGE)
     }
+
     post("signin") {
-        val request = call.receiveOrNull<AuthRequest>() ?: kotlin.run {
-            call.respond(HttpStatusCode.BadRequest)
+        val request = call.receiveNullable<AuthRequest>() ?: kotlin.run {
+            call.respond(HttpStatusCode.BadRequest, KMPConstant.ERROR_MESSAGE_4)
             return@post
         }
 
         val user = userDao.getUserByUserEmail(request.userEmail)
         if (user == null) {
-            call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
+            call.respond(HttpStatusCode.Conflict, KMPConstant.ERROR_MESSAGE_3)
             return@post
         }
 
@@ -73,7 +80,7 @@ fun Route.authentication(
         )
         if (!isValidPassword) {
             println("Entered hash: ${DigestUtils.sha256Hex("${user.salt}${request.password}")}, Hashed PW: ${user.password}")
-            call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
+            call.respond(HttpStatusCode.Conflict, KMPConstant.ERROR_MESSAGE_3)
             return@post
         }
 
@@ -88,15 +95,13 @@ fun Route.authentication(
         call.respond(
             status = HttpStatusCode.OK,
             message = AuthResponse(
-                token = token
+                token = token,
+                userId = user.id.toString(),
+                email = user.userEmail
             )
         )
     }
-    authenticate {
-        get("authenticate") {
-            call.respond(HttpStatusCode.OK)
-        }
-    }
+
     authenticate {
         get("secret") {
             val principal = call.principal<JWTPrincipal>()
