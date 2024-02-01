@@ -5,14 +5,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.example.project.data.request.PostRequest
 import org.example.project.entity.Post
 import org.example.project.netio.Response
-import ui.screens.home.HomeViewModel
 
 class PostViewModel : ViewModel() {
 
@@ -28,7 +25,7 @@ class PostViewModel : ViewModel() {
     var createPostUiState by mutableStateOf(CreatePostUiState())
         private set
 
-    var _postDetailUiState by mutableStateOf(PostDetailUiState())
+    var postDetailUiState by mutableStateOf(PostDetailUiState())
         private set
 
 
@@ -71,16 +68,19 @@ class PostViewModel : ViewModel() {
             createPostUiState = when (val result =
                 sdk.remoteApi.createPost(PostRequest(content), sdk.getToken() ?: "")) {
                 is Response.Error -> {
+                    println("$TAG createPost ${result.exception.message ?: "Error"}")
                     createPostUiState.copy(
                         loading = false, result = result.exception.message ?: "Error"
                     )
                 }
 
                 is Response.Loading -> {
+                    println("$TAG createPost Loading ...")
                     createPostUiState.copy(loading = true)
                 }
 
                 is Response.Success -> {
+                    println("$TAG createPost ${result.data}")
                     createPostUiState.copy(
                         loading = false,
                         result = result.data
@@ -92,30 +92,39 @@ class PostViewModel : ViewModel() {
 
     fun getPostDetail(postId: Int) {
         println("$TAG getPostDetail")
-        _postDetailUiState = _postDetailUiState.copy(loading = true)
+        postDetailUiState = postDetailUiState.copy(loading = true)
         viewModelScope.launch {
             sdk.getToken()?.let { userToken ->
-                _postDetailUiState =
+                postDetailUiState =
                     when (val post = sdk.remoteApi.getPostDetail(postId, userToken)) {
                         is Response.Error -> {
-                            _postDetailUiState.copy(
+                            postDetailUiState.copy(
                                 loading = false,
                                 error = post.exception.message ?: "Something went wrong"
                             )
                         }
 
                         is Response.Loading -> {
-                            _postDetailUiState.copy(loading = true)
+                            postDetailUiState.copy(loading = true)
                         }
 
                         is Response.Success -> {
-                            _postDetailUiState.copy(
+                            postDetailUiState.copy(
                                 loading = false,
                                 post = post.data
                             )
                         }
                     }
             }
+        }
+    }
+
+    fun resetResult() {
+        viewModelScope.launch {
+            delay(3_200)
+            createPostUiState = CreatePostUiState()
+            postListUiState = PostListUiState()
+            postDetailUiState = PostDetailUiState()
         }
     }
 

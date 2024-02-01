@@ -44,7 +44,7 @@ data class PostDetailScreen(val postId: Int) : Screen {
         }
 
         PostDetailScreenContent(
-            uiState = viewModel._postDetailUiState,
+            uiState = viewModel.postDetailUiState,
             onBackPress = navigator::pop,
             onClickContact = {
                 navigator.push(ChatDetailScreen(it))

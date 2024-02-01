@@ -61,8 +61,8 @@ class APIService {
 
     companion object {
         const val TAG = "APIService"
-        const val BASE_URL = "http://192.168.1.3:8080"
-        const val WS_URL = "ws://192.168.1.3:8080/ws"
+        const val BASE_URL = "http://192.168.1.7:8080"
+        const val WS_URL = "ws://192.168.1.7:8080/ws"
     }
 
     private val client = HttpClient(CIO) {
@@ -74,6 +74,12 @@ class APIService {
             })
         }
         install(WebSockets)
+//        engine {
+//            /**
+//             * Max time between TCP packets - default 10 seconds.
+//             */
+//            requestTimeout = 100
+//        }
     }
 
     private var sockets: WebSocketSession? = null
@@ -112,12 +118,8 @@ class APIService {
     }
 
     suspend fun logIn(authReq: AuthRequest): Response<AuthResponse> {
-
         return withContext(Dispatchers.IO) {
             try {
-
-//                Response.Loading
-
                 val result = client.post("$BASE_URL/signin") {
                     contentType(ContentType.Application.Json)
                     setBody(authReq)

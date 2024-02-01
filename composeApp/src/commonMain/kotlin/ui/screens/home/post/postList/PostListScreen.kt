@@ -1,5 +1,7 @@
 package ui.screens.home.post.postList
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -19,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
@@ -35,7 +38,8 @@ import ui.screens.home.post.createPost.CreatePostScreen
 import ui.screens.home.post.postDetail.PostDetailScreen
 
 class PostListScreen(
-    private var listState: LazyListState = LazyListState()
+    private var listState: LazyListState = LazyListState(),
+    private val postViewModel: PostViewModel,
 ) : Screen {
 
     companion object {
@@ -45,7 +49,7 @@ class PostListScreen(
     @Composable
     override fun Content() {
 
-        val postViewModel = getViewModel(PostListScreen().key, viewModelFactory { PostViewModel() })
+//        val postViewModel = getViewModel(PostListScreen().key, viewModelFactory { PostViewModel() })
         val navigator = LocalNavigator.currentOrThrow
 
         LaunchedEffect(Unit) {
@@ -93,7 +97,7 @@ class PostListScreen(
             FullScreenError(uiState.error) {
                 reTry()
             }
-        } else if (uiState.postList.isNotEmpty()) {
+        } else if (!uiState.loading && uiState.error.isEmpty()) {
             Scaffold(
                 modifier = Modifier.padding(bottom = if (listState.firstVisibleItemIndex == 0) 80.dp else 0.dp),
                 topBar = {
@@ -112,18 +116,27 @@ class PostListScreen(
                     )
                 },
                 floatingActionButtonPosition = FabPosition.End,
-            ) {
-                LazyColumn(
-                    state = listState,
-                    modifier = Modifier.padding(it)
-                ) {
-
-                    items(uiState.postList) { post ->
-                        ItemPost(Modifier, post) { postId ->
-                            onPostClick(postId)
+            ) { innerPadding ->
+                if (uiState.postList.isNotEmpty()) {
+                    LazyColumn(
+                        state = listState,
+                        modifier = Modifier.padding(innerPadding)
+                    ) {
+                        items(uiState.postList) { post ->
+                            ItemPost(Modifier, post) { postId ->
+                                onPostClick(postId)
+                            }
                         }
                     }
+                } else {
+                    Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
+                        Text(
+                            "No Post Available :(_",
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
                 }
+
             }
         }
     }

@@ -34,7 +34,8 @@ fun SlideMessage(text: String, onFinish: () -> Unit) {
                 color = MaterialTheme.colorScheme.onSecondary,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = 6.dp, vertical = 12.dp)
+                modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = 6.dp, vertical = 12.dp)
             )
         }
         onFinish()

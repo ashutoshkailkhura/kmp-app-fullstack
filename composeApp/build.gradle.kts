@@ -51,6 +51,8 @@ kotlin {
 
                 implementation(libs.mvvmCompose)
                 implementation(libs.mvvmFlowCompose)
+
+                implementation("com.darkrockstudios:mpfilepicker:3.1.0")
             }
         }
 

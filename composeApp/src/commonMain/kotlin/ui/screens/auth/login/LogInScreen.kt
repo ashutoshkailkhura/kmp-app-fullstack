@@ -1,5 +1,6 @@
 package ui.screens.auth.login
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,17 +9,21 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -32,6 +37,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -43,18 +50,28 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.painterResource
+import ui.components.SimpleLoading
 import ui.components.SlideMessage
 import ui.screens.auth.AuthViewModel
 import ui.screens.auth.LogInUiState
+import ui.screens.auth.authViewModelFactory
+import ui.screens.auth.authViewModelKey
 import ui.screens.auth.signup.SignUpScreen
 import ui.screens.home.HomeScreen
 
-class LogInScreen : Screen {
+data class LogInScreen(
+    private val authViewModel: AuthViewModel,
+    val checkUserLogIn: () -> Unit
+) : Screen {
 
     @Composable
     override fun Content() {
 
-        val authViewModel = getViewModel(LogInScreen().key, viewModelFactory { AuthViewModel() })
+//        val authViewModel = getViewModel(authViewModelKey, authViewModelFactory)
+//        val authViewModel = viewModel<AuthViewModel>()
+
         val navigator = LocalNavigator.currentOrThrow
 
         LogInScreenContent(
@@ -62,19 +79,23 @@ class LogInScreen : Screen {
             onLogInClick = { mail, pass ->
                 authViewModel.logIn(mail, pass)
             },
-            onSignUpClick = { navigator.push(SignUpScreen()) },
+            onSignUpClick = {
+                navigator.push(SignUpScreen(authViewModel))
+            },
             resetResult = {
                 authViewModel.resetResult()
             },
             navigateToHome = {
-                navigator.replace(HomeScreen())
-            }
+                checkUserLogIn()
+            },
+            viewModel = authViewModel
+
         )
     }
 }
 
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalResourceApi::class)
 @Composable
 fun LogInScreenContent(
     uiState: LogInUiState,
@@ -82,126 +103,125 @@ fun LogInScreenContent(
     onSignUpClick: () -> Unit,
     resetResult: () -> Unit,
     navigateToHome: () -> Unit,
+    viewModel: AuthViewModel
 ) {
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+    if (uiState.token.isNotEmpty()) {
+        navigateToHome()
+    }
 
-        SlideMessage(uiState.result) {
-            resetResult()
-        }
-
-        // Display UI for success state
-        Column(
+    if (uiState.loading) {
+        keyboardController?.hide()
+        SimpleLoading()
+    } else {
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .imePadding()
+                .navigationBarsPadding()
         ) {
 
-
-            // Spacer to push content to the top
-            Spacer(modifier = Modifier.height(16.dp))
-
-            if (uiState.token.isNotEmpty()) {
-                navigateToHome()
+            SlideMessage(uiState.result) {
+                resetResult()
             }
 
-            if (uiState.loading) {
-                keyboardController?.hide()
-                CircularProgressIndicator(Modifier.size(32.dp))
-            } else {
-                Spacer(Modifier.height(32.dp))
-            }
-
-            // Text Field for User Email
-            TextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email") },
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next
-                ),
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Email, contentDescription = null)
-                }
-            )
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            // Spacer to add vertical space between email and password fields
-            Spacer(modifier = Modifier.height(16.dp))
+                Image(
+                    painterResource("appicon.png"),
+                    modifier = Modifier
+                        .size(75.dp)
+                        .clip(RoundedCornerShape(6.dp)),
+                    contentDescription = null,
+                )
 
-            // Text Field for Password
-            TextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Password") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done
-                ),
-                trailingIcon = {
-                    IconButton(
-                        onClick = { isPasswordVisible = !isPasswordVisible }
-                    ) {
-                        Icon(
-                            imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                            contentDescription = null
-                        )
+                Spacer(modifier = Modifier.height(18.dp))
+
+                TextField(
+                    value = viewModel.logInUserMail,
+                    onValueChange = { mail -> viewModel.updateLogInUserMail(mail) },
+                    label = { Text("Email") },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.Email, contentDescription = null)
                     }
-                },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Default.Lock, contentDescription = null)
-                }
-            )
+                )
 
-            // Spacer to add vertical space between password and login button
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-            // Button to perform login action
-            Button(
-                onClick = { onLogInClick(email, password) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                enabled = !uiState.loading
-            ) {
-                Text("Log In")
-            }
+                TextField(
+                    value = viewModel.logInUserPassword,
+                    onValueChange = { password -> viewModel.updateLogInUserPass(password) },
+                    label = { Text("Password") },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
+                    trailingIcon = {
+                        IconButton(
+                            onClick = { isPasswordVisible = !isPasswordVisible }
+                        ) {
+                            Icon(
+                                imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.Lock, contentDescription = null)
+                    }
+                )
 
-            // Spacer to add vertical space between login button and signup text
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-            // Text "Don't have an account, create one" followed by Sign Up button
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text("Don't have an account,")
-                Spacer(modifier = Modifier.width(4.dp))
-                TextButton(
-                    onClick = onSignUpClick
+                Button(
+                    onClick = {
+                        focusManager.clearFocus()
+                        onLogInClick(viewModel.logInUserMail, viewModel.logInUserPassword)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    enabled = !uiState.loading
                 ) {
-                    Text("Sign Up")
+                    Text("Log In")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Don't have an account")
+                    Spacer(modifier = Modifier.width(4.dp))
+                    TextButton(
+                        onClick = onSignUpClick
+                    ) {
+                        Text("Sign Up")
+                    }
                 }
             }
-        }
 
+        }
     }
 }
