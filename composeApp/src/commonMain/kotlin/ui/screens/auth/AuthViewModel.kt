@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import org.example.project.data.request.AuthRequest
 import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import getPlatformName
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.example.project.netio.APIService
@@ -27,15 +28,41 @@ data class SignUpInUiState(
 
 class AuthViewModel : ViewModel() {
 
+    companion object {
+        const val TAG = "AuthViewModel"
+    }
+
     private val sdk = SharedSDK
 
+    init {
+        println("$TAG init")
+    }
+
+    //    TextField
+    var logInUserMail by mutableStateOf("")
+        private set
+    var logInUserPassword by mutableStateOf("")
+        private set
+
+    fun updateLogInUserMail(input: String) {
+        logInUserMail = input
+    }
+
+    fun updateLogInUserPass(input: String) {
+        logInUserPassword = input
+    }
+
+
+    //    UI State
     var logInUiState by mutableStateOf(LogInUiState())
         private set
+
 
     var signUpUiState by mutableStateOf(SignUpInUiState())
         private set
 
     fun logIn(mail: String, password: String) {
+        println("$TAG logIn")
 
         if (mail.isEmpty() || password.isEmpty()) {
             logInUiState = logInUiState.copy(result = "Empty field", loading = false)
@@ -43,13 +70,10 @@ class AuthViewModel : ViewModel() {
         }
 
         viewModelScope.launch {
-
             logInUiState = logInUiState.copy(loading = true)
-
-
             logInUiState = when (val result = sdk.remoteApi.logIn(AuthRequest(mail, password))) {
-
                 is Response.Error -> {
+                    println("$TAG error ${result.exception.message ?: "error"}")
                     logInUiState.copy(
                         result = result.exception.message ?: "error",
                         loading = false
@@ -57,10 +81,12 @@ class AuthViewModel : ViewModel() {
                 }
 
                 is Response.Loading -> {
+                    println("$TAG loading ... ")
                     logInUiState.copy(loading = true)
                 }
 
                 is Response.Success -> {
+                    println("$TAG success ${result.data}")
                     if (result.data.token.isNotEmpty()) {
                         sdk.saveToken(result.data.token)
                         logInUiState.copy(token = result.data.token, loading = false)
@@ -110,16 +136,17 @@ class AuthViewModel : ViewModel() {
     }
 
     fun resetResult() {
-        viewModelScope.launch {
-            delay(3_200)
+        val resetJob = viewModelScope.launch() {
+            delay(3_300)
             signUpUiState = SignUpInUiState()
             logInUiState = LogInUiState()
         }
     }
 
-
     override fun onCleared() {
+        println("$TAG onCleared")
         super.onCleared()
+        viewModelScope.cancel()
     }
 
 }

@@ -23,8 +23,8 @@ object DatabaseFactory {
 //                UserTable,
 //                UserProfileTable,
 //                PostTable,
-//                ChatMessagesTable,
-//                PetTable
+////                ChatMessagesTable,
+////                PetTable
 //            )
             SchemaUtils.create(
                 UserTable,

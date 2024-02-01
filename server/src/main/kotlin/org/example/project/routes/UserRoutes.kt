@@ -23,7 +23,7 @@ fun Route.authentication(
     hashingService: HashingService,
     tokenService: TokenService,
     tokenConfig: TokenConfig
-){
+) {
     post("signup") {
         val request = call.receiveOrNull<AuthRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
@@ -37,12 +37,14 @@ fun Route.authentication(
         }
 
         val saltedHash = hashingService.generateSaltedHash(request.password)
+
+// TODO check if mail already exist
+
         val user = User(
             userEmail = request.userEmail,
             password = saltedHash.hash,
             salt = saltedHash.salt
         )
-
         val wasAcknowledged = userDao.addUser(user)
         println("XXX $wasAcknowledged")
         if (wasAcknowledged == null) {
@@ -50,7 +52,7 @@ fun Route.authentication(
             return@post
         }
 
-        call.respond(HttpStatusCode.OK,"Success")
+        call.respond(HttpStatusCode.OK, "Success")
     }
     post("signin") {
         val request = call.receiveOrNull<AuthRequest>() ?: kotlin.run {

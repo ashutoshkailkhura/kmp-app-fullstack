@@ -12,6 +12,9 @@ import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import cafe.adriel.voyager.transitions.SlideTransition
+import dev.icerock.moko.mvvm.compose.getViewModel
+import dev.icerock.moko.mvvm.compose.viewModelFactory
+import ui.screens.home.post.PostViewModel
 import ui.screens.home.post.postList.PostListScreen
 
 data class HomeTab(
@@ -46,10 +49,18 @@ data class HomeTab(
             }
         )
 
-        Navigator(PostListScreen(listState)) { navigator ->
+        val postViewModel = getViewModel(this.key, viewModelFactory { PostViewModel() })
+
+        Navigator(
+            PostListScreen(
+                listState = listState,
+                postViewModel = postViewModel
+            )
+        ) { navigator ->
+
             SlideTransition(navigator) { screen ->
                 LaunchedEffect(Unit) {
-                    hideBottomBar(screen.key == PostListScreen().key)
+//                    hideBottomBar(screen.key == PostListScreen().key)
                 }
                 screen.Content()
             }

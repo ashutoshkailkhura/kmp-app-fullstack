@@ -92,7 +92,7 @@ class HomeScreen : Screen {
                                     label = {
                                         Text(item.options.title)
                                     },
-                                    selected = tabNavigator.current.key == item.key,
+                                    selected = tabNavigator.current == item,
                                     onClick = {
                                         tabNavigator.current = item
                                     }
