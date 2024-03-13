@@ -61,8 +61,8 @@ class APIService {
 
     companion object {
         const val TAG = "APIService"
-        const val BASE_URL = "http://192.168.1.7:8080"
-        const val WS_URL = "ws://192.168.1.7:8080/ws"
+        const val BASE_URL = "http://192.168.1.2:8080"
+        const val WS_URL = "ws://192.168.1.2:8080/ws"
     }
 
     private val client = HttpClient(CIO) {
@@ -98,7 +98,7 @@ class APIService {
                     setBody(authReq)
                 }
 
-                println("$TAG signup ${result}")
+                println("$TAG signup $result")
 
                 if (result.status == HttpStatusCode.OK) {
                     Response.Success(result.bodyAsText())

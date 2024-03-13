@@ -88,7 +88,7 @@ class AuthViewModel : ViewModel() {
                 is Response.Success -> {
                     println("$TAG success ${result.data}")
                     if (result.data.token.isNotEmpty()) {
-                        sdk.saveToken(result.data.token)
+                        sdk.saveToken(result.data)
                         logInUiState.copy(token = result.data.token, loading = false)
                     } else {
                         logInUiState.copy(
@@ -103,6 +103,7 @@ class AuthViewModel : ViewModel() {
     }
 
     fun signUp(mail: String, password: String) {
+        println("$TAG signUp")
 
         if (mail.isEmpty() || password.isEmpty()) {
             signUpUiState = signUpUiState.copy(result = "Field are empty", loading = false)

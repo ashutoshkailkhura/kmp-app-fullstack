@@ -1,11 +1,13 @@
 
 CREATE TABLE UserSetting (
- token TEXT NOT NULL
+ id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+ settingkey TEXT NOT NULL,
+ settingvalue TEXT NOT NULL
  );
 
  addUserSetting:
- INSERT INTO UserSetting (token)
- VALUES(?);
+ INSERT INTO UserSetting
+ VALUES ?;
 
  removeUserSetting:
  DELETE FROM UserSetting;

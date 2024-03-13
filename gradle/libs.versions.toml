@@ -1,7 +1,7 @@
 [versions]
 ktor = "2.3.5"
-logback = "1.4.11"
-compose = "1.5.4"
+logback = "1.4.14"
+compose = "1.6.3"
 compose-plugin = "1.5.11"
 compose-compiler = "1.5.5"
 agp = "8.1.2"

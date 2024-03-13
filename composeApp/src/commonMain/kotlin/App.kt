@@ -36,7 +36,10 @@ fun App() {
 }
 
 @Composable
-fun AppContent(uiState: MainUiState, checkUserLogIn: () -> Unit) {
+fun AppContent(
+    uiState: MainUiState,
+    checkUserLogIn: () -> Unit
+) {
     KMPTheme {
         Surface(tonalElevation = 5.dp) {
             if (uiState.loading) {
