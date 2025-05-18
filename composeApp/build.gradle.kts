@@ -18,17 +18,7 @@ kotlin {
         }
     }
 
-    listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "ComposeApp"
-//            isStatic = true
-            linkerOpts.add("-lsqlite3")
-        }
-    }
+
 
     sourceSets {
 
@@ -48,6 +38,7 @@ kotlin {
                 implementation(libs.voyagerTabNavigator)
                 implementation(libs.voyagerScreenModel)
                 implementation(libs.voyagerTransitions)
+//                implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10")
 
                 implementation(libs.mvvmCompose)
                 implementation(libs.mvvmFlowCompose)
@@ -66,19 +57,6 @@ kotlin {
             }
         }
 
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-            dependencies {
-                implementation(libs.ktor.client.darwin)
-                implementation(libs.sqldelightNative)
-            }
-        }
     }
 }
 
@@ -122,13 +100,6 @@ android {
         debugImplementation(libs.compose.ui.tooling)
         implementation(libs.kotlinxCoroutinesAndroid)
     }
-}
-
-sqldelight {
-    database("AppDatabase") {
-        packageName = "org.example.project.db"
-    }
-    linkSqlite = true
 }
 
 

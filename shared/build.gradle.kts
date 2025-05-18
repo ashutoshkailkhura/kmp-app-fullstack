@@ -1,7 +1,10 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.serialization)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.jetbrainsCompose)
 //    id("com.android.library")
     id("com.squareup.sqldelight")
 }
@@ -16,9 +19,17 @@ kotlin {
         }
     }
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "ComposeApp"
+//            isStatic = true
+            linkerOpts.add("-lsqlite3")
+        }
+    }
 
     jvm()
 
@@ -34,6 +45,22 @@ kotlin {
                 implementation(libs.sqldelightRuntime)
                 implementation("io.ktor:ktor-client-cio:2.3.5")
                 implementation("io.ktor:ktor-client-websockets:2.3.5")
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.materialIconsExtended)
+                @OptIn(ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
+                implementation(libs.sqldelightRuntime)
+                implementation(libs.voyagerNavigator)
+                implementation(libs.voyagerTabNavigator)
+                implementation(libs.voyagerScreenModel)
+                implementation(libs.voyagerTransitions)
+//                implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10")
+                implementation(libs.mvvmCompose)
+                implementation(libs.mvvmFlowCompose)
+                implementation("com.darkrockstudios:mpfilepicker:3.1.0")
+
             }
         }
         val commonTest by getting {
@@ -43,6 +70,10 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
+                implementation(libs.compose.ui)
+                implementation(libs.compose.ui.tooling.preview)
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.sqldelightAndroid)
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.sqldelightAndroid)
             }
