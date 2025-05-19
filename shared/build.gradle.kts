@@ -25,7 +25,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
-            baseName = "ComposeApp"
+            baseName = "shared"
 //            isStatic = true
             linkerOpts.add("-lsqlite3")
         }
@@ -42,7 +42,6 @@ kotlin {
                 implementation(libs.ktor.serialization)
                 implementation(libs.ktor.content.negotiation.client)
                 implementation(libs.kotlinxCoroutinesCore)
-                implementation(libs.sqldelightRuntime)
                 implementation("io.ktor:ktor-client-cio:2.3.5")
                 implementation("io.ktor:ktor-client-websockets:2.3.5")
                 implementation(compose.runtime)
