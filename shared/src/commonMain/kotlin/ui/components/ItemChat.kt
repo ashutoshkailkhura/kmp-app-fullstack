@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import kmpproject.shared.generated.resources.Res
+import kmpproject.shared.generated.resources.twitter
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -42,7 +44,7 @@ fun ItemChat(
             verticalAlignment = Alignment.Top
         ) {
             Image(
-                painterResource("compose-multiplatform.xml"),
+                painterResource(Res.drawable.twitter),
                 null,
                 modifier = Modifier
                     .padding(horizontal = 12.dp)

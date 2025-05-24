@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.serialization)
     id("com.squareup.sqldelight")
 }
@@ -18,18 +19,16 @@ kotlin {
         }
     }
 
-
-
     sourceSets {
 
         val commonMain by getting {
             dependencies {
                 implementation(projects.shared)
+
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
-                @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
 
                 implementation(libs.sqldelightRuntime)
@@ -38,12 +37,11 @@ kotlin {
                 implementation(libs.voyagerTabNavigator)
                 implementation(libs.voyagerScreenModel)
                 implementation(libs.voyagerTransitions)
-//                implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10")
 
                 implementation(libs.mvvmCompose)
                 implementation(libs.mvvmFlowCompose)
 
-                implementation("com.darkrockstudios:mpfilepicker:3.1.0")
+                implementation(libs.mpfilepicker)
             }
         }
 

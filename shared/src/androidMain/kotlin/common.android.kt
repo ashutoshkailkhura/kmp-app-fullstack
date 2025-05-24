@@ -18,8 +18,8 @@ actual class DatabaseDriverFactory() {
 actual fun getDatabaseDriverFactory() = DatabaseDriverFactory()
 actual fun getPlatformName(): String = MyApplication.context.packageName
 
-actual fun ByteArray.toImageBitmap(): ImageBitmap = toAndroidBitmap().asImageBitmap()
-
-fun ByteArray.toAndroidBitmap(): Bitmap {
-    return BitmapFactory.decodeByteArray(this, 0, size)
-}
+//actual fun ByteArray.toImageBitmap(): ImageBitmap = toAndroidBitmap().asImageBitmap()
+//
+//fun ByteArray.toAndroidBitmap(): Bitmap {
+//    return BitmapFactory.decodeByteArray(this, 0, size)
+//}

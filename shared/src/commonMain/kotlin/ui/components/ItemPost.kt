@@ -29,6 +29,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import kmpproject.shared.generated.resources.Res
+import kmpproject.shared.generated.resources.kodee_frightened
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -52,7 +54,7 @@ fun ItemPost(
         ) {
             Row(modifier = Modifier.fillMaxWidth()) {
                 Image(
-                    painterResource("compose-multiplatform.xml"),
+                    painterResource(Res.drawable.kodee_frightened),
                     modifier = modifier
                         .size(40.dp)
                         .clip(CircleShape),

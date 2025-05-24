@@ -1,21 +1,27 @@
 [versions]
+antJsch = "1.10.12"
+commonsCodec = "1.17.1"
+exposedKotlinDatetime = "0.44.1"
+gson = "2.11.0"
 ktor = "2.3.5"
 logback = "1.4.14"
-compose = "1.6.3"
-compose-plugin = "1.5.11"
+compose = "1.8.2"
+compose-plugin = "1.8.0"
 compose-compiler = "1.5.5"
 agp = "8.1.2"
 android-minSdk = "24"
-android-compileSdk = "34"
-android-targetSdk = "34"
-androidx-activityCompose = "1.8.0"
+android-compileSdk = "35"
+android-targetSdk = "35"
+androidx-activityCompose = "1.10.1"
 androidx-core-ktx = "1.12.0"
 androidx-appcompat = "1.6.1"
 androidx-material = "1.10.0"
 androidx-constraintlayout = "2.1.4"
 androidx-test-junit = "1.1.5"
 androidx-espresso-core = "3.5.1"
-kotlin = "1.9.10"
+kotlin = "2.1.21"
+mpfilepicker = "3.1.0"
+mysqlConnectorJava = "5.1.6"
 serialization = "1.9.10"
 junit = "4.13.2"
 voyagerVersion = "1.0.0"
@@ -25,9 +31,21 @@ mvvmComposeVersion = "0.16.1"
 sqldelightVersion = "1.5.5"
 
 [libraries]
+ant-jsch = { module = "org.apache.ant:ant-jsch", version.ref = "antJsch" }
+commons-codec = { module = "commons-codec:commons-codec", version.ref = "commonsCodec" }
+exposed-kotlin-datetime = { module = "org.jetbrains.exposed:exposed-kotlin-datetime", version.ref = "exposedKotlinDatetime" }
+gradle-plugin = { module = "com.squareup.sqldelight:gradle-plugin", version.ref = "sqldelightVersion" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
+ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
+ktor-server-auth = { module = "io.ktor:ktor-server-auth", version.ref = "ktor" }
+ktor-server-auth-jwt = { module = "io.ktor:ktor-server-auth-jwt", version.ref = "ktor" }
+ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging", version.ref = "ktor" }
+ktor-server-tests-jvm = { module = "io.ktor:ktor-server-tests-jvm" }
+ktor-server-websockets-jvm = { module = "io.ktor:ktor-server-websockets-jvm" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 #ktor
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
@@ -52,6 +70,8 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+mpfilepicker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "mpfilepicker" }
+mysql-connector-java = { module = "mysql:mysql-connector-java", version.ref = "mysqlConnectorJava" }
 voyagerNavigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerVersion" }
 voyagerTabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyagerVersion" }
 voyagerScreenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyagerVersion" }
@@ -73,3 +93,4 @@ androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

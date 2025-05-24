@@ -42,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
+import kmpproject.shared.generated.resources.Res
+import kmpproject.shared.generated.resources.appicon
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.components.SimpleLoading
@@ -124,7 +126,7 @@ data class SignUpScreen(private val authViewModel: AuthViewModel) : Screen {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Image(
-                        painterResource("composeResources/appicon.png"),
+                        painterResource(Res.drawable.appicon),
                         modifier = Modifier
                             .size(75.dp)
                             .clip(RoundedCornerShape(6.dp)),

@@ -9,4 +9,4 @@ expect class DatabaseDriverFactory {
 
 expect fun getDatabaseDriverFactory(): DatabaseDriverFactory
 
-expect fun ByteArray.toImageBitmap(): ImageBitmap
+//expect fun ByteArray.toImageBitmap(): ImageBitmap

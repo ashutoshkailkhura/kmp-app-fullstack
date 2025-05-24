@@ -14,6 +14,3 @@ actual class DatabaseDriverFactory {
 actual fun getDatabaseDriverFactory() = DatabaseDriverFactory()
 
 actual fun getPlatformName(): String = "iOS"
-
-actual fun ByteArray.toImageBitmap(): ImageBitmap =
-    Image.makeFromEncoded(this).toComposeImageBitmap()

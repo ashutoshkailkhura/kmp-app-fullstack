@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.core.screen.Screen
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import kmpproject.shared.generated.resources.Res
+import kmpproject.shared.generated.resources.kodee_frightened
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import ui.components.OnlineIndicator
@@ -76,7 +78,7 @@ class ProfileScreen() : Screen {
 //                        .align(Alignment.CenterVertically)
                 ) {
                     Image(
-                        painterResource("compose-multiplatform.xml"),
+                        painterResource(Res.drawable.kodee_frightened),
                         null,
                         modifier = Modifier
                             .clip(CircleShape)

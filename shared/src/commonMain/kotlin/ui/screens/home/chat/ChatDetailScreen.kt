@@ -60,6 +60,8 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import dev.icerock.moko.mvvm.compose.getViewModel
 import dev.icerock.moko.mvvm.compose.viewModelFactory
+import kmpproject.shared.generated.resources.Res
+import kmpproject.shared.generated.resources.kodee_frightened
 import org.example.project.entity.WebSocketPayload
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
@@ -210,7 +212,7 @@ fun Message(
         if (isLastMessageByAuthor) {
             // Avatar
             Image(
-                painterResource("compose-multiplatform.xml"),
+                painterResource(Res.drawable.kodee_frightened),
                 null,
                 modifier = Modifier
                     .clickable(onClick = { })
