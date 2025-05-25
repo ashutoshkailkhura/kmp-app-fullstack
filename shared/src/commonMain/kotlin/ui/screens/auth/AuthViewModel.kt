@@ -5,13 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import org.example.project.data.request.AuthRequest
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
 import getPlatformName
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.example.project.netio.APIService
 import org.example.project.netio.Response
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 
 
 data class LogInUiState(

@@ -4,7 +4,8 @@ import SharedSDK
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import dev.icerock.moko.mvvm.viewmodel.ViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ui.screens.home.OnLineUiState
 

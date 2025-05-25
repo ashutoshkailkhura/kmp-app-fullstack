@@ -42,6 +42,8 @@ kotlin {
                 implementation(libs.ktor.client.cio)
                 implementation(libs.ktor.client.websockets)
 
+                api(libs.koin.compose.viewmodel.navigation)
+
                 implementation(libs.kotlinxCoroutinesCore)
 
                 implementation(compose.runtime)
@@ -51,13 +53,14 @@ kotlin {
                 implementation(compose.components.resources)
 
                 implementation(libs.sqldelightRuntime)
-                implementation(libs.voyagerNavigator)
-                implementation(libs.voyagerTabNavigator)
-                implementation(libs.voyagerScreenModel)
-                implementation(libs.voyagerTransitions)
 
-                implementation(libs.mvvmCompose)
-                implementation(libs.mvvmFlowCompose)
+//                navigation
+                implementation(libs.androidx.lifecycle.runtime.compose)
+                implementation(libs.androidx.navigation.compose)
+                implementation(libs.compose.ui.backhandler)
+
+//                implementation(libs.mvvmCompose)
+//                implementation(libs.mvvmFlowCompose)
 
                 implementation(libs.mpfilepicker)
 

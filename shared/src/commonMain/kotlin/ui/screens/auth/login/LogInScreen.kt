@@ -1,6 +1,5 @@
 package ui.screens.auth.login
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,10 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -37,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -45,66 +41,58 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 import ui.components.SimpleLoading
 import ui.components.SlideMessage
 import ui.screens.auth.AuthViewModel
 import ui.screens.auth.LogInUiState
-import ui.screens.auth.authViewModelFactory
-import ui.screens.auth.authViewModelKey
-import ui.screens.auth.signup.SignUpScreen
-import ui.screens.home.HomeScreen
 
-data class LogInScreen(
-    private val authViewModel: AuthViewModel,
-    val checkUserLogIn: () -> Unit
-) : Screen {
-
-    @Composable
-    override fun Content() {
-
-//        val authViewModel = getViewModel(authViewModelKey, authViewModelFactory)
-//        val authViewModel = viewModel<AuthViewModel>()
-
-        val navigator = LocalNavigator.currentOrThrow
-
-        LogInScreenContent(
-            uiState = authViewModel.logInUiState,
-            onLogInClick = { mail, pass ->
-                authViewModel.logIn(mail, pass)
-            },
-            onSignUpClick = {
-                navigator.push(SignUpScreen(authViewModel))
-            },
-            resetResult = {
-                authViewModel.resetResult()
-            },
-            navigateToHome = {
-                checkUserLogIn()
-            },
-            viewModel = authViewModel
-
-        )
-    }
-}
+//data class LogInScreen(
+//    private val authViewModel: AuthViewModel,
+//    val checkUserLogIn: () -> Unit
+//) : Screen {
+//
+//    @Composable
+//    override fun Content() {
+//
+////        val authViewModel = getViewModel(authViewModelKey, authViewModelFactory)
+////        val authViewModel = viewModel<AuthViewModel>()
+//
+//        val navigator = LocalNavigator.currentOrThrow
+//
+//        LogInScreenContent(
+//            uiState = authViewModel.logInUiState,
+//            onLogInClick = { mail, pass ->
+//                authViewModel.logIn(mail, pass)
+//            },
+//            onSignUpClick = {
+//                navigator.push(SignUpScreen(authViewModel))
+//            },
+//            resetResult = {
+//                authViewModel.resetResult()
+//            },
+//            navigateToHome = {
+//                checkUserLogIn()
+//            },
+//            viewModel = authViewModel
+//
+//        )
+//    }
+//}
 
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalResourceApi::class)
 @Composable
-fun LogInScreenContent(
-    uiState: LogInUiState,
+fun LogInScreen(
     onLogInClick: (String, String) -> Unit,
     onSignUpClick: () -> Unit,
     resetResult: () -> Unit,
     navigateToHome: () -> Unit,
-    viewModel: AuthViewModel
+    viewModel: AuthViewModel = koinViewModel()
 ) {
+
+    val uiState = viewModel.logInUiState
 
     var isPasswordVisible by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current

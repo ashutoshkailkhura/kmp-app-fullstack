@@ -39,189 +39,188 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
 import kmpproject.shared.generated.resources.Res
 import kmpproject.shared.generated.resources.appicon
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 import ui.components.SimpleLoading
 import ui.components.SlideMessage
 import ui.screens.auth.AuthViewModel
 import ui.screens.auth.SignUpInUiState
 
-data class SignUpScreen(private val authViewModel: AuthViewModel) : Screen {
+//data class SignUpScreen(private val authViewModel: AuthViewModel) : Screen {
+//
+//    @Composable
+//    override fun Content() {
+//
+////        val authViewModel = getViewModel(authViewModelKey, authViewModelFactory)
+//
+//        val navigator = LocalNavigator.currentOrThrow
+//
+//        SignUpScreenContent(
+//            uiState = authViewModel.signUpUiState,
+//            onSignUpClick = { mail, pass ->
+//                authViewModel.signUp(mail, pass)
+//            },
+//            resetResult = {
+//                authViewModel.resetResult()
+//            },
+//            onBackPressed = navigator::pop
+//        )
+//
+//    }
 
-    @Composable
-    override fun Content() {
 
-//        val authViewModel = getViewModel(authViewModelKey, authViewModelFactory)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalResourceApi::class)
+@Composable
+fun SignUpScreen(
+    onSignUpClick: (String, String) -> Unit,
+    resetResult: () -> Unit,
+    onBackPressed: () -> Unit,
+    viewModel: AuthViewModel = koinViewModel()
+) {
 
-        val navigator = LocalNavigator.currentOrThrow
+    val uiState = viewModel.signUpUiState
 
-        SignUpScreenContent(
-            uiState = authViewModel.signUpUiState,
-            onSignUpClick = { mail, pass ->
-                authViewModel.signUp(mail, pass)
-            },
-            resetResult = {
-                authViewModel.resetResult()
-            },
-            onBackPressed = navigator::pop
-        )
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
 
+    var isPasswordVisible by remember { mutableStateOf(false) }
+    var isConfirmPasswordVisible by remember { mutableStateOf(false) }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
+
+    if (uiState.result == "Success") {
+        onBackPressed()
     }
 
+    if (uiState.loading) {
+        keyboardController?.hide()
+        SimpleLoading()
+    } else {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
 
-    @OptIn(ExperimentalComposeUiApi::class, ExperimentalResourceApi::class)
-    @Composable
-    fun SignUpScreenContent(
-        uiState: SignUpInUiState,
-        onSignUpClick: (String, String) -> Unit,
-        resetResult: () -> Unit,
-        onBackPressed: () -> Unit
-    ) {
+            IconButton(onClick = onBackPressed, modifier = Modifier.align(Alignment.TopStart)) {
+                Icon(
+                    imageVector = Icons.Filled.ArrowBack,
+                    contentDescription = "Localized description"
+                )
+            }
 
-        var email by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
-        var confirmPassword by remember { mutableStateOf("") }
+            SlideMessage(uiState.result) {
+                resetResult()
+            }
 
-        var isPasswordVisible by remember { mutableStateOf(false) }
-        var isConfirmPasswordVisible by remember { mutableStateOf(false) }
-
-        val keyboardController = LocalSoftwareKeyboardController.current
-        val focusManager = LocalFocusManager.current
-
-
-        if (uiState.result == "Success") {
-            onBackPressed()
-        }
-
-        if (uiState.loading) {
-            keyboardController?.hide()
-            SimpleLoading()
-        } else {
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
-                IconButton(onClick = onBackPressed, modifier = Modifier.align(Alignment.TopStart)) {
-                    Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Localized description"
-                    )
-                }
-
-                SlideMessage(uiState.result) {
-                    resetResult()
-                }
-
-                Column(
+                Image(
+                    painterResource(Res.drawable.appicon),
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painterResource(Res.drawable.appicon),
-                        modifier = Modifier
-                            .size(75.dp)
-                            .clip(RoundedCornerShape(6.dp)),
-                        contentDescription = null,
-                    )
+                        .size(75.dp)
+                        .clip(RoundedCornerShape(6.dp)),
+                    contentDescription = null,
+                )
 
-                    Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(18.dp))
 
-                    TextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = { Text("Email") },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
-                        ),
-                        leadingIcon = {
-                            Icon(imageVector = Icons.Default.Email, contentDescription = null)
-                        }
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    TextField(
-                        value = password,
-                        onValueChange = { password = it },
-                        label = { Text("Password") },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Next
-                        ),
-                        trailingIcon = {
-                            IconButton(
-                                onClick = { isPasswordVisible = !isPasswordVisible }
-                            ) {
-                                Icon(
-                                    imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        leadingIcon = {
-                            Icon(imageVector = Icons.Default.Lock, contentDescription = null)
-                        }
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    TextField(
-                        value = confirmPassword,
-                        onValueChange = { confirmPassword = it },
-                        label = { Text("Confirm Password") },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        visualTransformation = if (isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Password,
-                            imeAction = ImeAction.Done
-                        ),
-                        trailingIcon = {
-                            IconButton(
-                                onClick = {
-                                    isConfirmPasswordVisible = !isConfirmPasswordVisible
-                                }
-                            ) {
-                                Icon(
-                                    imageVector = if (isConfirmPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                    contentDescription = null
-                                )
-                            }
-                        },
-                        leadingIcon = {
-                            Icon(imageVector = Icons.Default.Lock, contentDescription = null)
-                        }
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = {
-                            focusManager.clearFocus()
-                            keyboardController?.hide()
-                            onSignUpClick(email, password)
-                        },
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        enabled = !uiState.loading
-                    ) {
-                        Text("Sign Up")
+                TextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("Email") },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next
+                    ),
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.Email, contentDescription = null)
                     }
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                TextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text("Password") },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Next
+                    ),
+                    trailingIcon = {
+                        IconButton(
+                            onClick = { isPasswordVisible = !isPasswordVisible }
+                        ) {
+                            Icon(
+                                imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.Lock, contentDescription = null)
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                TextField(
+                    value = confirmPassword,
+                    onValueChange = { confirmPassword = it },
+                    label = { Text("Confirm Password") },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    visualTransformation = if (isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done
+                    ),
+                    trailingIcon = {
+                        IconButton(
+                            onClick = {
+                                isConfirmPasswordVisible = !isConfirmPasswordVisible
+                            }
+                        ) {
+                            Icon(
+                                imageVector = if (isConfirmPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                contentDescription = null
+                            )
+                        }
+                    },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Default.Lock, contentDescription = null)
+                    }
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    onClick = {
+                        focusManager.clearFocus()
+                        keyboardController?.hide()
+                        onSignUpClick(email, password)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    enabled = !uiState.loading
+                ) {
+                    Text("Sign Up")
                 }
             }
         }

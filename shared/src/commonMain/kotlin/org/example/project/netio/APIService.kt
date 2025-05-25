@@ -25,6 +25,7 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.utils.io.core.Closeable
 import io.ktor.websocket.Frame
 import io.ktor.websocket.WebSocketSession
 import io.ktor.websocket.close
@@ -57,7 +58,7 @@ sealed class Response<out T> {
     object Loading : Response<Nothing>()
 }
 
-class APIService {
+class APIService : Closeable {
 
     companion object {
         const val TAG = "APIService"
@@ -311,6 +312,10 @@ class APIService {
 
     suspend fun closeChatSession() {
         sockets?.close()
+    }
+
+    override fun close() {
+        client.close()
     }
 
 }

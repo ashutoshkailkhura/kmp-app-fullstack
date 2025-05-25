@@ -8,14 +8,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFrom
@@ -33,17 +29,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -53,50 +44,44 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.LocalNavigator
-import cafe.adriel.voyager.navigator.currentOrThrow
-import dev.icerock.moko.mvvm.compose.getViewModel
-import dev.icerock.moko.mvvm.compose.viewModelFactory
 import kmpproject.shared.generated.resources.Res
 import kmpproject.shared.generated.resources.kodee_frightened
 import org.example.project.entity.WebSocketPayload
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-data class ChatDetailScreen(val userId: Int) : Screen {
-
-    companion object {
-        const val TAG = "ChatDetailScreen"
-    }
-
-    @Composable
-    override fun Content() {
-
-        val chatViewModel =
-            getViewModel(ChatDetailScreen(userId).key, viewModelFactory { ChatViewModel() })
-
-        val navigator = LocalNavigator.currentOrThrow
-
-        LaunchedEffect(Unit) {
-            println("$TAG LaunchedEffect observeMsg")
-            chatViewModel.observeMsg()
-        }
-
-        ChatDetailScreenContent(
-            uiState = chatViewModel.chatDetailUiState,
-            onBackPressed = navigator::pop,
-            targetUser = userId,
-            onMsgSend = { chatViewModel.sendMsg(it, userId.toString()) }
-        )
-    }
-}
+//data class ChatDetailScreen(val userId: Int) : Screen {
+//
+//    companion object {
+//        const val TAG = "ChatDetailScreen"
+//    }
+//
+//    @Composable
+//    override fun Content() {
+//
+//        val chatViewModel =
+//            getViewModel(ChatDetailScreen(userId).key, viewModelFactory { ChatViewModel() })
+//
+//        val navigator = LocalNavigator.currentOrThrow
+//
+//        LaunchedEffect(Unit) {
+//            println("$TAG LaunchedEffect observeMsg")
+//            chatViewModel.observeMsg()
+//        }
+//
+//        ChatDetailScreenContent(
+//            uiState = chatViewModel.chatDetailUiState,
+//            onBackPressed = navigator::pop,
+//            targetUser = userId,
+//            onMsgSend = { chatViewModel.sendMsg(it, userId.toString()) }
+//        )
+//    }
+//}
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun ChatDetailScreenContent(
+fun ChatDetailScreen(
     uiState: ChatDetailUiState,
     onBackPressed: () -> Unit,
     targetUser: Int,
@@ -154,7 +139,6 @@ fun ChatDetailScreenContent(
                 },
             )
         }
-
     }
 }
 

@@ -38,8 +38,8 @@ kotlin {
                 implementation(libs.voyagerScreenModel)
                 implementation(libs.voyagerTransitions)
 
-                implementation(libs.mvvmCompose)
-                implementation(libs.mvvmFlowCompose)
+//                implementation(libs.mvvmCompose)
+//                implementation(libs.mvvmFlowCompose)
 
                 implementation(libs.mpfilepicker)
             }
@@ -75,9 +75,6 @@ android {
     }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
     packaging {
         resources {

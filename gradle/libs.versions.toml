@@ -4,15 +4,18 @@ commonsCodec = "1.17.1"
 exposedKotlinDatetime = "0.44.1"
 gson = "2.11.0"
 ktor = "2.3.5"
+koin = "4.1.0-Beta11"
 logback = "1.4.14"
 compose = "1.8.2"
-compose-plugin = "1.8.0"
-compose-compiler = "1.5.5"
-agp = "8.1.2"
+compose-multiplatform = "1.8.0"
+#compose-compiler = "1.5.5"
+agp = "8.10.0"
 android-minSdk = "24"
 android-compileSdk = "35"
 android-targetSdk = "35"
 androidx-activityCompose = "1.10.1"
+androidx-navigation = "2.9.0-beta01"
+androidx-lifecycle = "2.9.0-beta01"
 androidx-core-ktx = "1.12.0"
 androidx-appcompat = "1.6.1"
 androidx-material = "1.10.0"
@@ -72,15 +75,27 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
 mpfilepicker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "mpfilepicker" }
 mysql-connector-java = { module = "mysql:mysql-connector-java", version.ref = "mysqlConnectorJava" }
+#navigation
 voyagerNavigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerVersion" }
 voyagerTabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyagerVersion" }
 voyagerScreenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyagerVersion" }
 voyagerTransitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerVersion" }
+
+androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
+compose-ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose-multiplatform" }
+androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+
+#
+koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
+koin-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin" }
+#
 kotlinxCoroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesCore" }
 kotlinxCoroutinesAndroid = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesVersion" }
 #
-mvvmCompose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "mvvmComposeVersion" }
-mvvmFlowCompose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "mvvmComposeVersion" }
+#mvvmCompose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "mvvmComposeVersion" }
+#mvvmFlowCompose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "mvvmComposeVersion" }
 sqldelightRuntime = { module = "com.squareup.sqldelight:runtime", version.ref = "sqldelightVersion" }
 sqldelightAndroid = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelightVersion" }
 sqldelightNative = { module = "com.squareup.sqldelight:native-driver", version.ref = "sqldelightVersion" }
@@ -88,7 +103,7 @@ sqldelightNative = { module = "com.squareup.sqldelight:native-driver", version.r
 [plugins]
 kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
-jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
