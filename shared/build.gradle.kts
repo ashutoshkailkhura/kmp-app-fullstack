@@ -37,6 +37,7 @@ kotlin {
             dependencies {
                 //put your multiplatform dependencies here
                 implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.logging)
                 implementation(libs.ktor.serialization)
                 implementation(libs.ktor.content.negotiation.client)
                 implementation(libs.ktor.client.cio)
@@ -48,9 +49,12 @@ kotlin {
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
+                implementation(compose.animation)
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
                 implementation(compose.components.resources)
+
+                implementation(libs.kotlinx.datetime)
 
                 implementation(libs.sqldelightRuntime)
 
@@ -61,6 +65,12 @@ kotlin {
 
 //                implementation(libs.mvvmCompose)
 //                implementation(libs.mvvmFlowCompose)
+
+                // Multiplatform Settings
+                implementation(libs.settings)
+                implementation(libs.settings.serialization)
+                implementation(libs.settings.observable)
+                implementation(libs.settings.coroutines)
 
                 implementation(libs.mpfilepicker)
 
@@ -75,7 +85,9 @@ kotlin {
             dependencies {
                 implementation(libs.compose.ui)
                 implementation(libs.compose.ui.tooling.preview)
-                implementation(libs.androidx.activity.compose)
+                implementation(libs.androidx.core.ktx)
+                implementation(libs.androidx.work.runtime)
+                implementation(libs.androidx.preference)
                 implementation(libs.sqldelightAndroid)
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.sqldelightAndroid)

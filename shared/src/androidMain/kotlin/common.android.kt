@@ -15,7 +15,7 @@ import org.example.project.db.AppDatabase
 //}
 //
 //actual fun getDatabaseDriverFactory() = DatabaseDriverFactory()
-actual fun getPlatformName(): String = "MyApplication.context.packageName"
+//actual fun getPlatformName(): String = "MyApplication.context.packageName"
 
 //actual fun ByteArray.toImageBitmap(): ImageBitmap = toAndroidBitmap().asImageBitmap()
 //

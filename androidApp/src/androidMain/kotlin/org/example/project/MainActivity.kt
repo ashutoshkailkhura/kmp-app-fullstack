@@ -1,6 +1,5 @@
 package org.example.project
 
-import App
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
@@ -14,8 +13,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import org.koin.mp.KoinPlatform
 
 //import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
