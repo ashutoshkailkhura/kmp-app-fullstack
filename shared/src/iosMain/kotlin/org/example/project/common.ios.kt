@@ -1,8 +1,8 @@
+package org.example.project
+
 import com.squareup.sqldelight.db.SqlDriver
+import com.squareup.sqldelight.drivers.native.NativeSqliteDriver
 import org.example.project.db.AppDatabase
-
-actual fun getPlatformName(): String = "Server"
-
 
 actual class DatabaseDriverFactory {
     actual fun createDriver(): SqlDriver {
@@ -11,3 +11,5 @@ actual class DatabaseDriverFactory {
 }
 
 actual fun getDatabaseDriverFactory() = DatabaseDriverFactory()
+
+actual fun getPlatformName(): String = "iOS"

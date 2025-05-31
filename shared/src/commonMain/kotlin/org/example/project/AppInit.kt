@@ -3,17 +3,22 @@ package org.example.project
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import org.example.project.storage.ApplicationStorage
+import org.example.project.storage.MultiplatformSettingsStorage
+import org.example.project.ui.screens.auth.AuthViewModel
+import org.example.project.ui.screens.home.HomeViewModel
+import org.example.project.ui.screens.home.chat.ChatViewModel
+import org.example.project.ui.screens.home.post.PostViewModel
+import org.example.project.ui.screens.home.profile.ProfileViewModel
+import org.example.project.utils.DebugLogger
 import org.example.project.utils.Logger
 import org.example.project.utils.NoopProdLogger
 import org.koin.core.Koin
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
-import org.koin.dsl.module
-import org.example.project.utils.DebugLogger
-import org.example.project.storage.ApplicationStorage
-import org.example.project.storage.MultiplatformSettingsStorage
 import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.module
 
 fun initApp(
     platformLogger: Logger,
@@ -62,6 +67,9 @@ private fun initKoin(
         val viewModelModule = module {
             viewModelOf(::AuthViewModel)
             viewModelOf(::HomeViewModel)
+            viewModelOf(::PostViewModel)
+            viewModelOf(::ChatViewModel)
+            viewModelOf(::ProfileViewModel)
         }
 
         // Note that the order of modules here is significant, later

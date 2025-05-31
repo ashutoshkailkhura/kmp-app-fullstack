@@ -44,9 +44,9 @@ fun App(
         .collectAsStateWithLifecycle(initialValue = null)
         .value
 
-//    val flags by koinInject<FlagsManager>().flags.collectAsStateWithLifecycle()
+    val flags by koinInject<FlagsManager>().flags.collectAsStateWithLifecycle()
 
-    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.primary) {
+    CompositionLocalProvider(LocalFlags provides flags) {
         KMPTheme(
             darkTheme = isDarkTheme,
 //            rippleEnabled = LocalFlags.current.rippleEnabled,

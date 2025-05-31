@@ -19,8 +19,12 @@ import androidx.navigation.toRoute
 import org.example.project.ui.screens.auth.login.LogInScreen
 import org.example.project.ui.screens.auth.signup.SignUpScreen
 import org.example.project.ui.screens.home.AppMainScreen
+import org.example.project.ui.screens.home.chat.ChatDetailScreen
+import org.example.project.ui.screens.home.chat.ChatListScreen
 import org.example.project.ui.screens.home.post.createPost.CreatePostScreen
 import org.example.project.ui.screens.home.post.postDetail.PostDetailScreen
+import org.example.project.ui.screens.home.post.postList.PostListScreen
+import org.example.project.ui.screens.home.profile.ProfileScreen
 
 
 @Composable
@@ -32,9 +36,9 @@ internal fun KMPAppNavHost(
     val navController = rememberNavController()
 
 //    NotificationHandler(navController)
-//    PlatformNavHandler(navController)
+    PlatformNavHandler(navController)
 
-    val startDestination = if (isOnboardingComplete) AuthScreen else AppMainScreen
+    val startDestination = if (isOnboardingComplete) AppMainScreen else AuthScreen
     if (popEnterTransition != null && popExitTransition != null) {
         NavHost(
             navController = navController,
@@ -67,6 +71,27 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
         )
     }
 
+//    composable<PostListScreen> {
+//        val uriHandler = LocalUriHandler.current
+//        PostListScreen(
+//            onPostClick = {
+//                navController.navigate(PostDetailScreen(it.toString()))
+//            },
+//            onClickCreatePost = {
+//                navController.navigate(CreatePostScreen)
+//            })
+//    }
+
+    composable<PostDetailScreen> {
+        val params = it.toRoute<PostDetailScreen>()
+        PostDetailScreen(
+            postId = params.postId,
+            onClickContact = TODO(),
+            onBackPress = TODO(),
+            viewModel = TODO()
+        )
+    }
+
     composable<CreatePostScreen> {
         val uriHandler = LocalUriHandler.current
         CreatePostScreen(
@@ -82,14 +107,26 @@ fun NavGraphBuilder.screens(navController: NavHostController) {
             }
         )
     }
-//    composable<PostDetailScreen> {
-//        val params = it.toRoute<PostDetailScreen>()
-//        PostDetailScreen(
-//            postId = params.postId,
-//            onClickContact = TODO(),
-//            onBackPress = TODO(),
+
+//    composable<ChatListScreen> {
+//        val uriHandler = LocalUriHandler.current
+//        ChatListScreen(
+//            onUserSelect = TODO(),
 //            viewModel = TODO()
 //        )
+//    }
+
+    composable<ChatDetailScreen> {
+        ChatDetailScreen(
+            uiState = TODO(),
+            onBackPressed = TODO(),
+            targetUser = TODO(),
+            onMsgSend = TODO()
+        )
+    }
+
+//    composable<ProfileScreen> {
+//        ProfileScreen()
 //    }
 
 }
@@ -100,6 +137,7 @@ fun NavGraphBuilder.startScreens(
     navigation<AuthScreen>(
         startDestination = LogInScreen
     ) {
+
         composable<LogInScreen> {
             LogInScreen(
                 onLogInClick = { mail, pass ->
@@ -107,6 +145,7 @@ fun NavGraphBuilder.startScreens(
                 },
                 onSignUpClick = {
 //                    navigator.push(SignUpScreen(authViewModel))
+                    navController.navigate(SignUpScreen)
                 },
                 resetResult = {
 //                    authViewModel.resetResult()
@@ -116,6 +155,7 @@ fun NavGraphBuilder.startScreens(
                 }
             )
         }
+
         composable<SignUpScreen> {
             SignUpScreen(
                 onSignUpClick = { mail, pass ->
@@ -125,9 +165,7 @@ fun NavGraphBuilder.startScreens(
                 resetResult = {
 //                    authViewModel.resetResult()
                 },
-                onBackPressed = {
-
-                }
+                onBackPressed = navController::navigateUp,
             )
         }
     }

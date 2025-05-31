@@ -8,14 +8,10 @@ import com.russhwolf.settings.set
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.jetbrains.kotlinconf.Conference
-import org.jetbrains.kotlinconf.Flags
-import org.jetbrains.kotlinconf.NewsItem
-import org.jetbrains.kotlinconf.NotificationSettings
-import org.jetbrains.kotlinconf.SessionId
-import org.jetbrains.kotlinconf.Theme
-import org.jetbrains.kotlinconf.VoteInfo
+import org.example.project.Flags
+import org.example.project.Theme
 
 @OptIn(ExperimentalSettingsApi::class)
 class MultiplatformSettingsStorage(
@@ -38,11 +34,17 @@ class MultiplatformSettingsStorage(
     override fun getUserId(): Flow<String?> = settings.getStringOrNullFlow(Keys.USER_ID)
     override suspend fun setUserId(value: String?) = settings.set(Keys.USER_ID, value)
 
-    override fun getPendingUserId(): Flow<String?> = settings.getStringOrNullFlow(Keys.PENDING_USER_ID)
-    override suspend fun setPendingUserId(value: String?) = settings.set(Keys.PENDING_USER_ID, value)
+    override fun getPendingUserId(): Flow<String?> =
+        settings.getStringOrNullFlow(Keys.PENDING_USER_ID)
 
-    override fun isOnboardingComplete(): Flow<Boolean> = settings.getBooleanFlow(Keys.ONBOARDING_COMPLETE, false)
-    override suspend fun setOnboardingComplete(value: Boolean) = settings.set(Keys.ONBOARDING_COMPLETE, value)
+    override suspend fun setPendingUserId(value: String?) =
+        settings.set(Keys.PENDING_USER_ID, value)
+
+    override fun isOnboardingComplete(): Flow<Boolean> =
+        settings.getBooleanFlow(Keys.ONBOARDING_COMPLETE, false)
+
+    override suspend fun setOnboardingComplete(value: Boolean) =
+        settings.set(Keys.ONBOARDING_COMPLETE, value)
 
     override fun getTheme(): Flow<Theme> = settings.getStringOrNullFlow(Keys.THEME)
         .map { it?.let { Theme.valueOf(it) } ?: Theme.SYSTEM }
@@ -50,36 +52,37 @@ class MultiplatformSettingsStorage(
     override suspend fun setTheme(value: Theme) = settings
         .set(Keys.THEME, value.name)
 
-    override fun getConferenceCache(): Flow<Conference?> = settings.getStringOrNullFlow(Keys.CONFERENCE_CACHE)
-        .map { it.decodeOrNull<Conference>() }
-
-    override suspend fun setConferenceCache(value: Conference) = settings
-        .set(Keys.CONFERENCE_CACHE, json.encodeToString(value))
-
-    override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(Keys.FAVORITES)
-        .map { it.decodeOrNull<Set<SessionId>>() ?: emptySet() }
-
-    override suspend fun setFavorites(value: Set<SessionId>) = settings
-        .set(Keys.FAVORITES, json.encodeToString(value))
-
-    override fun getNews(): Flow<List<NewsItem>> = settings.getStringOrNullFlow(Keys.NEWS_CACHE)
-        .map { it.decodeOrNull<List<NewsItem>>() ?: emptyList() }
-
-    override suspend fun setNews(value: List<NewsItem>) = settings
-        .set(Keys.NEWS_CACHE, json.encodeToString(value))
-
-    override fun getNotificationSettings(): Flow<NotificationSettings?> =
-        settings.getStringOrNullFlow(Keys.NOTIFICATION_SETTINGS)
-            .map { it.decodeOrNull<NotificationSettings>() }
-
-    override suspend fun setNotificationSettings(value: NotificationSettings) = settings
-        .set(Keys.NOTIFICATION_SETTINGS, json.encodeToString(value))
-
-    override fun getVotes(): Flow<List<VoteInfo>> = settings.getStringOrNullFlow(Keys.VOTES)
-        .map { it.decodeOrNull<List<VoteInfo>>() ?: emptyList() }
-
-    override suspend fun setVotes(value: List<VoteInfo>) = settings
-        .set(Keys.VOTES, json.encodeToString(value))
+//    override fun getConferenceCache(): Flow<Conference?> =
+//        settings.getStringOrNullFlow(Keys.CONFERENCE_CACHE)
+//            .map { it.decodeOrNull<Conference>() }
+//
+//    override suspend fun setConferenceCache(value: Conference) = settings
+//        .set(Keys.CONFERENCE_CACHE, json.encodeToString(value))
+//
+//    override fun getFavorites(): Flow<Set<SessionId>> = settings.getStringOrNullFlow(Keys.FAVORITES)
+//        .map { it.decodeOrNull<Set<SessionId>>() ?: emptySet() }
+//
+//    override suspend fun setFavorites(value: Set<SessionId>) = settings
+//        .set(Keys.FAVORITES, json.encodeToString(value))
+//
+//    override fun getNews(): Flow<List<NewsItem>> = settings.getStringOrNullFlow(Keys.NEWS_CACHE)
+//        .map { it.decodeOrNull<List<NewsItem>>() ?: emptyList() }
+//
+//    override suspend fun setNews(value: List<NewsItem>) = settings
+//        .set(Keys.NEWS_CACHE, json.encodeToString(value))
+//
+//    override fun getNotificationSettings(): Flow<NotificationSettings?> =
+//        settings.getStringOrNullFlow(Keys.NOTIFICATION_SETTINGS)
+//            .map { it.decodeOrNull<NotificationSettings>() }
+//
+//    override suspend fun setNotificationSettings(value: NotificationSettings) = settings
+//        .set(Keys.NOTIFICATION_SETTINGS, json.encodeToString(value))
+//
+//    override fun getVotes(): Flow<List<VoteInfo>> = settings.getStringOrNullFlow(Keys.VOTES)
+//        .map { it.decodeOrNull<List<VoteInfo>>() ?: emptyList() }
+//
+//    override suspend fun setVotes(value: List<VoteInfo>) = settings
+//        .set(Keys.VOTES, json.encodeToString(value))
 
     override fun getFlagsBlocking(): Flags? =
         settings.getStringOrNull(Keys.FLAGS)?.decodeOrNull<Flags>()

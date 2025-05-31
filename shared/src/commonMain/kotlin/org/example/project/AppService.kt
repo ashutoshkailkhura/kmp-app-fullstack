@@ -1,11 +1,11 @@
 package org.example.project
 
-import io.ktor.util.logging.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.example.project.netio.APIService
 import org.example.project.storage.ApplicationStorage
+import org.example.project.utils.Logger
 
 class AppService(
     private val client: APIClient,

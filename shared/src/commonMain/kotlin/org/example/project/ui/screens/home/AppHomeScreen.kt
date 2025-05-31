@@ -1,7 +1,6 @@
 package org.example.project.ui.screens.home
 
 import org.example.project.AppService
-import org.example.project.LocalFlags
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -45,6 +44,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kmpproject.shared.generated.resources.Res
 import kmpproject.shared.generated.resources.*
+import org.example.project.LocalFlags
 import org.example.project.navigation.ChatDetailScreen
 import org.example.project.navigation.ChatListScreen
 import org.example.project.navigation.CreatePostScreen
@@ -96,16 +96,18 @@ fun AppMainScreen(
                 MainBackHandler()
                 PostListScreen(
                     onPostClick = {
-                        rootNavController.navigate(PostDetailScreen(it.toString()))
+//                        rootNavController.navigate(PostDetailScreen(it.toString()))
                     },
                     onClickCreatePost = {
-                        rootNavController.navigate(CreatePostScreen)
+//                        rootNavController.navigate(CreatePostScreen)
                     })
             }
             composable<ChatListScreen> {
                 MainBackHandler()
                 ChatListScreen(
-                    onUserSelect = { rootNavController.navigate(ChatDetailScreen(it.toString())) },
+                    onUserSelect = {
+//                        rootNavController.navigate(ChatDetailScreen(it.toString()))
+                    },
                 )
             }
             composable<ProfileScreen> {
@@ -124,7 +126,8 @@ fun AppMainScreen(
 private fun MainBackHandler() {
     if (!LocalFlags.current.enableBackOnMainScreens) {
         // Prevent back navigation with an empty handler
-        @OptIn(ExperimentalComposeUiApi::class) BackHandler(true) { }
+        @OptIn(ExperimentalComposeUiApi::class)
+        BackHandler(true) { }
     }
 }
 
