@@ -1,1 +1,5 @@
-package org.example.project//actual fun getPlatformName(): String = "iOS"
+package org.example.project
+
+actual fun getPlatformName(): String = "iOS"
+
+

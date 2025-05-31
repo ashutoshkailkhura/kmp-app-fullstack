@@ -1,15 +1,17 @@
 package org.example.project.ui.screens.home
 
-import org.example.project.SharedSDK
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import org.example.project.netio.Response
+import org.example.project.AppService
+import org.example.project.Response
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(
+    private val service: AppService
+) : ViewModel() {
 
     companion object {
         const val TAG = "HomeViewModel"
@@ -19,19 +21,17 @@ class HomeViewModel : ViewModel() {
         println("$TAG init")
     }
 
-    private val sdk = SharedSDK
-
     var onLineUiState by mutableStateOf(OnLineUiState())
         private set
 
     fun connectUser() {
         println("$TAG connectUser")
         viewModelScope.launch {
-            val userToken = sdk.getToken()
+            val userToken = service.getToken()
             userToken?.let { token ->
                 onLineUiState = onLineUiState.copy(isLoading = true, connected = false)
                 onLineUiState =
-                    when (val result = sdk.remoteApi.initSession(token)) {
+                    when (val result = service.initSession(token)) {
                         is Response.Error -> {
                             println("$TAG connectUser ${result.exception}")
                             onLineUiState.copy(

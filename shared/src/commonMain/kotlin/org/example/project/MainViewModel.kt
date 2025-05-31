@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val service: AppService
+) : ViewModel() {
 
     companion object {
         const val TAG = "MainViewModel"
@@ -18,16 +20,13 @@ class MainViewModel : ViewModel() {
         println("$TAG init")
     }
 
-    private val sdk = SharedSDK
-
-
     var mainUiState by mutableStateOf(MainUiState())
         private set
 
     fun isUserLogIn() {
         println("$TAG isUserLogIn")
         viewModelScope.launch {
-            val token = SharedSDK.getToken()
+            val token = service.getToken()
             token?.let {
                 mainUiState = mainUiState.copy(userToken = token, loading = false)
             } ?: run {

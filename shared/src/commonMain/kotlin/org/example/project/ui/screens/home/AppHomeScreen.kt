@@ -1,6 +1,5 @@
 package org.example.project.ui.screens.home
 
-import org.example.project.AppService
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -43,7 +42,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kmpproject.shared.generated.resources.Res
-import kmpproject.shared.generated.resources.*
+import kmpproject.shared.generated.resources.clock_28
+import kmpproject.shared.generated.resources.clock_28_fill
+import kmpproject.shared.generated.resources.info_28
+import kmpproject.shared.generated.resources.info_28_fill
+import kmpproject.shared.generated.resources.nav_destination_chat
+import kmpproject.shared.generated.resources.nav_destination_post
+import kmpproject.shared.generated.resources.nav_destination_profile
+import kmpproject.shared.generated.resources.team_28
+import kmpproject.shared.generated.resources.team_28_fill
+import org.example.project.AppService
 import org.example.project.LocalFlags
 import org.example.project.navigation.ChatDetailScreen
 import org.example.project.navigation.ChatListScreen
@@ -51,13 +59,13 @@ import org.example.project.navigation.CreatePostScreen
 import org.example.project.navigation.PostDetailScreen
 import org.example.project.navigation.PostListScreen
 import org.example.project.navigation.ProfileScreen
+import org.example.project.ui.screens.home.chat.ChatListScreen
+import org.example.project.ui.screens.home.post.PostListScreen
+import org.example.project.ui.screens.home.profile.ProfileScreen
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
-import org.example.project.ui.screens.home.chat.ChatListScreen
-import org.example.project.ui.screens.home.post.postList.PostListScreen
-import org.example.project.ui.screens.home.profile.ProfileScreen
 import kotlin.reflect.KClass
 
 data class MainNavDestination(
@@ -96,17 +104,17 @@ fun AppMainScreen(
                 MainBackHandler()
                 PostListScreen(
                     onPostClick = {
-//                        rootNavController.navigate(PostDetailScreen(it.toString()))
+                        rootNavController.navigate(PostDetailScreen(it.toString()))
                     },
                     onClickCreatePost = {
-//                        rootNavController.navigate(CreatePostScreen)
+                        rootNavController.navigate(CreatePostScreen)
                     })
             }
             composable<ChatListScreen> {
                 MainBackHandler()
                 ChatListScreen(
                     onUserSelect = {
-//                        rootNavController.navigate(ChatDetailScreen(it.toString()))
+                        rootNavController.navigate(ChatDetailScreen(it.toString()))
                     },
                 )
             }
@@ -141,28 +149,21 @@ private fun isKeyboardOpen(): Boolean {
 private fun BottomNavigation(nestedNavController: NavHostController) {
     val bottomNavDestinations: List<MainNavDestination> = listOf(
         MainNavDestination(
-            label = stringResource(Res.string.nav_destination_schedule),
+            label = stringResource(Res.string.nav_destination_post),
             icon = Res.drawable.clock_28,
             iconSelected = Res.drawable.clock_28_fill,
             route = PostListScreen,
             routeClass = PostListScreen::class
         ),
         MainNavDestination(
-            label = stringResource(Res.string.nav_destination_speakers),
+            label = stringResource(Res.string.nav_destination_chat),
             icon = Res.drawable.team_28,
             iconSelected = Res.drawable.team_28_fill,
             route = ChatListScreen,
             routeClass = ChatListScreen::class
         ),
-//        MainNavDestination(
-//            label = stringResource(Res.string.nav_destination_map),
-//            icon = Res.drawable.location_28,
-//            iconSelected = Res.drawable.location_28_fill,
-//            route = MapScreen,
-//            routeClass = MapScreen::class
-//        ),
         MainNavDestination(
-            label = stringResource(Res.string.nav_destination_info),
+            label = stringResource(Res.string.nav_destination_profile),
             icon = Res.drawable.info_28,
             iconSelected = Res.drawable.info_28_fill,
             route = ProfileScreen,

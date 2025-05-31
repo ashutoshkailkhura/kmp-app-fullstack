@@ -1,19 +1,21 @@
-package org.example.project.ui.screens.auth.signup
+package org.example.project.ui.screens.auth
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
@@ -22,6 +24,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,9 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -39,63 +40,27 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import kmpproject.shared.generated.resources.Res
-import kmpproject.shared.generated.resources.appicon
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
 import org.example.project.ui.components.SimpleLoading
 import org.example.project.ui.components.SlideMessage
-import org.example.project.ui.screens.auth.AuthViewModel
-import org.example.project.ui.screens.auth.SignUpInUiState
+import org.koin.compose.viewmodel.koinViewModel
 
-//data class SignUpScreen(private val authViewModel: AuthViewModel) : Screen {
-//
-//    @Composable
-//    override fun Content() {
-//
-////        val authViewModel = getViewModel(authViewModelKey, authViewModelFactory)
-//
-//        val navigator = LocalNavigator.currentOrThrow
-//
-//        SignUpScreenContent(
-//            uiState = authViewModel.signUpUiState,
-//            onSignUpClick = { mail, pass ->
-//                authViewModel.signUp(mail, pass)
-//            },
-//            resetResult = {
-//                authViewModel.resetResult()
-//            },
-//            onBackPressed = navigator::pop
-//        )
-//
-//    }
-
-
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalResourceApi::class)
 @Composable
-fun SignUpScreen(
-    onSignUpClick: (String, String) -> Unit,
+fun LogInScreen(
+    onLogInClick: (String, String) -> Unit,
+    onSignUpClick: () -> Unit,
     resetResult: () -> Unit,
-    onBackPressed: () -> Unit,
+    navigateToHome: () -> Unit,
     viewModel: AuthViewModel = koinViewModel()
 ) {
 
-    val uiState = viewModel.signUpUiState
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+    val uiState = viewModel.logInUiState
 
     var isPasswordVisible by remember { mutableStateOf(false) }
-    var isConfirmPasswordVisible by remember { mutableStateOf(false) }
-
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
-
-    if (uiState.result == "Success") {
-        onBackPressed()
+    if (uiState.token.isNotEmpty()) {
+        navigateToHome()
     }
 
     if (uiState.loading) {
@@ -105,14 +70,9 @@ fun SignUpScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .imePadding()
+                .navigationBarsPadding()
         ) {
-
-            IconButton(onClick = onBackPressed, modifier = Modifier.align(Alignment.TopStart)) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Localized description"
-                )
-            }
 
             SlideMessage(uiState.result) {
                 resetResult()
@@ -121,23 +81,32 @@ fun SignUpScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
                     .padding(16.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Image(
-                    painterResource(Res.drawable.appicon),
-                    modifier = Modifier
-                        .size(75.dp)
-                        .clip(RoundedCornerShape(6.dp)),
-                    contentDescription = null,
-                )
+
+//                Image(
+//                    painterResource("resources/appicon.png"),
+//                    modifier = Modifier
+//                        .size(75.dp)
+//                        .clip(RoundedCornerShape(6.dp)),
+//                    contentDescription = null,
+//                )
+
+//                try
+                /*   PageMenuItem(
+                   stringResource(Res.string.about_app_link_github),
+                   drawableEnd = Res.drawable.arrow_up_right_24,
+                   onClick = onGitHubRepo,
+               )*/
 
                 Spacer(modifier = Modifier.height(18.dp))
 
                 TextField(
-                    value = email,
-                    onValueChange = { email = it },
+                    value = viewModel.logInUserMail,
+                    onValueChange = { mail -> viewModel.updateLogInUserMail(mail) },
                     label = { Text("Email") },
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -153,15 +122,15 @@ fun SignUpScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 TextField(
-                    value = password,
-                    onValueChange = { password = it },
+                    value = viewModel.logInUserPassword,
+                    onValueChange = { password -> viewModel.updateLogInUserPass(password) },
                     label = { Text("Password") },
                     modifier = Modifier
                         .fillMaxWidth(),
                     visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Next
+                        imeAction = ImeAction.Done
                     ),
                     trailingIcon = {
                         IconButton(
@@ -180,49 +149,35 @@ fun SignUpScreen(
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                TextField(
-                    value = confirmPassword,
-                    onValueChange = { confirmPassword = it },
-                    label = { Text("Confirm Password") },
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    visualTransformation = if (isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password,
-                        imeAction = ImeAction.Done
-                    ),
-                    trailingIcon = {
-                        IconButton(
-                            onClick = {
-                                isConfirmPasswordVisible = !isConfirmPasswordVisible
-                            }
-                        ) {
-                            Icon(
-                                imageVector = if (isConfirmPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                                contentDescription = null
-                            )
-                        }
-                    },
-                    leadingIcon = {
-                        Icon(imageVector = Icons.Default.Lock, contentDescription = null)
-                    }
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
                 Button(
                     onClick = {
                         focusManager.clearFocus()
-                        keyboardController?.hide()
-                        onSignUpClick(email, password)
+                        onLogInClick(viewModel.logInUserMail, viewModel.logInUserPassword)
                     },
                     modifier = Modifier
                         .fillMaxWidth(),
                     enabled = !uiState.loading
                 ) {
-                    Text("Sign Up")
+                    Text("Log In")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("Don't have an account")
+                    Spacer(modifier = Modifier.width(4.dp))
+                    TextButton(
+                        onClick = onSignUpClick
+                    ) {
+                        Text("Sign Up")
+                    }
                 }
             }
+
         }
     }
 }

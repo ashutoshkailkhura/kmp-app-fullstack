@@ -56,7 +56,6 @@ ktor-server-tests-jvm = { module = "io.ktor:ktor-server-tests-jvm" }
 ktor-server-websockets-jvm = { module = "io.ktor:ktor-server-websockets-jvm" }
 logback = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
-
 #ktor
 ktor-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -84,13 +83,7 @@ mpfilepicker = { module = "com.darkrockstudios:mpfilepicker", version.ref = "mpf
 mysql-connector-java = { module = "mysql:mysql-connector-java", version.ref = "mysqlConnectorJava" }
 androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "androidx-work-runtime" }
 androidx-preference = { module = "androidx.preference:preference-ktx", version.ref = "androidx-preference" }
-
 #navigation
-voyagerNavigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyagerVersion" }
-voyagerTabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyagerVersion" }
-voyagerScreenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyagerVersion" }
-voyagerTransitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyagerVersion" }
-
 androidx-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 compose-ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "compose-multiplatform" }
 androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
@@ -104,8 +97,6 @@ koin-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin"
 kotlinxCoroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutinesCore" }
 kotlinxCoroutinesAndroid = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesVersion" }
 #
-#mvvmCompose = { module = "dev.icerock.moko:mvvm-compose", version.ref = "mvvmComposeVersion" }
-#mvvmFlowCompose = { module = "dev.icerock.moko:mvvm-flow-compose", version.ref = "mvvmComposeVersion" }
 sqldelightRuntime = { module = "com.squareup.sqldelight:runtime", version.ref = "sqldelightVersion" }
 sqldelightAndroid = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelightVersion" }
 sqldelightNative = { module = "com.squareup.sqldelight:native-driver", version.ref = "sqldelightVersion" }

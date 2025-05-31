@@ -1,6 +1,5 @@
 package org.example.project.ui.screens.home.post
 
-import org.example.project.SharedSDK
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,17 +7,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.example.project.AppService
+import org.example.project.Response
 import org.example.project.data.request.PostRequest
 import org.example.project.entity.Post
-import org.example.project.netio.Response
 
-class PostViewModel : ViewModel() {
+class PostViewModel(
+    private val service: AppService
+) : ViewModel() {
 
     companion object {
         const val TAG = "PostViewModel"
     }
 
-    private val sdk = SharedSDK
 
     var postListUiState by mutableStateOf(PostListUiState())
         private set
@@ -40,7 +41,7 @@ class PostViewModel : ViewModel() {
         postListUiState = PostListUiState()
         viewModelScope.launch {
             postListUiState = postListUiState.copy(loading = true)
-            postListUiState = when (val result = sdk.remoteApi.getPost(sdk.getToken() ?: "")) {
+            postListUiState = when (val result = service.getPost(service.getToken() ?: "")) {
                 is Response.Error -> {
                     println("$TAG getPost ${result.exception}")
                     postListUiState.copy(
@@ -67,7 +68,7 @@ class PostViewModel : ViewModel() {
             createPostUiState = createPostUiState.copy(loading = true)
 
             createPostUiState = when (val result =
-                sdk.remoteApi.createPost(PostRequest(content), sdk.getToken() ?: "")) {
+                service.createPost(PostRequest(content), service.getToken() ?: "")) {
                 is Response.Error -> {
                     println("$TAG createPost ${result.exception.message ?: "Error"}")
                     createPostUiState.copy(
@@ -95,9 +96,9 @@ class PostViewModel : ViewModel() {
         println("$TAG getPostDetail")
         postDetailUiState = postDetailUiState.copy(loading = true)
         viewModelScope.launch {
-            sdk.getToken()?.let { userToken ->
+            service.getToken()?.let { userToken ->
                 postDetailUiState =
-                    when (val post = sdk.remoteApi.getPostDetail(postId, userToken)) {
+                    when (val post = service.getPostDetail(postId, userToken)) {
                         is Response.Error -> {
                             postDetailUiState.copy(
                                 loading = false,

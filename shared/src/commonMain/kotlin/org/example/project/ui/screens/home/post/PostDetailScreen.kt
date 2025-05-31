@@ -1,4 +1,4 @@
-package org.example.project.ui.screens.home.post.postDetail
+package org.example.project.ui.screens.home.post
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
@@ -19,33 +19,6 @@ import androidx.compose.ui.unit.dp
 import org.koin.compose.viewmodel.koinViewModel
 import org.example.project.ui.components.FullScreenError
 import org.example.project.ui.components.SimpleLoading
-import org.example.project.ui.screens.home.post.PostViewModel
-
-//
-//data class PostDetailScreen(val postId: Int) : Screen {
-//
-//    @Composable
-//    override fun Content() {
-//
-//        val viewModel =
-//            getViewModel(CreatePostScreen().key, viewModelFactory { PostViewModel() })
-//
-//        val navigator = LocalNavigator.currentOrThrow
-//
-//        LaunchedEffect(Unit) {
-//            viewModel.getPostDetail(postId)
-//        }
-//
-//        PostDetailScreenContent(
-//            uiState = viewModel.postDetailUiState,
-//            onBackPress = navigator::pop,
-//            onClickContact = {
-//                navigator.push(ChatDetailScreen(it))
-//            }
-//        )
-//
-//
-//    }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

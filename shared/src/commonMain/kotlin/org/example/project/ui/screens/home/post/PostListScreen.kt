@@ -1,4 +1,4 @@
-package org.example.project.ui.screens.home.post.postList
+package org.example.project.ui.screens.home.post
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,47 +27,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.example.project.ui.components.FullScreenError
 import org.example.project.ui.components.ItemPost
 import org.example.project.ui.components.SimpleLoading
-import org.example.project.ui.screens.home.post.PostListUiState
-import org.example.project.ui.screens.home.post.PostViewModel
-
-//class PostListScreen(
-//    private var listState: LazyListState = LazyListState(),
-//    private val postViewModel: PostViewModel,
-//) : Screen {
-//
-//    companion object {
-//        const val TAG = "PostListScreen"
-//    }
-//
-//    @Composable
-//    override fun Content() {
-//
-////        val postViewModel = getViewModel(PostListScreen().key, viewModelFactory { PostViewModel() })
-//        val navigator = LocalNavigator.currentOrThrow
-//
-//        LaunchedEffect(Unit) {
-//            println("$TAG LaunchEffect getPost")
-//            postViewModel.getPost()
-//        }
-//
-//        PostListContent(
-//            uiState = postViewModel.postListUiState,
-//            onPostClick = {
-//                navigator.push(
-//                    PostDetailScreen(it)
-//                )
-//            },
-//            onClickCreatePost = {
-//                navigator.push(
-//                    CreatePostScreen()
-//                )
-//            },
-//            reTry = {
-//                postViewModel.getPost()
-//            }
-//        )
-//
-//    }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

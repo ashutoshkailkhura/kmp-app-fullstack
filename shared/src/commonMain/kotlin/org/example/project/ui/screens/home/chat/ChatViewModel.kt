@@ -1,6 +1,5 @@
 package org.example.project.ui.screens.home.chat
 
-import org.example.project.SharedSDK
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,10 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.example.project.AppService
 import org.example.project.entity.OnlineUser
 import org.example.project.entity.WebSocketEventType
 import org.example.project.entity.WebSocketPayload
-import org.example.project.netio.Response
+import org.example.project.Response
 
 data class OnlineUserChatListUiState(
     val onlineUserList: List<OnlineUser> = emptyList(),
@@ -23,7 +23,9 @@ data class ChatDetailUiState(
     val msgList: List<WebSocketPayload> = emptyList()
 )
 
-class ChatViewModel : ViewModel() {
+class ChatViewModel(
+    private val service: AppService
+) : ViewModel() {
 
     companion object {
         const val TAG = "ChatViewModel"
@@ -32,8 +34,6 @@ class ChatViewModel : ViewModel() {
     init {
         println("$TAG init")
     }
-
-    private val sdk = SharedSDK
 
     var onlineUserChatListUiState by mutableStateOf(OnlineUserChatListUiState())
         private set
@@ -94,7 +94,7 @@ class ChatViewModel : ViewModel() {
                     data = msg,
                     targetUserId = userId
                 )
-                when (val result = sdk.remoteApi.sendMessage(wsMsg)) {
+                when (val result = service.sendMessage(wsMsg)) {
                     is Response.Error -> TODO()
                     is Response.Loading -> TODO()
                     is Response.Success -> {
@@ -113,7 +113,7 @@ class ChatViewModel : ViewModel() {
     fun observeMsg() {
         println("$TAG observeMsg ")
         viewModelScope.launch {
-            sdk.remoteApi.observeMsg()
+            service.observeMsg()
                 .collect {
                     println("$TAG observeMsg ${it.data}")
                     val newList = chatDetailUiState.msgList.toMutableList().apply {
@@ -128,7 +128,7 @@ class ChatViewModel : ViewModel() {
 
     fun disconnect() {
         viewModelScope.launch {
-            sdk.remoteApi.closeChatSession()
+            service.closeChatSession()
         }
     }
 

@@ -51,35 +51,7 @@ import org.example.project.entity.WebSocketPayload
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-//data class ChatDetailScreen(val userId: Int) : Screen {
-//
-//    companion object {
-//        const val TAG = "ChatDetailScreen"
-//    }
-//
-//    @Composable
-//    override fun Content() {
-//
-//        val chatViewModel =
-//            getViewModel(ChatDetailScreen(userId).key, viewModelFactory { ChatViewModel() })
-//
-//        val navigator = LocalNavigator.currentOrThrow
-//
-//        LaunchedEffect(Unit) {
-//            println("$TAG LaunchedEffect observeMsg")
-//            chatViewModel.observeMsg()
-//        }
-//
-//        ChatDetailScreenContent(
-//            uiState = chatViewModel.chatDetailUiState,
-//            onBackPressed = navigator::pop,
-//            targetUser = userId,
-//            onMsgSend = { chatViewModel.sendMsg(it, userId.toString()) }
-//        )
-//    }
-//}
-
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChatDetailScreen(
     uiState: ChatDetailUiState,

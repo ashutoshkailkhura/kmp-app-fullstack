@@ -1,4 +1,4 @@
-package org.example.project.ui.screens.home.post.createPost
+package org.example.project.ui.screens.home.post
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -48,39 +48,7 @@ import androidx.compose.ui.unit.dp
 import com.darkrockstudios.libraries.mpfilepicker.FilePicker
 import org.koin.compose.viewmodel.koinViewModel
 import org.example.project.ui.components.SlideMessage
-import org.example.project.ui.screens.auth.AuthViewModel
-import org.example.project.ui.screens.home.post.CreatePostUiState
-import org.example.project.ui.screens.home.post.PostViewModel
 
-//import java.io.File
-//import java.io.IOException
-//import java.net.URL
-
-//class CreatePostScreen : Screen {
-//
-//    @Composable
-//    override fun Content() {
-//
-//        val homeViewModel =
-//            getViewModel(CreatePostScreen().key, viewModelFactory { PostViewModel() })
-//
-//        val navigator = LocalNavigator.currentOrThrow
-//
-//        CreatePostContent(
-//            uiState = homeViewModel.createPostUiState,
-//            createPost = {
-//                homeViewModel.createPost(it)
-//            },
-//            onBackPress = navigator::pop,
-//            resetResult = {
-//                homeViewModel.resetResult()
-//            }
-//        )
-//
-//
-//    }
-
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CreatePostScreen(
     createPost: (content: String) -> Unit,

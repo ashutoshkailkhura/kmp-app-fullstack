@@ -16,15 +16,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import androidx.navigation.toRoute
-import org.example.project.ui.screens.auth.login.LogInScreen
-import org.example.project.ui.screens.auth.signup.SignUpScreen
+import org.example.project.ui.screens.auth.LogInScreen
+import org.example.project.ui.screens.auth.SignUpScreen
 import org.example.project.ui.screens.home.AppMainScreen
 import org.example.project.ui.screens.home.chat.ChatDetailScreen
-import org.example.project.ui.screens.home.chat.ChatListScreen
-import org.example.project.ui.screens.home.post.createPost.CreatePostScreen
-import org.example.project.ui.screens.home.post.postDetail.PostDetailScreen
-import org.example.project.ui.screens.home.post.postList.PostListScreen
-import org.example.project.ui.screens.home.profile.ProfileScreen
+import org.example.project.ui.screens.home.post.CreatePostScreen
+import org.example.project.ui.screens.home.post.PostDetailScreen
 
 
 @Composable

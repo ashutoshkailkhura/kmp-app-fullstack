@@ -8,7 +8,8 @@ package org.example.project
 //}
 //
 //actual fun getDatabaseDriverFactory() = DatabaseDriverFactory()
-//actual fun getPlatformName(): String = "MyApplication.context.packageName"
+
+actual fun getPlatformName(): String = "android"
 
 //actual fun ByteArray.toImageBitmap(): ImageBitmap = toAndroidBitmap().asImageBitmap()
 //

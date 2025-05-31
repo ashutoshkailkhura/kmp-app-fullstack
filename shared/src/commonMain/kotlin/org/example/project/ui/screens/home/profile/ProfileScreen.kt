@@ -23,25 +23,8 @@ import androidx.compose.ui.unit.sp
 import kmpproject.shared.generated.resources.Res
 import kmpproject.shared.generated.resources.kodee_frightened
 import org.example.project.ui.components.OnlineIndicator
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-//class ProfileScreen() : Screen {
-//
-//    @OptIn(ExperimentalResourceApi::class)
-//    @Composable
-//    override fun Content() {
-//
-//        val profileViewModel =
-//            getViewModel(ProfileScreen().key, viewModelFactory { ProfileViewModel() })
-//
-//        ProfileScreenContent(
-//            uiState = profileViewModel.onLineUiState
-//        )
-//
-//    }
-
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ProfileScreen() {
     Column(

@@ -1,6 +1,5 @@
 package org.example.project.ui.screens.auth
 
-import org.example.project.SharedSDK
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,9 +7,10 @@ import org.example.project.data.request.AuthRequest
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.example.project.netio.Response
+import org.example.project.Response
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import org.example.project.AppService
 
 
 data class LogInUiState(
@@ -25,13 +25,13 @@ data class SignUpInUiState(
 )
 
 
-class AuthViewModel : ViewModel() {
+class AuthViewModel(
+    private val service: AppService
+) : ViewModel() {
 
     companion object {
         const val TAG = "AuthViewModel"
     }
-
-    private val sdk = SharedSDK
 
     init {
         println("$TAG init")
@@ -70,7 +70,7 @@ class AuthViewModel : ViewModel() {
 
         viewModelScope.launch {
             logInUiState = logInUiState.copy(loading = true)
-            logInUiState = when (val result = sdk.remoteApi.logIn(AuthRequest(mail, password))) {
+            logInUiState = when (val result = service.login(AuthRequest(mail, password))) {
                 is Response.Error -> {
                     println("$TAG error ${result.exception.message ?: "error"}")
                     logInUiState.copy(
@@ -87,7 +87,8 @@ class AuthViewModel : ViewModel() {
                 is Response.Success -> {
                     println("$TAG success ${result.data}")
                     if (result.data.token.isNotEmpty()) {
-                        sdk.saveToken(result.data)
+//                        sdk.saveToken(result.data)
+//                        TODO :- save token locally
                         logInUiState.copy(token = result.data.token, loading = false)
                     } else {
                         logInUiState.copy(
@@ -114,7 +115,7 @@ class AuthViewModel : ViewModel() {
             signUpUiState = signUpUiState.copy(result = "", loading = true)
 
 
-            signUpUiState = when (val result = sdk.remoteApi.signUp(AuthRequest(mail, password))) {
+            signUpUiState = when (val result = service.signUp(AuthRequest(mail, password))) {
 
                 is Response.Error -> {
                     signUpUiState.copy(

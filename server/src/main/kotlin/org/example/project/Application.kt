@@ -8,6 +8,7 @@ import org.example.project.security.TokenConfig
 import org.example.project.security.hasing.SHA256HashingService
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
+
 fun Application.module() {
     val tokenService = JwtTokenService()
     val tokenConfig = TokenConfig(

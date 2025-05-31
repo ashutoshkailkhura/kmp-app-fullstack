@@ -1,14 +1,11 @@
 package org.example.project
 
-import org.example.project.Theme.*
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -16,9 +13,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
+import org.example.project.Theme.DARK
+import org.example.project.Theme.LIGHT
+import org.example.project.Theme.SYSTEM
 import org.example.project.navigation.KMPAppNavHost
-import org.koin.compose.koinInject
 import org.example.project.ui.theme.KMPTheme
+import org.koin.compose.koinInject
 import kotlin.jvm.JvmSuppressWildcards
 
 @Composable
@@ -63,27 +63,4 @@ fun App(
         }
     }
 
-//    KMPTheme {
-//        Surface(tonalElevation = 5.dp) {
-//            if (uiState.loading) {
-//                SimpleLoading(modifier = Modifier.fillMaxSize())
-//            } else {
-//                if (uiState.userToken != null) {
-//                    Navigator(HomeScreen())
-//                } else {
-//                    val authViewModel = getViewModel(authViewModelKey, authViewModelFactory)
-//                    Navigator(
-//                        screen = LogInScreen(
-//                            authViewModel = authViewModel,
-//                            checkUserLogIn = {
-//                                checkUserLogIn()
-//                            }
-//                        )
-//                    ) { navigator ->
-//                        SlideTransition(navigator)
-//                    }
-//                }
-//            }
-//        }
-//    }
 }

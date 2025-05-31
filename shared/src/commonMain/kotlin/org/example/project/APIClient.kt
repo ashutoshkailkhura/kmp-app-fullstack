@@ -22,7 +22,6 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.http.encodedPath
-import io.ktor.http.isSuccess
 import kotlinx.datetime.Instant
 import io.ktor.http.takeFrom
 import io.ktor.serialization.kotlinx.json.json
@@ -50,10 +49,7 @@ import org.example.project.data.response.AuthResponse
 import org.example.project.entity.OnlineUser
 import org.example.project.entity.Post
 import org.example.project.entity.WebSocketPayload
-import org.example.project.netio.APIService.Companion.BASE_URL
-import org.example.project.netio.APIService.Companion.TAG
-import org.example.project.netio.APIService.Companion.WS_URL
-import org.example.project.netio.Response
+import org.example.project.Response
 import io.ktor.client.plugins.logging.Logger as KtorLogger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.LogLevel
@@ -78,7 +74,10 @@ class APIClient(
     private val client = HttpClient {
 
         install(ContentNegotiation) {
-            json()
+            json(Json {
+                prettyPrint = true
+                isLenient = true
+            })
         }
 
         install(Logging) {
@@ -106,6 +105,7 @@ class APIClient(
             url.takeFrom(apiUrl)
         }
     }
+
 
 //    /**
 //     * @return status of request.
@@ -447,4 +447,10 @@ class APIClient(
     override fun close() {
         client.close()
     }
+}
+
+sealed class Response<out T> {
+    data class Success<out T>(val data: T) : Response<T>()
+    data class Error(val exception: Exception) : Response<Nothing>()
+    object Loading : Response<Nothing>()
 }

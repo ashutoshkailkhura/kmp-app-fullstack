@@ -1,5 +1,3 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
@@ -32,11 +30,6 @@ kotlin {
                 implementation(compose.components.resources)
 
                 implementation(libs.sqldelightRuntime)
-
-                implementation(libs.voyagerNavigator)
-                implementation(libs.voyagerTabNavigator)
-                implementation(libs.voyagerScreenModel)
-                implementation(libs.voyagerTransitions)
 
 //                implementation(libs.mvvmCompose)
 //                implementation(libs.mvvmFlowCompose)
