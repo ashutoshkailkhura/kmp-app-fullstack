@@ -3,6 +3,7 @@ plugins {
     // in each subproject's classloader
     alias(libs.plugins.kotlinJvm) apply false
     alias(libs.plugins.jetbrainsCompose) apply false
+    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.kotlinMultiplatform) apply false
@@ -10,10 +11,8 @@ plugins {
 }
 
 buildscript {
-    val sqlDelightVersion = "1.5.5"
     dependencies {
-        classpath("com.squareup.sqldelight:gradle-plugin:$sqlDelightVersion")
-//        classpath("com.android.tools.build:gradle:8.0.2")
+        classpath(libs.gradle.plugin)
     }
 }
 

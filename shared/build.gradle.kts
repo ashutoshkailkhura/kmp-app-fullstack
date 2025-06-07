@@ -1,11 +1,9 @@
-import org.jetbrains.compose.ExperimentalComposeLibrary
-
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.serialization)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
-//    id("com.android.library")
+    alias(libs.plugins.compose.compiler)
     id("com.squareup.sqldelight")
 }
 
@@ -39,26 +37,42 @@ kotlin {
             dependencies {
                 //put your multiplatform dependencies here
                 implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.logging)
                 implementation(libs.ktor.serialization)
                 implementation(libs.ktor.content.negotiation.client)
+                implementation(libs.ktor.client.cio)
+                implementation(libs.ktor.client.websockets)
+
+                api(libs.koin.compose.viewmodel.navigation)
+
                 implementation(libs.kotlinxCoroutinesCore)
-                implementation("io.ktor:ktor-client-cio:2.3.5")
-                implementation("io.ktor:ktor-client-websockets:2.3.5")
+
                 implementation(compose.runtime)
                 implementation(compose.foundation)
+                implementation(compose.animation)
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
-                @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
+
+                implementation(libs.kotlinx.datetime)
+
                 implementation(libs.sqldelightRuntime)
-                implementation(libs.voyagerNavigator)
-                implementation(libs.voyagerTabNavigator)
-                implementation(libs.voyagerScreenModel)
-                implementation(libs.voyagerTransitions)
-//                implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha10")
-                implementation(libs.mvvmCompose)
-                implementation(libs.mvvmFlowCompose)
-                implementation("com.darkrockstudios:mpfilepicker:3.1.0")
+
+//                navigation
+                implementation(libs.androidx.lifecycle.runtime.compose)
+                implementation(libs.androidx.navigation.compose)
+                implementation(libs.compose.ui.backhandler)
+
+//                implementation(libs.mvvmCompose)
+//                implementation(libs.mvvmFlowCompose)
+
+                // Multiplatform Settings
+                implementation(libs.settings)
+                implementation(libs.settings.serialization)
+                implementation(libs.settings.observable)
+                implementation(libs.settings.coroutines)
+
+                implementation(libs.mpfilepicker)
 
             }
         }
@@ -71,7 +85,9 @@ kotlin {
             dependencies {
                 implementation(libs.compose.ui)
                 implementation(libs.compose.ui.tooling.preview)
-                implementation(libs.androidx.activity.compose)
+                implementation(libs.androidx.core.ktx)
+                implementation(libs.androidx.work.runtime)
+                implementation(libs.androidx.preference)
                 implementation(libs.sqldelightAndroid)
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.sqldelightAndroid)

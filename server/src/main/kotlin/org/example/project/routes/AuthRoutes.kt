@@ -11,8 +11,6 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.apache.commons.codec.digest.DigestUtils
 import org.example.project.dao.DAOUser
-import org.example.project.data.KMPConstant
-import org.example.project.data.KMPConstant.SUCCESS_MESSAGE
 import org.example.project.entity.User
 import org.example.project.security.TokenClaim
 import org.example.project.security.TokenConfig
@@ -28,7 +26,7 @@ fun Route.authRoute(
 ) {
     post("signup") {
         val request = call.receiveNullable<AuthRequest>() ?: kotlin.run {
-            call.respond(HttpStatusCode.BadRequest, KMPConstant.ERROR_MESSAGE_4)
+            call.respond(HttpStatusCode.BadRequest, "Bad request dear")
             return@post
         }
 
@@ -36,7 +34,7 @@ fun Route.authRoute(
         val isPwTooShort = request.password.length < 8
 
         if (areFieldsBlank || isPwTooShort) {
-            call.respond(HttpStatusCode.Conflict, KMPConstant.ERROR_MESSAGE_1)
+            call.respond(HttpStatusCode.Conflict, "password length must be equal or greater then 8")
             return@post
         }
 
@@ -52,22 +50,22 @@ fun Route.authRoute(
         val wasAcknowledged = userDao.addUser(user)
 
         if (wasAcknowledged == null) {
-            call.respond(HttpStatusCode.Conflict, KMPConstant.ERROR_MESSAGE_2)
+            call.respond(HttpStatusCode.Conflict, "Unable to create Account")
             return@post
         }
 
-        call.respond(HttpStatusCode.OK, SUCCESS_MESSAGE)
+        call.respond(HttpStatusCode.OK, "Success")
     }
 
     post("signin") {
         val request = call.receiveNullable<AuthRequest>() ?: kotlin.run {
-            call.respond(HttpStatusCode.BadRequest, KMPConstant.ERROR_MESSAGE_4)
+            call.respond(HttpStatusCode.BadRequest, "Bad request dear")
             return@post
         }
 
         val user = userDao.getUserByUserEmail(request.userEmail)
         if (user == null) {
-            call.respond(HttpStatusCode.Conflict, KMPConstant.ERROR_MESSAGE_3)
+            call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
             return@post
         }
 
@@ -80,7 +78,7 @@ fun Route.authRoute(
         )
         if (!isValidPassword) {
             println("Entered hash: ${DigestUtils.sha256Hex("${user.salt}${request.password}")}, Hashed PW: ${user.password}")
-            call.respond(HttpStatusCode.Conflict, KMPConstant.ERROR_MESSAGE_3)
+            call.respond(HttpStatusCode.Conflict, "Incorrect username or password")
             return@post
         }
 
