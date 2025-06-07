@@ -8,17 +8,17 @@ JetBrains and You may each also be referred to individually as a “Party” or 
 
 #### **1\. PARTIES**
 
-1.1. “**You**” means a natural person entering into and exercising rights under this Agreement. 
+1.1. “**You**” means a natural person entering into and exercising rights under this Agreement.
 
 1.2. “**JetBrains**” or “**we**” means JetBrains Expo B.V., having its principal place of business at Gelrestraat 16, 1079 MZ Amsterdam, the Netherlands, registered with the Dutch Chamber of Commerce under the number: 74098896, VAT ID number: NL85977129B01.
 
 #### **2\. GRANT OF RIGHTS**
 
-2.1. KotlinConf App is licensed for use under the Apache 2.0 license (see [https://github.com/JetBrains/kotlinconf-app/blob/master/LICENSE](https://github.com/JetBrains/kotlinconf-app/blob/master/LICENSE)).  
+2.1. KotlinConf App is licensed for use under the Apache 2.0 license (see [https://github.com/JetBrains/kotlinconf-app/blob/master/LICENSE](https://github.com/JetBrains/kotlinconf-app/blob/master/LICENSE)).
 
 In connection with Your use of KotlinConf App, You may:
 
-(i) access, download, and use of any content made available by JetBrains in the KotlinConf App in connection with KotlinConf, the official event by JetBrains (“**KotlinConf**”); and 
+(i) access, download, and use of any content made available by JetBrains in the KotlinConf App in connection with KotlinConf, the official event by JetBrains (“**KotlinConf**”); and
 
 (ii) share Your feedback through KotlinConf App with JetBrains in compliance with the Code of Conduct available at [https://kotlinconf.com/code-of-conduct](https://kotlinconf.com/code-of-conduct).
 
@@ -90,7 +90,7 @@ JetBrains reserves the right to suspend Your access to KotlinConf App if Your us
 
 10.7. **Governing Law**. This Agreement is governed by the laws of the Netherlands, without regard to conflict of laws principles and specifically excluding the United Nations Convention on Contracts for the International Sale of Goods. The Parties to the agreement constituted by this Agreement undertake to use best commercial efforts to amicably settle any disputes arising hereunder (“**Dispute**”).
 
-10.8. **Dispute Resolution**. Should the Parties to this Agreement fail to settle a Dispute amicably, You and we both agree that any Dispute-related litigation may only be brought in, and shall be subject to the jurisdiction of, any competent court of the Netherlands, unless provided otherwise by applicable consumer law. Any disputes between JetBrains and an individual consumer, who is an EU resident, can be settled out of court through alternative dispute resolution (ADR). This can be done through the ODR platform accessible through: [http://ec.europa.eu/consumers/odr/](http://ec.europa.eu/consumers/odr/). 
+10.8. **Dispute Resolution**. Should the Parties to this Agreement fail to settle a Dispute amicably, You and we both agree that any Dispute-related litigation may only be brought in, and shall be subject to the jurisdiction of, any competent court of the Netherlands, unless provided otherwise by applicable consumer law. Any disputes between JetBrains and an individual consumer, who is an EU resident, can be settled out of court through alternative dispute resolution (ADR). This can be done through the ODR platform accessible through: [http://ec.europa.eu/consumers/odr/](http://ec.europa.eu/consumers/odr/).
 
 13.12. **Data Privacy**. By accepting this Agreement, You acknowledge that JetBrains will process personal data in accordance with the [KotlinConf App Privacy Notice](app-privacy-notice.md).
 
@@ -99,4 +99,3 @@ JetBrains reserves the right to suspend Your access to KotlinConf App if Your us
 13.14. **Children and minors**. If You are under 18 years old, then by entering into this Agreement You explicitly stipulate, that (i) You have legal capacity to conclude this Agreement or that You have valid consent from a parent or legal guardian to do so and (ii) You understand the KotlinConf App Privacy Notice. You may not enter into this Agreement if You are under 16 years old. If You do not understand this section, do not understand the KotlinConf App Privacy Notice or do not know whether You have the legal capacity to accept these terms, please ask Your parent or legal guardian for help.
 
 For further information, please contact us at [info@kotlinconf.com](mailto:info@kotlinconf.com).
-

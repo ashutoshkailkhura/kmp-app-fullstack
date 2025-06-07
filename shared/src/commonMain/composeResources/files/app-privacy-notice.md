@@ -2,7 +2,7 @@
 
 In this KotlinConf App Privacy Notice (“Privacy Notice”), we describe the types of data, including Personal Data (collectively, "data"), that we and our associated companies collect from you when you use the KotlinConf app and the functionalities and services it offers (collectively, the "App"), how we and our associated companies use and disclose that data, and your options to access or update your data.
 
-The data controllers are JetBrains Expo B.V. with its business address at Gelrestraat 16, 1079 MZ Amsterdam, the Netherlands, and [its associated companies](https://www.jetbrains.com/company/contacts/#headquarters-international-sales): JetBrains N.V., JetBrains s.r.o. and JetBrains GmbH. 
+The data controllers are JetBrains Expo B.V. with its business address at Gelrestraat 16, 1079 MZ Amsterdam, the Netherlands, and [its associated companies](https://www.jetbrains.com/company/contacts/#headquarters-international-sales): JetBrains N.V., JetBrains s.r.o. and JetBrains GmbH.
 
 JetBrains and its associated companies act as joint data controllers, who are jointly responsible for compliance with data protection legislation. JetBrains Expo B.V. is primarily responsible for exercising the rights of data subjects and providing information about data processing.
 
@@ -10,9 +10,9 @@ JetBrains and its associated companies act as joint data controllers, who are jo
 
 The following definitions are used throughout this Privacy Notice:
 
-**JetBrains Website**. The website of JetBrains which can be found on [https://www.jetbrains.com/](https://www.jetbrains.com/). 
+**JetBrains Website**. The website of JetBrains which can be found on [https://www.jetbrains.com/](https://www.jetbrains.com/).
 
-**KotlinConf**. The official event by [JetBrains](https://www.jetbrains.com/) under the name KotlinConf of which more information can be directly found on the website [https://kotlinconf.com/](https://kotlinconf.com/).  
+**KotlinConf**. The official event by [JetBrains](https://www.jetbrains.com/) under the name KotlinConf of which more information can be directly found on the website [https://kotlinconf.com/](https://kotlinconf.com/).
 
 **Personal Data** means any data relating to an identified or identifiable natural person.
 
@@ -20,8 +20,8 @@ All other capitalized terms used in this Privacy Notice shall have the same mean
 
 **Why We Collect Data and What We Collect**
 
-We collect data for various reasons as reflected in our [general Privacy Notice](https://www.jetbrains.com/legal/docs/privacy/privacy/) which can be found on the JetBrains Website, but for this App specifically we collect data for only the following reasons:  
-a) **To provide you with the basic functionalities of the App.** Upon your (re-)installation of the App we generate and collect a random ID, which is required to provide you with the basic functionalities and settings of this App, such as in any case the account management (used for the setup or management of a user’s account), the sending of notifications through the App and other processing connected with the use of this App. Please note that we do not collect, store or process any Personal Data, such as your Device ID, so we can’t trace the random ID back to any device or person. We use [Google Cloud](https://cloud.google.com/terms/cloud-privacy-notice) Platform, as third party service provider, acting as a data processor, to assist us in hosting and providing the App to you or in our operations. The legal basis for this data processing is the performance of a contract between you and us. 
+We collect data for various reasons as reflected in our [general Privacy Notice](https://www.jetbrains.com/legal/docs/privacy/privacy/) which can be found on the JetBrains Website, but for this App specifically we collect data for only the following reasons:
+a) **To provide you with the basic functionalities of the App.** Upon your (re-)installation of the App we generate and collect a random ID, which is required to provide you with the basic functionalities and settings of this App, such as in any case the account management (used for the setup or management of a user’s account), the sending of notifications through the App and other processing connected with the use of this App. Please note that we do not collect, store or process any Personal Data, such as your Device ID, so we can’t trace the random ID back to any device or person. We use [Google Cloud](https://cloud.google.com/terms/cloud-privacy-notice) Platform, as third party service provider, acting as a data processor, to assist us in hosting and providing the App to you or in our operations. The legal basis for this data processing is the performance of a contract between you and us.
 
 b) **To improve the App and KotlinConf.** We may collect anonymous data based on your use of the App and we may use feedback that you provide voluntarily through the App, in particular on the talks during KotlinConf, as applicable. We use such data to better understand the usage patterns of the App, the options it provides and the behavior, preferences and feedback of our KoltinConf audience. Collection of data based on your use of the App and feedback that you provide voluntarily through the App is done anonymously but if you decide to share any Personal Data in your feedback the legal basis for this data processing shall be your consent.
 
@@ -37,11 +37,11 @@ Where appropriate, we will prompt you to give us your consent to the collection 
 
 **Your Privacy Choices And Rights**
 
-Your Privacy Choices. The privacy choices you may have about your Personal Data are determined by applicable law and are described below. 
+Your Privacy Choices. The privacy choices you may have about your Personal Data are determined by applicable law and are described below.
 
-●	Mobile Devices. We may send push notifications through the App. You may opt out from receiving these push notifications by changing the settings on your mobile device. 
+●	Mobile Devices. We may send push notifications through the App. You may opt out from receiving these push notifications by changing the settings on your mobile device.
 
-Please note you must separately opt out in each browser and on each device. 
+Please note you must separately opt out in each browser and on each device.
 
 **Children**
 
@@ -55,9 +55,9 @@ To respect your privacy, before using your Personal Data we will inform you abou
 
 Collected Personal Data are shared based on this Privacy Notice. Additionally, we share collected Personal Data within the JetBrains group of companies described above, which act as joint data controllers and process Personal Data for the purposes described above.
 
-We may share your Personal Data with [Google Cloud Platform which third party hosts and helps us provide you with this App.](https://cloud.google.com/terms/cloud-privacy-notice) 
+We may share your Personal Data with [Google Cloud Platform which third party hosts and helps us provide you with this App.](https://cloud.google.com/terms/cloud-privacy-notice)
 
-We may also share your Personal Data with certain third parties if we are obliged to do so under applicable legislation (especially with tax authorities or with other government bodies exercising their statutory powers) or if such sharing is necessary to achieve the purposes defined above (especially with government bodies or with parties harmed as a result of violations of applicable laws).  
+We may also share your Personal Data with certain third parties if we are obliged to do so under applicable legislation (especially with tax authorities or with other government bodies exercising their statutory powers) or if such sharing is necessary to achieve the purposes defined above (especially with government bodies or with parties harmed as a result of violations of applicable laws).
 To adhere to the requirements of the California Consumer Privacy Act (CCPA), we hereby notify you that JetBrains will not a) retain, use, sell, or otherwise disclose any Personal Data for any purpose other than to provide the App; or b) retain, use, sell, or disclose such Personal Data outside of the direct relationship between you and JetBrains; or c) use Personal Data other than as described within this Privacy Notice.
 
 **Security**
@@ -84,15 +84,15 @@ As the App does not collect, store or process any Personal Data, there is no Per
 
 If applicable, you are responsible for the correctness of the Personal Data you provide to us. We expect you to check the Personal Data you provide to us and if any inconsistency takes place, update your Personal Data or report the inconsistency to JetBrains.
 
-As permitted by applicable law, EU residents may request a copy of the information that we hold about them. As we do not collect, store or process any Personal Data with the App we do not hold any information about you. 
+As permitted by applicable law, EU residents may request a copy of the information that we hold about them. As we do not collect, store or process any Personal Data with the App we do not hold any information about you.
 
-Moreover, as set out in locally applicable Personal Data protection law, you may have the right to: (i) request access to your Personal Data; (ii) request rectification of your Personal Data; (iii) request erasure of your Personal Data; (iv) request a restriction on the processing of your Personal Data; (v) request Personal Data portability; or (vi) object to the processing of your Personal Data. Please note that as we do not collect, store or process any Personal Data with the App, some of the rights can’t be exercised. 
+Moreover, as set out in locally applicable Personal Data protection law, you may have the right to: (i) request access to your Personal Data; (ii) request rectification of your Personal Data; (iii) request erasure of your Personal Data; (iv) request a restriction on the processing of your Personal Data; (v) request Personal Data portability; or (vi) object to the processing of your Personal Data. Please note that as we do not collect, store or process any Personal Data with the App, some of the rights can’t be exercised.
 
-* **Right of Access.** You may have the right to obtain from us a confirmation as to whether or not Personal Data concerning you are being processed, and, where that is the case, to request access to your Personal Data. The information about Personal Data processing includes the purposes of the processing, the categories of Personal Data concerned, and the recipients or categories of recipients to whom your Personal Data have been or will be disclosed, etc. However, this is not an absolute right and the interests of other individuals may restrict your right of access. Further, you may have the right to obtain a copy of your Personal Data undergoing processing. For additional copies requested, we may charge a reasonable fee based on administrative costs.  
-* **Right to Rectification.** You may have the right to obtain from us the rectification of inaccurate Personal Data. Depending on the purposes of the processing, you may have the right to have incomplete Personal Data made complete, in particular by providing a supplementary statement.  
-* **Right to Erasure (Right to Be Forgotten).** Under certain circumstances, you may have the right to require us to delete your Personal Data.  
-* **Right to a Restriction of Processing.** Under certain circumstances, you may have the right to require us to restrict the processing of your Personal Data. In this case, the respective Personal Data will be marked and may only be processed by us for certain purposes.  
-* **Right to Personal Data portability.** Under certain circumstances, you may have the right to receive the Personal Data concerning you, which you have provided to us, in a structured, commonly used, and machine-readable format, and to transmit these Personal Data to another entity.  
+* **Right of Access.** You may have the right to obtain from us a confirmation as to whether or not Personal Data concerning you are being processed, and, where that is the case, to request access to your Personal Data. The information about Personal Data processing includes the purposes of the processing, the categories of Personal Data concerned, and the recipients or categories of recipients to whom your Personal Data have been or will be disclosed, etc. However, this is not an absolute right and the interests of other individuals may restrict your right of access. Further, you may have the right to obtain a copy of your Personal Data undergoing processing. For additional copies requested, we may charge a reasonable fee based on administrative costs.
+* **Right to Rectification.** You may have the right to obtain from us the rectification of inaccurate Personal Data. Depending on the purposes of the processing, you may have the right to have incomplete Personal Data made complete, in particular by providing a supplementary statement.
+* **Right to Erasure (Right to Be Forgotten).** Under certain circumstances, you may have the right to require us to delete your Personal Data.
+* **Right to a Restriction of Processing.** Under certain circumstances, you may have the right to require us to restrict the processing of your Personal Data. In this case, the respective Personal Data will be marked and may only be processed by us for certain purposes.
+* **Right to Personal Data portability.** Under certain circumstances, you may have the right to receive the Personal Data concerning you, which you have provided to us, in a structured, commonly used, and machine-readable format, and to transmit these Personal Data to another entity.
 * **Right to Object.** Under certain circumstances, you may have the right to object, on grounds relating to their particular situation, at any time to the processing of your Personal Data by us and we can be required to no longer process your Personal Data.
 
 Where applicable, these rights can be exercised via the email address [privacy@jetbrains.com](mailto:privacy@jetbrains.com).
@@ -105,5 +105,5 @@ You may lodge a complaint related to the processing of your personal data with t
 
 This Privacy Notice is current as of the Effective Date set forth above. We may change this Privacy Notice from time to time, so please be sure to check back periodically. We will post any changes to this Privacy Notice in the App. If we make any changes to this Privacy Notice that materially affect our practices with regard to the Personal Data we have previously collected from you, we will endeavor to provide you with an advance notice of such change by highlighting the change upon your subsequent use of the App.
 
-**Reaching out**  
-If you have any questions or concerns, or you feel that this Privacy Notice has been violated in any way, please let us know immediately by contacting [privacy@jetbrains.com](mailto:privacy@jetbrains.com).  
+**Reaching out**
+If you have any questions or concerns, or you feel that this Privacy Notice has been violated in any way, please let us know immediately by contacting [privacy@jetbrains.com](mailto:privacy@jetbrains.com).
