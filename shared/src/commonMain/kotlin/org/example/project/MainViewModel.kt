@@ -46,4 +46,3 @@ data class MainUiState(
     val loading: Boolean = true,
     val userToken: String? = null
 )
-

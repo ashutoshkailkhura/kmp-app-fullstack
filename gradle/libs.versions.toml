@@ -36,6 +36,7 @@ multiplatform-settings = "1.3.0"
 androidx-preference = "1.2.1"
 androidx-work-runtime = "2.10.0"
 kotlinx-datetime = "0.6.2"
+spotless = "7.0.3"
 
 [libraries]
 ant-jsch = { module = "org.apache.ant:ant-jsch", version.ref = "antJsch" }
@@ -115,3 +116,4 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "serialization" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

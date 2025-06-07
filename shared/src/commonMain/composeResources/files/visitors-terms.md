@@ -79,4 +79,4 @@ The liability of JetBrains shall be limited to the lower of the following two su
 
 This section shall apply in cases in which an Organizer wants to organize or has organized a Group Visit. In such cases all agreements are concluded between the Organizer and JetBrains.
 
-It is the responsibility of the Organizer to ensure that the members of the Group comply with the [Code of Conduct](code-of-conduct.md) and these General Terms and Conditions for Visitors.  
+It is the responsibility of the Organizer to ensure that the members of the Group comply with the [Code of Conduct](code-of-conduct.md) and these General Terms and Conditions for Visitors.
